@@ -66,13 +66,14 @@
         .music-bar .music-note { font-size:14px; }
         .music-bar .music-close { margin-left:auto; background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:14px; }
         .chat-log { flex:1; overflow-y:auto; padding:12px 12px 6px; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth; }
-        .message { display:flex; flex-direction:column; max-width:85%; animation:fadeInUp 0.25s ease-out; position:relative; }
+        .message { display:flex; flex-direction:column; max-width:85%; position:relative; }
         .message.user { align-self:flex-end; align-items:flex-end; }
         .message.assistant { align-self:flex-start; align-items:flex-start; }
-        .bubble { padding:11px 14px; border-radius:18px; font-size:15px; line-height:1.5; word-break:break-word; cursor:pointer; transition: transform 0.08s; }
-        .message.user .bubble { background:var(--bubble-user); color:var(--bubble-user-text); border-bottom-right-radius:6px; }
-        .message.assistant .bubble { background:var(--bubble-ai); color:var(--bubble-ai-text); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); }
-        .typing-bubble { background:var(--bubble-ai); color:var(--text-secondary); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); display:inline-flex; align-items:center; gap:2px; padding:12px 16px; border-radius:18px; font-size:14px; letter-spacing:1px; }
+        .bubble { padding:11px 14px; border-radius:18px; font-size:15px; line-height:1.5; word-break:break-word; cursor:pointer; transition: transform 0.08s; animation: popIn 0.35s cubic-bezier(0.21, 1.02, 0.58, 1) forwards; }
+        .message.user .bubble { background:var(--bubble-user); color:var(--bubble-user-text); border-bottom-right-radius:6px; transform-origin: bottom right; }
+        .message.assistant .bubble { background:var(--bubble-ai); color:var(--bubble-ai-text); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); transform-origin: bottom left; }
+        @keyframes popIn { 0% { opacity:0; transform: scale(0.85); } 60% { opacity:1; transform: scale(1.04); } 100% { opacity:1; transform: scale(1); } }
+        .typing-bubble { background:var(--bubble-ai); color:var(--text-secondary); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); display:inline-flex; align-items:center; gap:2px; padding:12px 16px; border-radius:18px; font-size:14px; letter-spacing:1px; animation: popIn 0.35s cubic-bezier(0.21, 1.02, 0.58, 1) forwards; transform-origin: bottom left; }
         .typing-bubble span { animation: dotPulse 1.4s infinite; }
         .typing-bubble span:nth-child(2) { animation-delay: 0.2s; }
         .typing-bubble span:nth-child(3) { animation-delay: 0.4s; }
@@ -87,7 +88,6 @@
         .rewind-row .ver-indicator { color:var(--text-secondary); font-size:10px; }
         .message.highlight .bubble { animation:highlightPulse 1.5s ease; }
         @keyframes highlightPulse { 0%{box-shadow:0 0 0 0 rgba(200,180,140,0.6);} 50%{box-shadow:0 0 0 8px rgba(200,180,140,0);} 100%{box-shadow:0 0 0 0 rgba(200,180,140,0);} }
-        @keyframes fadeInUp { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
         .input-area { padding:8px 12px 16px; padding-bottom:max(16px, env(safe-area-inset-bottom, 16px)); background:var(--bg); border-top:1px solid var(--border); display:flex; gap:6px; align-items:flex-end; z-index:10; }
         .attach-btn { width:38px; height:38px; border-radius:50%; background:transparent; border:1px solid var(--border); color:var(--text-secondary); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
         .image-preview-row { display:flex; align-items:center; gap:6px; padding:4px 12px; background:var(--bg); }
@@ -114,6 +114,8 @@
         .drawer-left .drawer-item { padding:10px 0; font-size:14px; color:var(--text); cursor:pointer; border-bottom:1px solid rgba(128,128,128,0.05); display:flex; align-items:center; justify-content:space-between; }
         .drawer-left .drawer-item:last-child { border-bottom:none; }
         .drawer-left .drawer-item .item-arrow { color:var(--text-secondary); font-size:14px; }
+        .drawer-left .drawer-bottom { margin-top:auto; padding:8px 16px; border-top:1px solid var(--border); }
+        .drawer-left .drawer-bottom .drawer-item { border-bottom:none; }
         .toggle-switch { position:relative; width:44px; height:26px; background:var(--toggle-off); border-radius:13px; cursor:pointer; transition:0.2s; flex-shrink:0; }
         .toggle-switch.on { background:var(--toggle-on); }
         .toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:20px; height:20px; background:white; border-radius:50%; transition:0.2s; }
@@ -163,21 +165,6 @@
         .memory-page .mem-item.faded { opacity:0.4; }
         .memory-page .mem-item .mem-delete { background:none; border:none; color:#C0A0A0; cursor:pointer; font-size:14px; }
         .memory-page .add-mem-btn { background:var(--hover-bg); border:none; padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; margin:8px 16px; color:var(--text); }
-        .usage-page { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--drawer-bg); z-index:52; transform:translateX(-100%); transition:transform 0.3s; display:flex; flex-direction:column; overflow-y:auto; }
-        .usage-page.open { transform:translateX(0); }
-        .usage-page .usage-header { padding:16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
-        .usage-page .usage-back { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
-        .usage-page .usage-title { font-size:16px; font-weight:500; color:var(--text); }
-        .usage-page .usage-section { padding:16px; border-bottom:1px solid var(--border); }
-        .usage-page .usage-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; letter-spacing:1px; margin-bottom:12px; }
-        .usage-page .progress-bar-wrap { background:var(--progress-bg); border-radius:8px; height:12px; margin-bottom:6px; overflow:hidden; }
-        .usage-page .progress-bar-fill { background:var(--progress-fill); height:100%; border-radius:8px; transition:width 0.5s; }
-        .usage-page .progress-label { font-size:11px; color:var(--text-secondary); }
-        .usage-page .stat-card { background:var(--card-bg); border-radius:14px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
-        .usage-page .stat-card .stat-title { font-size:13px; color:var(--text-secondary); }
-        .usage-page .stat-card .stat-values { text-align:right; }
-        .usage-page .stat-card .stat-tokens { font-size:15px; font-weight:500; color:var(--text); }
-        .usage-page .stat-card .stat-cost { font-size:11px; color:#B8A88A; margin-top:2px; }
         .overlay-mask { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.2); z-index:40; display:none; }
         .overlay-mask.show { display:block; }
         .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:300; display:flex; align-items:center; justify-content:center; }
@@ -192,7 +179,6 @@
         .modal-card button { padding:10px 16px; border-radius:12px; border:none; font-size:14px; font-weight:500; cursor:pointer; }
         .save-btn { background:var(--btn-primary); color:var(--btn-primary-text); }
         .cancel-btn { background:var(--btn-secondary); color:var(--btn-secondary-text); }
-        .param-hint { font-size:10px; color:var(--text-secondary); margin-top:-8px; margin-bottom:4px; }
         .year-list { max-height:50vh; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
         .year-list .year-item { padding:12px; text-align:center; border-radius:10px; cursor:pointer; font-size:16px; color:var(--text); }
         .year-list .year-item:hover { background:var(--hover-bg); }
@@ -224,11 +210,26 @@
         .settings-item { padding:12px 0; border-bottom:1px solid rgba(128,128,128,0.05); display:flex; align-items:center; justify-content:space-between; }
         .settings-item .settings-label { font-size:14px; color:var(--text); }
         .settings-item .settings-value { font-size:14px; color:var(--text-secondary); cursor:pointer; }
-        .settings-item input, .settings-item select { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; max-width:120px; }
-        .settings-item input[type="range"] { -webkit-appearance:none; width:100px; height:6px; background:var(--progress-bg); border-radius:3px; outline:none; border:none; }
-        .settings-item input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; background:var(--btn-primary); border-radius:50%; cursor:pointer; }
-        .settings-row { display:flex; align-items:center; gap:8px; }
-        .settings-row span { font-size:12px; color:var(--text-secondary); min-width:30px; text-align:center; }
+        .settings-item select { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; max-width:150px; }
+        .settings-item input { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; max-width:120px; }
+        .param-options { display:flex; gap:4px; }
+        .param-options .param-btn { padding:6px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; background:var(--card-bg); color:var(--text-secondary); cursor:pointer; transition:0.15s; white-space:nowrap; }
+        .param-options .param-btn.active { background:var(--btn-primary); color:var(--btn-primary-text); border-color:var(--btn-primary); }
+        .settings-subpage { display:none; flex-direction:column; flex:1; overflow-y:auto; }
+        .settings-subpage.active { display:flex; }
+        .settings-subpage .subpage-header { padding:16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+        .settings-subpage .subpage-back { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
+        .settings-subpage .subpage-title { font-size:16px; font-weight:500; color:var(--text); }
+        .settings-subpage .usage-section { padding:16px; border-bottom:1px solid var(--border); }
+        .settings-subpage .usage-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; letter-spacing:1px; margin-bottom:12px; }
+        .settings-subpage .progress-bar-wrap { background:var(--progress-bg); border-radius:8px; height:12px; margin-bottom:6px; overflow:hidden; }
+        .settings-subpage .progress-bar-fill { background:var(--progress-fill); height:100%; border-radius:8px; transition:width 0.5s; }
+        .settings-subpage .progress-label { font-size:11px; color:var(--text-secondary); }
+        .settings-subpage .stat-card { background:var(--card-bg); border-radius:14px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+        .settings-subpage .stat-card .stat-title { font-size:13px; color:var(--text-secondary); }
+        .settings-subpage .stat-card .stat-values { text-align:right; }
+        .settings-subpage .stat-card .stat-tokens { font-size:15px; font-weight:500; color:var(--text); }
+        .settings-subpage .stat-card .stat-cost { font-size:11px; color:#B8A88A; margin-top:2px; }
     </style>
 </head>
 <body>
@@ -291,6 +292,8 @@
             <div class="drawer-item" id="exportItem"><span>导出全部</span><span class="item-arrow">›</span></div>
             <div class="drawer-item" id="importItem"><span>导入备份</span><span class="item-arrow">›</span></div>
             <div class="drawer-item" id="clearItem"><span style="color:#C06050;">清空对话</span><span class="item-arrow" style="color:#C06050;">›</span></div>
+        </div>
+        <div class="drawer-bottom">
             <div class="drawer-item" id="settingsEntry"><span>⚙️ 系统设置</span><span class="item-arrow">›</span></div>
         </div>
         <div class="memory-page" id="memoryPage">
@@ -298,11 +301,6 @@
             <div class="mem-section"><div class="mem-section-title">关于你</div><div id="memAboutYou"></div></div>
             <div class="mem-section"><div class="mem-section-title">我们之间</div><div id="memAboutUs"></div></div>
             <button class="add-mem-btn" id="addMemBtn">+ 手动添加一条</button>
-        </div>
-        <div class="usage-page" id="usagePage">
-            <div class="usage-header"><button class="usage-back" id="usageBackBtn">←</button><span class="usage-title">用量统计</span></div>
-            <div class="usage-section"><div class="usage-section-title">本月概览</div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="monthProgress" style="width:0%;"></div></div><div class="progress-label" id="monthProgressLabel">本月已用 0 token</div></div>
-            <div class="usage-section"><div class="usage-section-title">详细统计</div><div id="usageStatsCards"></div></div>
         </div>
     </div>
 
@@ -325,12 +323,12 @@
             <div class="settings-item"><span class="settings-label">费率设置</span><span class="settings-value" id="pricingValue">¥1/¥2</span></div>
         </div>
         <div class="settings-tab-content" id="tab-chat">
-            <div class="settings-item"><span class="settings-label">温度</span><div class="settings-row"><input type="range" id="tempSlider" min="0" max="2" step="0.1" value="0.9"><span id="tempValue">0.9</span></div></div>
-            <div class="settings-item"><span class="settings-label">Top P</span><div class="settings-row"><input type="range" id="topPSlider" min="0" max="1" step="0.05" value="1"><span id="topPValue">1.0</span></div></div>
-            <div class="settings-item"><span class="settings-label">回复句数</span><div class="settings-row"><input type="range" id="maxSentencesSlider" min="1" max="8" step="1" value="3"><span id="maxSentencesValue">3</span></div></div>
-            <div class="settings-item"><span class="settings-label">最大长度</span><div class="settings-row"><input type="range" id="maxTokensSlider" min="256" max="8192" step="256" value="1024"><span id="maxTokensValue">1024</span></div></div>
-            <div class="settings-item"><span class="settings-label">频率惩罚</span><div class="settings-row"><input type="range" id="freqPenaltySlider" min="0" max="2" step="0.05" value="0.1"><span id="freqPenaltyValue">0.1</span></div></div>
-            <div class="settings-item"><span class="settings-label">存在惩罚</span><div class="settings-row"><input type="range" id="presPenaltySlider" min="0" max="2" step="0.05" value="0.1"><span id="presPenaltyValue">0.1</span></div></div>
+            <div class="settings-item"><span class="settings-label">温度</span><div class="param-options" id="tempOptions"></div></div>
+            <div class="settings-item"><span class="settings-label">Top P</span><div class="param-options" id="topPOptions"></div></div>
+            <div class="settings-item"><span class="settings-label">回复句数</span><div class="param-options" id="maxSentencesOptions"></div></div>
+            <div class="settings-item"><span class="settings-label">最大长度</span><div class="param-options" id="maxTokensOptions"></div></div>
+            <div class="settings-item"><span class="settings-label">频率惩罚</span><div class="param-options" id="freqPenaltyOptions"></div></div>
+            <div class="settings-item"><span class="settings-label">存在惩罚</span><div class="param-options" id="presPenaltyOptions"></div></div>
         </div>
         <div class="settings-tab-content" id="tab-ui">
             <div class="settings-item"><span class="settings-label">主题模式</span><select id="themeSelect"><option value="auto">跟随系统</option><option value="light">白天模式</option><option value="dark">黑夜模式</option></select></div>
@@ -338,9 +336,25 @@
             <div class="settings-item"><span class="settings-label">一起听歌</span><span class="settings-value" id="musicEntrySettings">设置</span></div>
         </div>
         <div class="settings-tab-content" id="tab-data">
-            <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntrySettings">查看</span></div>
+            <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntrySettings">查看 ›</span></div>
             <div class="settings-item"><span class="settings-label">修改密码</span><span class="settings-value" id="changePasswordSettings">修改</span></div>
             <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearChatSettings" style="color:#C06050;">⚠️</span></div>
+        </div>
+        <!-- 用量统计子页面 -->
+        <div class="settings-subpage" id="usageSubpage">
+            <div class="subpage-header">
+                <button class="subpage-back" id="usageSubpageBack">←</button>
+                <span class="subpage-title">用量统计</span>
+            </div>
+            <div class="usage-section">
+                <div class="usage-section-title">本月概览</div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill" id="monthProgress" style="width:0%;"></div></div>
+                <div class="progress-label" id="monthProgressLabel">本月已用 0 token</div>
+            </div>
+            <div class="usage-section">
+                <div class="usage-section-title">详细统计</div>
+                <div id="usageStatsCards"></div>
+            </div>
         </div>
     </div>
 
@@ -377,8 +391,9 @@
     const musicBar = $('musicBar'), musicBarText = $('musicBarText'), musicCloseBtn = $('musicCloseBtn');
     const reminderBanner = $('reminderBanner'), reminderBannerText = $('reminderBannerText'), bannerCloseBtn = $('bannerCloseBtn');
     const overlayMask = $('overlayMask'), contextMenu = $('contextMenu');
-    const drawerLeft = $('drawerLeft'), drawerRight = $('drawerRight'), memoryPage = $('memoryPage'), usagePage = $('usagePage');
+    const drawerLeft = $('drawerLeft'), drawerRight = $('drawerRight'), memoryPage = $('memoryPage');
     const settingsDrawer = $('settingsDrawer'), settingsTabs = $('settingsTabs');
+    const usageSubpage = $('usageSubpage');
     const searchContainer = $('searchContainer'), searchInput = $('searchInput'), searchResults = $('searchResults');
     const calendarContainer = $('calendarContainer'), diaryCard = $('diaryCard'), diaryEmpty = $('diaryEmpty');
     const toast = $('toast');
@@ -407,6 +422,26 @@
     const MEMORY_WINDOW = 40, RECENT_KEEP = 20;
     const PRICING_PRESETS = { 'deepseek-v3':{input:1,output:2}, 'deepseek-r1':{input:4,output:16} };
 
+    // 参数预设
+    const TEMP_PRESETS = [{label:'保守',value:0.3},{label:'平衡',value:0.9},{label:'创意',value:1.3},{label:'疯狂',value:1.8}];
+    const TOPP_PRESETS = [{label:'0.1',value:0.1},{label:'0.3',value:0.3},{label:'0.5',value:0.5},{label:'0.7',value:0.7},{label:'0.9',value:0.9},{label:'1.0',value:1}];
+    const SENTENCE_PRESETS = [{label:'1句',value:1},{label:'2句',value:2},{label:'3句',value:3},{label:'4句',value:4},{label:'5句',value:5},{label:'6句',value:6},{label:'7句',value:7},{label:'8句',value:8}];
+    const TOKENS_PRESETS = [{label:'短',value:512},{label:'中',value:1024},{label:'长',value:2048},{label:'超长',value:4096}];
+    const PENALTY_PRESETS = [{label:'无',value:0},{label:'低',value:0.1},{label:'中',value:0.5},{label:'高',value:1}];
+
+    function buildParamOptions(containerId, presets, currentValue, onChange){
+        const c = $(containerId); c.innerHTML = '';
+        presets.forEach(p => {
+            const btn = document.createElement('div'); btn.className = 'param-btn';
+            if(Math.abs(p.value - currentValue) < 0.001) btn.classList.add('active');
+            btn.textContent = p.label; btn.addEventListener('click', ()=>{
+                c.querySelectorAll('.param-btn').forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active'); onChange(p.value);
+            });
+            c.appendChild(btn);
+        });
+    }
+
     // ========== 密码系统 ==========
     async function sha256(m){ const b = new TextEncoder().encode(m); const h = await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join(''); }
     function getStoredHash(){ return localStorage.getItem(PW_HASH_KEY); }
@@ -431,12 +466,12 @@
 
     // ========== 系统设置子抽屉 ==========
     $('settingsEntry').addEventListener('click', ()=>{ settingsDrawer.classList.add('open'); refreshSettingsUI(); });
-    $('settingsBackBtn').addEventListener('click', ()=>{ settingsDrawer.classList.remove('open'); });
-    settingsTabs.addEventListener('click', (e)=>{ if(e.target.classList.contains('tab')){ document.querySelectorAll('#settingsTabs .tab').forEach(t=>t.classList.remove('active')); e.target.classList.add('active'); const tabId=e.target.dataset.tab; document.querySelectorAll('.settings-tab-content').forEach(c=>c.classList.remove('active')); $(tabId).classList.add('active'); } });
+    $('settingsBackBtn').addEventListener('click', ()=>{ settingsDrawer.classList.remove('open'); usageSubpage.classList.remove('active'); });
+    settingsTabs.addEventListener('click', (e)=>{ if(e.target.classList.contains('tab')){ document.querySelectorAll('#settingsTabs .tab').forEach(t=>t.classList.remove('active')); e.target.classList.add('active'); const tabId=e.target.dataset.tab; document.querySelectorAll('.settings-tab-content').forEach(c=>c.classList.remove('active')); $(tabId).classList.add('active'); usageSubpage.classList.remove('active'); } });
 
     function refreshSettingsUI(){
         $('apiKeyValue').textContent = API_KEYS.length ? `已设置 ${API_KEYS.length} 个` : '未设置';
-        $('apiKeyValue').addEventListener('click', ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); });
+        $('apiKeyValue').onclick = ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
         const currentModel = getCurrentModel();
         if(currentModel === 'deepseek-chat') $('modelSelect').value = 'deepseek-chat';
         else if(currentModel === 'deepseek-reasoner') $('modelSelect').value = 'deepseek-reasoner';
@@ -449,19 +484,12 @@
         $('pricingValue').textContent = `¥${INPUT_PRICE}/¥${OUTPUT_PRICE}`;
         $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
 
-        $('tempSlider').value = TEMPERATURE; $('tempValue').textContent = TEMPERATURE;
-        $('topPSlider').value = TOP_P; $('topPValue').textContent = TOP_P;
-        $('maxSentencesSlider').value = MAX_SENTENCES; $('maxSentencesValue').textContent = MAX_SENTENCES;
-        $('maxTokensSlider').value = MAX_TOKENS; $('maxTokensValue').textContent = MAX_TOKENS;
-        $('freqPenaltySlider').value = FREQ_PENALTY; $('freqPenaltyValue').textContent = FREQ_PENALTY;
-        $('presPenaltySlider').value = PRES_PENALTY; $('presPenaltyValue').textContent = PRES_PENALTY;
-
-        $('tempSlider').oninput = function(){ TEMPERATURE=parseFloat(this.value); $('tempValue').textContent=this.value; saveParams(); };
-        $('topPSlider').oninput = function(){ TOP_P=parseFloat(this.value); $('topPValue').textContent=this.value; saveParams(); };
-        $('maxSentencesSlider').oninput = function(){ MAX_SENTENCES=parseInt(this.value); $('maxSentencesValue').textContent=this.value; localStorage.setItem('claude_max_sentences', MAX_SENTENCES); };
-        $('maxTokensSlider').oninput = function(){ MAX_TOKENS=parseInt(this.value); $('maxTokensValue').textContent=this.value; saveParams(); };
-        $('freqPenaltySlider').oninput = function(){ FREQ_PENALTY=parseFloat(this.value); $('freqPenaltyValue').textContent=this.value; saveParams(); };
-        $('presPenaltySlider').oninput = function(){ PRES_PENALTY=parseFloat(this.value); $('presPenaltyValue').textContent=this.value; saveParams(); };
+        buildParamOptions('tempOptions', TEMP_PRESETS, TEMPERATURE, (v)=>{ TEMPERATURE=v; saveParams(); });
+        buildParamOptions('topPOptions', TOPP_PRESETS, TOP_P, (v)=>{ TOP_P=v; saveParams(); });
+        buildParamOptions('maxSentencesOptions', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{ MAX_SENTENCES=v; localStorage.setItem('claude_max_sentences', MAX_SENTENCES); });
+        buildParamOptions('maxTokensOptions', TOKENS_PRESETS, MAX_TOKENS, (v)=>{ MAX_TOKENS=v; saveParams(); });
+        buildParamOptions('freqPenaltyOptions', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{ FREQ_PENALTY=v; saveParams(); });
+        buildParamOptions('presPenaltyOptions', PENALTY_PRESETS, PRES_PENALTY, (v)=>{ PRES_PENALTY=v; saveParams(); });
 
         $('themeSelect').value = THEME_MODE;
         $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
@@ -469,7 +497,8 @@
         imgTgl.classList.toggle('on', IMAGE_ENABLED);
         imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
         $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
-        $('usageEntrySettings').onclick = ()=>{ usagePage.classList.add('open'); renderUsagePage(); };
+        $('usageEntrySettings').onclick = ()=>{ usageSubpage.classList.add('active'); renderUsagePage(); };
+        $('usageSubpageBack').onclick = ()=>{ usageSubpage.classList.remove('active'); };
     }
 
     function saveKeys(){ localStorage.setItem('claude_api_keys',API_KEYS.join(',')); localStorage.setItem('claude_models',API_MODELS.join(',')); localStorage.setItem('claude_key_index',currentKeyIndex); }
@@ -526,11 +555,10 @@
 
     function createTypingBubble(){ const div=document.createElement('div'); div.className='message assistant'; div.dataset.typing='true'; const b=document.createElement('div'); b.className='typing-bubble'; b.innerHTML='<span>●</span><span>●</span><span>●</span>'; div.appendChild(b); chatLog.appendChild(div); scrollToBottom(); return div; }
     function replaceTypingBubble(typingDiv, content, msg){ typingDiv.dataset.typing='false'; typingDiv.innerHTML=''; const timeStr=new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); let inner=`<div class="bubble">${parseMarkdown(content)}</div>`; inner+=`<div class="timestamp"><span>${timeStr}</span></div>`; inner+=`<div class="rewind-row"><button class="prev-ver-btn" disabled>◂</button><span class="ver-indicator">1/1</span><button class="next-ver-btn" disabled>▸</button><button class="regen-btn">↺ 重新生成</button></div>`; typingDiv.innerHTML=inner; const bubble=typingDiv.querySelector('.bubble'); if(bubble){ bubble.addEventListener('click',(e)=>{e.stopPropagation();handleBubbleClick('assistant',msg.timestamp,typingDiv);}); } typingDiv.querySelector('.regen-btn')?.addEventListener('click',(e)=>{e.stopPropagation();regenerateResponse(msg);}); let pt; let ilp=false; typingDiv.addEventListener('touchstart',(e)=>{ilp=false;pt=setTimeout(()=>{ilp=true;showMessageContextMenu(msg,e,typingDiv);},450);}); typingDiv.addEventListener('touchend',()=>{clearTimeout(pt);}); typingDiv.addEventListener('touchmove',()=>{clearTimeout(pt);ilp=false;}); scrollToBottom(); }
-    function appendToTypingBubble(typingDiv, newChunk){ const bubble=typingDiv.querySelector('.bubble'); if(!bubble){ const timeStr=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); typingDiv.innerHTML=`<div class="bubble">${parseMarkdown(newChunk)}</div><div class="timestamp"><span>${timeStr}</span></div>`; return; } const currentText=bubble.textContent||''; bubble.innerHTML=parseMarkdown(currentText+newChunk); scrollToBottom(); }
 
     function resetTypingTimer(){ if(userInputTimer) clearTimeout(userInputTimer); userInputTimer=setTimeout(()=>{userInputTimer=null;triggerAIResponse();},TYPING_DELAY); }
 
-    async function triggerAIResponse(){ if(!getCurrentKey()||!SYSTEM_PROMPT) return; if(currentAbortController){currentAbortController.abort();currentAbortController=null;} const oldTyping=document.querySelector('[data-typing="true"]'); if(oldTyping) oldTyping.remove(); const typingDiv=createTypingBubble(); currentAbortController=new AbortController(); const signal=currentAbortController.signal; let fullResponse=''; try{ const timeCtx=getTimeContext(); const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))]; msgs.splice(1,0,{role:'user',content:timeCtx}); const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,msgs,signal); if(!resp.ok){if(resp.status===429||resp.status===402){if(switchToNextKey()){triggerAIResponse();return;}}throw new Error(`API 错误 ${resp.status}`);} const reader=resp.body.getReader(); const dec=new TextDecoder('utf-8'); let buf=''; let lastChunk=''; let pendingText=''; let sentenceCount=0; let sentenceTimer=null; const flushPending=()=>{if(pendingText){appendToTypingBubble(typingDiv,pendingText);pendingText='';}}; while(true){ const{done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const l of lines){ if(l.startsWith('data: ')){ const d=l.slice(6); if(d==='[DONE]') continue; try{ const p=JSON.parse(d); const txt=extractStreamText(endpoint.type,p); if(txt){ fullResponse+=txt; pendingText+=txt; if(/[。！？\n]/.test(txt)){ sentenceCount++; flushPending(); if(sentenceCount>=MAX_SENTENCES){ reader.cancel(); break; } if(sentenceTimer) clearTimeout(sentenceTimer); await new Promise(r=>{sentenceTimer=setTimeout(r,SENTENCE_PAUSE);}); } else { if(sentenceTimer) clearTimeout(sentenceTimer); sentenceTimer=setTimeout(flushPending,300); } } if(p.usage) lastChunk=d; }catch(e){} } } if(sentenceCount>=MAX_SENTENCES) break; } flushPending(); if(lastChunk){try{const usage=JSON.parse(lastChunk).usage;if(usage)recordUsage(usage);}catch(e){}} const newMsg={role:'assistant',versions:[fullResponse],currentVersion:0,timestamp:Date.now()}; conversationHistory.push(newMsg); saveHistory(); replaceTypingBubble(typingDiv,fullResponse,newMsg); checkDiaryTriggers(); }catch(e){if(e.name==='AbortError'){}else{if(typingDiv.parentNode)typingDiv.remove();const errDiv=document.createElement('div');errDiv.className='message assistant';errDiv.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(errDiv);}} finally{currentAbortController=null;userInput.focus();} }
+    async function triggerAIResponse(){ if(!getCurrentKey()||!SYSTEM_PROMPT) return; if(currentAbortController){currentAbortController.abort();currentAbortController=null;} const oldTyping=document.querySelector('[data-typing="true"]'); if(oldTyping) oldTyping.remove(); const typingDiv=createTypingBubble(); currentAbortController=new AbortController(); const signal=currentAbortController.signal; let fullResponse=''; try{ const timeCtx=getTimeContext(); const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))]; msgs.splice(1,0,{role:'user',content:timeCtx}); const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,msgs,signal); if(!resp.ok){if(resp.status===429||resp.status===402){if(switchToNextKey()){triggerAIResponse();return;}}throw new Error(`API 错误 ${resp.status}`);} const reader=resp.body.getReader(); const dec=new TextDecoder('utf-8'); let buf=''; let lastChunk=''; let sentenceCount=0; while(true){ const{done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const l of lines){ if(l.startsWith('data: ')){ const d=l.slice(6); if(d==='[DONE]') continue; try{ const p=JSON.parse(d); const txt=extractStreamText(endpoint.type,p); if(txt){ fullResponse+=txt; if(/[。！？\n]/.test(txt)){ sentenceCount++; if(sentenceCount>=MAX_SENTENCES){ reader.cancel(); break; } } } if(p.usage) lastChunk=d; }catch(e){} } } if(sentenceCount>=MAX_SENTENCES) break; } if(lastChunk){try{const usage=JSON.parse(lastChunk).usage;if(usage)recordUsage(usage);}catch(e){}} const newMsg={role:'assistant',versions:[fullResponse],currentVersion:0,timestamp:Date.now()}; conversationHistory.push(newMsg); saveHistory(); replaceTypingBubble(typingDiv,fullResponse,newMsg); checkDiaryTriggers(); }catch(e){if(e.name==='AbortError'){}else{if(typingDiv.parentNode)typingDiv.remove();const errDiv=document.createElement('div');errDiv.className='message assistant';errDiv.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(errDiv);}} finally{currentAbortController=null;userInput.focus();} }
 
     window.showImageOverlay=function(src){const o=document.createElement('div');o.className='image-overlay';o.innerHTML=`<img src="${src}">`;o.addEventListener('click',()=>o.remove());document.body.appendChild(o);};
     function scrollToBottom(){chatLog.scrollTop=chatLog.scrollHeight;}
@@ -546,7 +574,7 @@
     splashScreen.addEventListener('click',()=>{splashScreen.classList.add('hidden');setTimeout(()=>userInput.focus(),100);});
 
     function openLeft(){drawerLeft.classList.add('open');overlayMask.classList.add('show');updateDrawerDays();}
-    function closeLeft(){drawerLeft.classList.remove('open');overlayMask.classList.remove('show');memoryPage.classList.remove('open');usagePage.classList.remove('open');settingsDrawer.classList.remove('open');}
+    function closeLeft(){drawerLeft.classList.remove('open');overlayMask.classList.remove('show');memoryPage.classList.remove('open');settingsDrawer.classList.remove('open');}
     function openRight(){drawerRight.classList.add('open');overlayMask.classList.add('show');renderCalendarPanel();}
     function closeRight(){drawerRight.classList.remove('open');overlayMask.classList.remove('show');}
     topAvatarBtn.addEventListener('click',()=>{if(drawerRight.classList.contains('open'))closeRight();openLeft();});
@@ -605,7 +633,7 @@
     imageInput.addEventListener('change',()=>{const f=imageInput.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{pendingImage=e.target.result;imagePreviewThumb.src=pendingImage;imagePreviewRow.classList.remove('hidden');};r.readAsDataURL(f);imageInput.value='';});
     imagePreviewRemove.addEventListener('click',()=>{pendingImage=null;imagePreviewRow.classList.add('hidden');});
 
-    async function sendImageMessage(img){if(!getCurrentKey()||!SYSTEM_PROMPT)return;if(currentAbortController){currentAbortController.abort();currentAbortController=null;}const old=document.querySelector('[data-typing="true"]');if(old)old.remove();const td=createTypingBubble();currentAbortController=new AbortController();const sig=currentAbortController.signal;let fr='';try{const ms=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,ms,sig);if(!rp.ok){if(rp.status===429||rp.status===402){if(switchToNextKey()){sendImageMessage(img);return;}}throw new Error(`API 错误 ${rp.status}`);}const rd=rp.body.getReader();const dc=new TextDecoder('utf-8');let bf='';let lc='';let sc=0;let pt='';let st=null;const fp=()=>{if(pt){appendToTypingBubble(td,pt);pt='';}};while(true){const{done,value}=await rd.read();if(done)break;bf+=dc.decode(value,{stream:true});const ls=bf.split('\n');bf=ls.pop()||'';for(const l of ls){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const t=extractStreamText(ep.type,p);if(t){fr+=t;pt+=t;if(/[。！？\n]/.test(t)){sc++;fp();if(sc>=MAX_SENTENCES){rd.cancel();break;}if(st)clearTimeout(st);await new Promise(r=>{st=setTimeout(r,SENTENCE_PAUSE);});}else{if(st)clearTimeout(st);st=setTimeout(fp,300);}}if(p.usage)lc=d;}catch(e){}}} if(sc>=MAX_SENTENCES)break;} fp();if(lc){try{const u=JSON.parse(lc).usage;if(u)recordUsage(u);}catch(e){}}const nm={role:'assistant',versions:[fr],currentVersion:0,timestamp:Date.now()};conversationHistory.push(nm);saveHistory();replaceTypingBubble(td,fr,nm);checkDiaryTriggers();}catch(e){if(e.name==='AbortError'){}else{if(td.parentNode)td.remove();const ed=document.createElement('div');ed.className='message assistant';ed.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(ed);}}finally{currentAbortController=null;userInput.focus();}}
+    async function sendImageMessage(img){if(!getCurrentKey()||!SYSTEM_PROMPT)return;if(currentAbortController){currentAbortController.abort();currentAbortController=null;}const old=document.querySelector('[data-typing="true"]');if(old)old.remove();const td=createTypingBubble();currentAbortController=new AbortController();const sig=currentAbortController.signal;let fr='';try{const ms=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,ms,sig);if(!rp.ok){if(rp.status===429||rp.status===402){if(switchToNextKey()){sendImageMessage(img);return;}}throw new Error(`API 错误 ${rp.status}`);}const rd=rp.body.getReader();const dc=new TextDecoder('utf-8');let bf='';let lc='';let sc=0;while(true){const{done,value}=await rd.read();if(done)break;bf+=dc.decode(value,{stream:true});const ls=bf.split('\n');bf=ls.pop()||'';for(const l of ls){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const t=extractStreamText(ep.type,p);if(t){fr+=t;if(/[。！？\n]/.test(t)){sc++;if(sc>=MAX_SENTENCES){rd.cancel();break;}}}if(p.usage)lc=d;}catch(e){}}} if(sc>=MAX_SENTENCES)break;} if(lc){try{const u=JSON.parse(lc).usage;if(u)recordUsage(u);}catch(e){}}const nm={role:'assistant',versions:[fr],currentVersion:0,timestamp:Date.now()};conversationHistory.push(nm);saveHistory();replaceTypingBubble(td,fr,nm);checkDiaryTriggers();}catch(e){if(e.name==='AbortError'){}else{if(td.parentNode)td.remove();const ed=document.createElement('div');ed.className='message assistant';ed.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(ed);}}finally{currentAbortController=null;userInput.focus();}}
 
     async function summarizeMessages(ms){if(!getCurrentKey())return null;const t=ms.map(m=>`${m.role}: ${getCurrentContent(m)}`).join('\n');const p=`请用一段简短的话总结以下对话的关键内容，保留重要的记忆、决定、情绪和事件：\n${t}`;try{const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,[{role:'user',content:p}]);if(!rp.ok)return null;const d=await rp.json();if(ep.type==='anthropic')return d.content?.[0]?.text?.trim()||null;return d.choices?.[0]?.message?.content?.trim()||null;}catch(e){return null;}}
     function getLastUserMessageTime(){for(let i=conversationHistory.length-1;i>=0;i--)if(conversationHistory[i].role==='user')return conversationHistory[i].timestamp;return 0;}
