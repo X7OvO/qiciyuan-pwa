@@ -72,11 +72,11 @@
         .bubble { padding:11px 14px; border-radius:18px; font-size:15px; line-height:1.5; word-break:break-word; cursor:pointer; transition: transform 0.08s; }
         .message.user .bubble { background:var(--bubble-user); color:var(--bubble-user-text); border-bottom-right-radius:6px; }
         .message.assistant .bubble { background:var(--bubble-ai); color:var(--bubble-ai-text); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); }
-        .typing-bubble { background:var(--bubble-ai); color:var(--text-secondary); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); display:inline-flex; align-items:center; gap:3px; padding:14px 18px; border-radius:18px; font-size:20px; letter-spacing:2px; }
+        .typing-bubble { background:var(--bubble-ai); color:var(--text-secondary); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); display:inline-flex; align-items:center; gap:2px; padding:12px 16px; border-radius:18px; font-size:14px; letter-spacing:1px; }
         .typing-bubble span { animation: dotPulse 1.4s infinite; }
         .typing-bubble span:nth-child(2) { animation-delay: 0.2s; }
         .typing-bubble span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes dotPulse { 0%,60%,100% { opacity:0.2; transform:translateY(0); } 30% { opacity:1; transform:translateY(-4px); } }
+        @keyframes dotPulse { 0%,60%,100% { opacity:0.2; transform:translateY(0); } 30% { opacity:1; transform:translateY(-3px); } }
         .message img { max-width:100%; border-radius:12px; cursor:pointer; }
         .message .timestamp { font-size:10px; color:var(--text-secondary); margin-top:3px; padding:0 6px; display:flex; align-items:center; gap:6px; }
         .message .edited-tag { font-size:9px; color:#B8A88A; font-style:italic; }
@@ -110,11 +110,7 @@
         .drawer-left .drawer-name { font-size:18px; font-weight:500; color:var(--text); }
         .drawer-left .drawer-days { font-size:12px; color:var(--text-secondary); }
         .drawer-left .drawer-section { padding:8px 16px; border-bottom:1px solid var(--border); }
-        .drawer-left .drawer-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
-        .drawer-left .drawer-section-title .collapse-arrow { font-size:12px; transition:transform 0.2s; }
-        .drawer-left .drawer-section-title.collapsed .collapse-arrow { transform:rotate(-90deg); }
-        .drawer-left .drawer-section-body { overflow:hidden; transition:max-height 0.3s ease; }
-        .drawer-left .drawer-section-body.collapsed { max-height:0 !important; }
+        .drawer-left .drawer-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; letter-spacing:1px; margin-bottom:6px; text-transform:uppercase; }
         .drawer-left .drawer-item { padding:10px 0; font-size:14px; color:var(--text); cursor:pointer; border-bottom:1px solid rgba(128,128,128,0.05); display:flex; align-items:center; justify-content:space-between; }
         .drawer-left .drawer-item:last-child { border-bottom:none; }
         .drawer-left .drawer-item .item-arrow { color:var(--text-secondary); font-size:14px; }
@@ -214,6 +210,25 @@
         .reminder-banner { margin:4px 12px; padding:8px 12px; background:var(--banner-bg); border-radius:12px; border:1px solid #F0E8C0; font-size:12px; color:var(--banner-text); display:flex; align-items:center; gap:6px; cursor:default; }
         .reminder-banner.hidden { display:none; }
         .reminder-banner .banner-close { margin-left:auto; background:none; border:none; color:var(--banner-text); cursor:pointer; font-size:14px; }
+        /* 系统设置子抽屉 */
+        .settings-drawer { position:absolute; top:0; right:0; width:100%; height:100%; background:var(--drawer-bg); z-index:55; transform:translateX(100%); transition:transform 0.3s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; overflow-y:auto; }
+        .settings-drawer.open { transform:translateX(0); }
+        .settings-drawer .settings-header { padding:16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+        .settings-drawer .settings-back { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
+        .settings-drawer .settings-title { font-size:16px; font-weight:500; color:var(--text); }
+        .settings-tabs { display:flex; gap:0; padding:8px 12px; border-bottom:1px solid var(--border); }
+        .settings-tabs .tab { flex:1; text-align:center; padding:8px 0; font-size:13px; color:var(--text-secondary); cursor:pointer; border-radius:8px; transition:0.2s; }
+        .settings-tabs .tab.active { background:var(--hover-bg); color:var(--text); font-weight:500; }
+        .settings-tab-content { display:none; padding:12px 16px; flex:1; overflow-y:auto; }
+        .settings-tab-content.active { display:block; }
+        .settings-item { padding:12px 0; border-bottom:1px solid rgba(128,128,128,0.05); display:flex; align-items:center; justify-content:space-between; }
+        .settings-item .settings-label { font-size:14px; color:var(--text); }
+        .settings-item .settings-value { font-size:14px; color:var(--text-secondary); cursor:pointer; }
+        .settings-item input, .settings-item select { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; max-width:120px; }
+        .settings-item input[type="range"] { -webkit-appearance:none; width:100px; height:6px; background:var(--progress-bg); border-radius:3px; outline:none; border:none; }
+        .settings-item input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; background:var(--btn-primary); border-radius:50%; cursor:pointer; }
+        .settings-row { display:flex; align-items:center; gap:8px; }
+        .settings-row span { font-size:12px; color:var(--text-secondary); min-width:30px; text-align:center; }
     </style>
 </head>
 <body>
@@ -267,33 +282,16 @@
         </div>
         <div class="drawer-section">
             <div class="drawer-section-title">他的档案</div>
-            <div class="drawer-section-body">
-                <div class="drawer-item" id="editNameItem"><span>名字</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="editPromptItem"><span>互动指令</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="memoryEntry"><span>记忆库</span><span class="item-arrow">›</span></div>
-            </div>
+            <div class="drawer-item" id="editNameItem"><span>名字</span><span class="item-arrow">›</span></div>
+            <div class="drawer-item" id="editPromptItem"><span>互动指令</span><span class="item-arrow">›</span></div>
+            <div class="drawer-item" id="memoryEntry"><span>记忆库</span><span class="item-arrow">›</span></div>
         </div>
         <div class="drawer-section">
             <div class="drawer-section-title">数据</div>
-            <div class="drawer-section-body">
-                <div class="drawer-item" id="exportItem"><span>导出全部</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="importItem"><span>导入备份</span><span class="item-arrow">›</span></div>
-            </div>
-        </div>
-        <div class="drawer-section">
-            <div class="drawer-section-title" id="systemSectionTitle">系统 ▾</div>
-            <div class="drawer-section-body collapsed" id="systemSectionBody">
-                <div class="drawer-item" id="apiKeyItem"><span>API Key</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="modelItem"><span>模型</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="paramsEntry"><span>推理参数</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="pricingEntry"><span>费率设置</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="usageEntry"><span>用量统计</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="themeEntry"><span>主题模式</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="imageToggleItem"><span>图片发送</span><div class="toggle-switch on" id="imageToggle"></div></div>
-                <div class="drawer-item" id="musicEntry"><span>一起听歌</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="changePasswordItem"><span>修改密码</span><span class="item-arrow">›</span></div>
-                <div class="drawer-item" id="clearItem"><span style="color:#C06050;">清空对话</span><span class="item-arrow" style="color:#C06050;">›</span></div>
-            </div>
+            <div class="drawer-item" id="exportItem"><span>导出全部</span><span class="item-arrow">›</span></div>
+            <div class="drawer-item" id="importItem"><span>导入备份</span><span class="item-arrow">›</span></div>
+            <div class="drawer-item" id="clearItem"><span style="color:#C06050;">清空对话</span><span class="item-arrow" style="color:#C06050;">›</span></div>
+            <div class="drawer-item" id="settingsEntry"><span>⚙️ 系统设置</span><span class="item-arrow">›</span></div>
         </div>
         <div class="memory-page" id="memoryPage">
             <div class="mem-header"><button class="mem-back" id="memBackBtn">←</button><span class="mem-title">记忆库</span></div>
@@ -305,6 +303,44 @@
             <div class="usage-header"><button class="usage-back" id="usageBackBtn">←</button><span class="usage-title">用量统计</span></div>
             <div class="usage-section"><div class="usage-section-title">本月概览</div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="monthProgress" style="width:0%;"></div></div><div class="progress-label" id="monthProgressLabel">本月已用 0 token</div></div>
             <div class="usage-section"><div class="usage-section-title">详细统计</div><div id="usageStatsCards"></div></div>
+        </div>
+    </div>
+
+    <!-- 系统设置子抽屉 -->
+    <div class="settings-drawer" id="settingsDrawer">
+        <div class="settings-header">
+            <button class="settings-back" id="settingsBackBtn">←</button>
+            <span class="settings-title">系统设置</span>
+        </div>
+        <div class="settings-tabs" id="settingsTabs">
+            <div class="tab active" data-tab="tab-interface">接口</div>
+            <div class="tab" data-tab="tab-chat">对话</div>
+            <div class="tab" data-tab="tab-ui">界面</div>
+            <div class="tab" data-tab="tab-data">数据</div>
+        </div>
+        <div class="settings-tab-content active" id="tab-interface">
+            <div class="settings-item"><span class="settings-label">API Key</span><span class="settings-value" id="apiKeyValue">未设置</span></div>
+            <div class="settings-item"><span class="settings-label">模型</span><select id="modelSelect"><option value="deepseek-chat">DeepSeek V3</option><option value="deepseek-reasoner">DeepSeek R1</option><option value="custom">自定义</option></select></div>
+            <div class="settings-item" id="customModelItem" style="display:none;"><span class="settings-label">自定义模型</span><input type="text" id="customModelInput" placeholder="输入模型名"></div>
+            <div class="settings-item"><span class="settings-label">费率设置</span><span class="settings-value" id="pricingValue">¥1/¥2</span></div>
+        </div>
+        <div class="settings-tab-content" id="tab-chat">
+            <div class="settings-item"><span class="settings-label">温度</span><div class="settings-row"><input type="range" id="tempSlider" min="0" max="2" step="0.1" value="0.9"><span id="tempValue">0.9</span></div></div>
+            <div class="settings-item"><span class="settings-label">Top P</span><div class="settings-row"><input type="range" id="topPSlider" min="0" max="1" step="0.05" value="1"><span id="topPValue">1.0</span></div></div>
+            <div class="settings-item"><span class="settings-label">回复句数</span><div class="settings-row"><input type="range" id="maxSentencesSlider" min="1" max="8" step="1" value="3"><span id="maxSentencesValue">3</span></div></div>
+            <div class="settings-item"><span class="settings-label">最大长度</span><div class="settings-row"><input type="range" id="maxTokensSlider" min="256" max="8192" step="256" value="1024"><span id="maxTokensValue">1024</span></div></div>
+            <div class="settings-item"><span class="settings-label">频率惩罚</span><div class="settings-row"><input type="range" id="freqPenaltySlider" min="0" max="2" step="0.05" value="0.1"><span id="freqPenaltyValue">0.1</span></div></div>
+            <div class="settings-item"><span class="settings-label">存在惩罚</span><div class="settings-row"><input type="range" id="presPenaltySlider" min="0" max="2" step="0.05" value="0.1"><span id="presPenaltyValue">0.1</span></div></div>
+        </div>
+        <div class="settings-tab-content" id="tab-ui">
+            <div class="settings-item"><span class="settings-label">主题模式</span><select id="themeSelect"><option value="auto">跟随系统</option><option value="light">白天模式</option><option value="dark">黑夜模式</option></select></div>
+            <div class="settings-item"><span class="settings-label">图片发送</span><div class="toggle-switch on" id="imageToggleSettings"></div></div>
+            <div class="settings-item"><span class="settings-label">一起听歌</span><span class="settings-value" id="musicEntrySettings">设置</span></div>
+        </div>
+        <div class="settings-tab-content" id="tab-data">
+            <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntrySettings">查看</span></div>
+            <div class="settings-item"><span class="settings-label">修改密码</span><span class="settings-value" id="changePasswordSettings">修改</span></div>
+            <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearChatSettings" style="color:#C06050;">⚠️</span></div>
         </div>
     </div>
 
@@ -321,16 +357,13 @@
     <div class="modal-overlay hidden" id="editNameModal"><div class="modal-card"><h3>编辑名字</h3><input type="text" id="editNameInput" maxlength="20"><div class="btn-row"><button class="cancel-btn" id="cancelNameBtn">取消</button><button class="save-btn" id="saveNameBtn">保存</button></div></div></div>
     <div class="modal-overlay hidden" id="editPromptModal"><div class="modal-card"><h3>互动指令</h3><textarea id="editPromptInput"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelPromptBtn">取消</button><button class="save-btn" id="savePromptBtn">保存</button></div></div></div>
     <div class="modal-overlay hidden" id="editApiKeyModal"><div class="modal-card"><h3>API Keys</h3><textarea id="editApiKeyInput" placeholder="多个Key用英文逗号分隔" style="height:80px;"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelApiKeyBtn">取消</button><button class="save-btn" id="saveApiKeyBtn">保存</button></div></div></div>
-    <div class="modal-overlay hidden" id="editModelModal"><div class="modal-card"><h3>模型</h3><input type="text" id="editModelInput" placeholder="多个模型用英文逗号分隔"><div class="btn-row"><button class="cancel-btn" id="cancelModelBtn">取消</button><button class="save-btn" id="saveModelBtn">保存</button></div></div></div>
-    <div class="modal-overlay hidden" id="editParamsModal"><div class="modal-card"><h3>推理参数</h3><label style="font-size:13px;color:var(--text);">Temperature（温度）</label><input type="number" id="editTemperature" step="0.1" min="0" max="2"><div class="param-hint">0=保守，1=平衡，2=天马行空。日常聊天建议0.8-1.2</div><label style="font-size:13px;color:var(--text);">Top P</label><input type="number" id="editTopP" step="0.05" min="0" max="1"><div class="param-hint">和温度配合使用，建议0.9-1.0</div><label style="font-size:13px;color:var(--text);">Max Tokens（最大回复长度）</label><input type="number" id="editMaxTokens" step="256" min="256" max="8192"><div class="param-hint">1024=日常聊天，4096=长篇描写，8192=小说章节</div><label style="font-size:13px;color:var(--text);">Frequency Penalty（频率惩罚）</label><input type="number" id="editFreqPenalty" step="0.05" min="0" max="2"><div class="param-hint">0=可能重复，0.3=减少套话，1+=用词多变。建议0.1-0.3</div><label style="font-size:13px;color:var(--text);">Presence Penalty（存在惩罚）</label><input type="number" id="editPresPenalty" step="0.05" min="0" max="2"><div class="param-hint">0=只回应你，0.3=偶尔主动开新话题，1+=频繁转移话题。建议0.1-0.3</div><div class="btn-row"><button class="cancel-btn" id="cancelParamsBtn">取消</button><button class="save-btn" id="saveParamsBtn">保存</button></div></div></div>
-    <div class="modal-overlay hidden" id="editPricingModal"><div class="modal-card"><h3>费率设置</h3><select id="pricingPreset"><option value="custom">自定义</option><option value="deepseek-v3">DeepSeek V3 (¥1/¥2)</option><option value="deepseek-r1">DeepSeek R1 (¥4/¥16)</option><option value="claude-sonnet">Claude Sonnet 4 ($3/$15)</option><option value="claude-opus">Claude Opus 4 ($15/$75)</option><option value="gpt-4o">GPT-4o ($2.50/$10)</option></select><input type="number" id="editInputPrice" placeholder="输入价格（每百万token）" step="0.01" min="0"><input type="number" id="editOutputPrice" placeholder="输出价格（每百万token）" step="0.01" min="0"><div class="btn-row"><button class="cancel-btn" id="cancelPricingBtn">取消</button><button class="save-btn" id="savePricingBtn">保存</button></div></div></div>
-    <div class="modal-overlay hidden" id="editThemeModal"><div class="modal-card"><h3>主题模式</h3><select id="themeSelect"><option value="auto">跟随系统</option><option value="light">白天模式</option><option value="dark">黑夜模式</option></select><div class="btn-row"><button class="cancel-btn" id="cancelThemeBtn">取消</button><button class="save-btn" id="saveThemeBtn">保存</button></div></div></div>
+    <div class="modal-overlay hidden" id="editPricingModal"><div class="modal-card"><h3>费率设置</h3><select id="pricingPreset"><option value="custom">自定义</option><option value="deepseek-v3">DeepSeek V3 (¥1/¥2)</option><option value="deepseek-r1">DeepSeek R1 (¥4/¥16)</option></select><input type="number" id="editInputPrice" placeholder="输入价格（每百万token）" step="0.01" min="0"><input type="number" id="editOutputPrice" placeholder="输出价格（每百万token）" step="0.01" min="0"><div class="btn-row"><button class="cancel-btn" id="cancelPricingBtn">取消</button><button class="save-btn" id="savePricingBtn">保存</button></div></div></div>
+    <div class="modal-overlay hidden" id="changePasswordModal"><div class="modal-card"><h3>修改密码</h3><input type="password" id="oldPasswordInput" placeholder="旧密码"><input type="password" id="newPasswordInput" placeholder="新密码"><div class="btn-row"><button class="cancel-btn" id="cancelChangePwBtn">取消</button><button class="save-btn" id="saveChangePwBtn">保存</button></div></div></div>
+    <div class="modal-overlay hidden" id="clearChatModal"><div class="modal-card"><h3>清空对话</h3><div style="font-size:13px;color:var(--text-secondary);text-align:center;">此操作不可撤销。请输入"确认删除"后点击确认。</div><input type="text" id="clearChatConfirmInput" placeholder="输入 确认删除"><div class="btn-row"><button class="cancel-btn" id="cancelClearChatBtn">取消</button><button class="save-btn" id="confirmClearChatBtn" disabled style="opacity:0.5;">确认清空</button></div></div></div>
+    <div class="modal-overlay hidden" id="musicModal"><div class="modal-card"><h3>一起听歌</h3><div style="font-size:12px;color:var(--text-secondary);text-align:center;">从音乐App复制链接后回来点"读取剪贴板"</div><input type="text" id="musicSongInput" placeholder="歌名"><input type="text" id="musicArtistInput" placeholder="歌手（可选）"><div class="btn-row"><button class="cancel-btn" id="readClipboardBtn">📋 读取剪贴板</button><button class="cancel-btn" id="cancelMusicBtn">取消</button><button class="save-btn" id="saveMusicBtn">开始听</button></div></div></div>
     <div class="modal-overlay hidden" id="yearPickerModal"><div class="modal-card"><h3>选择年份</h3><div class="year-list" id="yearList"></div><div class="btn-row"><button class="cancel-btn" id="cancelYearBtn">取消</button></div></div></div>
     <div class="modal-overlay hidden" id="addMarkModal"><div class="modal-card"><h3 id="addMarkTitle">添加日程</h3><input type="text" id="markTitleInput" placeholder="标题（必填）" maxlength="50"><select id="markTypeSelect"><option value="anniversary">纪念日</option><option value="period-start">经期开始</option><option value="period-end">经期结束</option><option value="custom">自定义日程</option></select><textarea id="markNoteInput" placeholder="备注（可选）" style="height:60px;"></textarea><select id="markReminderSelect"><option value="none">不提醒</option><option value="day-before">提前一天</option><option value="same-day">当天早上</option><option value="one-hour">提前一小时</option></select><input type="hidden" id="editMarkDate"><input type="hidden" id="editMarkIsNew" value="true"><div class="btn-row"><button class="cancel-btn" id="cancelMarkBtn">取消</button><button class="save-btn" id="saveMarkBtn">保存</button><button class="cancel-btn" id="deleteMarkBtn" style="display:none;color:#C06050;">删除</button></div></div></div>
     <div class="modal-overlay hidden" id="addMemoryModal"><div class="modal-card"><h3>添加记忆</h3><select id="memCategorySelect"><option value="about_you">关于你</option><option value="about_us">我们之间</option></select><textarea id="memContentInput" placeholder="写一条记忆..."></textarea><div class="btn-row"><button class="cancel-btn" id="cancelMemBtn">取消</button><button class="save-btn" id="saveMemBtn">保存</button></div></div></div>
-    <div class="modal-overlay hidden" id="musicModal"><div class="modal-card"><h3>一起听歌</h3><div style="font-size:12px;color:var(--text-secondary);text-align:center;">从音乐App复制链接后回来点"读取剪贴板"</div><input type="text" id="musicSongInput" placeholder="歌名"><input type="text" id="musicArtistInput" placeholder="歌手（可选）"><div class="btn-row"><button class="cancel-btn" id="readClipboardBtn">📋 读取剪贴板</button><button class="cancel-btn" id="cancelMusicBtn">取消</button><button class="save-btn" id="saveMusicBtn">开始听</button></div></div></div>
-    <div class="modal-overlay hidden" id="changePasswordModal"><div class="modal-card"><h3>修改密码</h3><input type="password" id="oldPasswordInput" placeholder="旧密码"><input type="password" id="newPasswordInput" placeholder="新密码"><div class="btn-row"><button class="cancel-btn" id="cancelChangePwBtn">取消</button><button class="save-btn" id="saveChangePwBtn">保存</button></div></div></div>
-    <div class="modal-overlay hidden" id="clearChatModal"><div class="modal-card"><h3>清空对话</h3><div style="font-size:13px;color:var(--text-secondary);text-align:center;">此操作不可撤销。请输入"确认删除"后点击确认。</div><input type="text" id="clearChatConfirmInput" placeholder="输入 确认删除"><div class="btn-row"><button class="cancel-btn" id="cancelClearChatBtn">取消</button><button class="save-btn" id="confirmClearChatBtn" disabled style="opacity:0.5;">确认清空</button></div></div></div>
     <div class="toast" id="toast"></div>
 </div>
 
@@ -345,9 +378,10 @@
     const reminderBanner = $('reminderBanner'), reminderBannerText = $('reminderBannerText'), bannerCloseBtn = $('bannerCloseBtn');
     const overlayMask = $('overlayMask'), contextMenu = $('contextMenu');
     const drawerLeft = $('drawerLeft'), drawerRight = $('drawerRight'), memoryPage = $('memoryPage'), usagePage = $('usagePage');
+    const settingsDrawer = $('settingsDrawer'), settingsTabs = $('settingsTabs');
     const searchContainer = $('searchContainer'), searchInput = $('searchInput'), searchResults = $('searchResults');
     const calendarContainer = $('calendarContainer'), diaryCard = $('diaryCard'), diaryEmpty = $('diaryEmpty');
-    const imageToggle = $('imageToggle'), toast = $('toast');
+    const toast = $('toast');
     const PW_HASH_KEY = 'claude_pw_hash_v2';
 
     let PARTNER_NAME = localStorage.getItem('claude_partner_name') || '七次元';
@@ -360,19 +394,18 @@
     let INPUT_PRICE = parseFloat(localStorage.getItem('claude_input_price') || '1'), OUTPUT_PRICE = parseFloat(localStorage.getItem('claude_output_price') || '2');
     let TEMPERATURE = parseFloat(localStorage.getItem('claude_temperature') || '0.9'), TOP_P = parseFloat(localStorage.getItem('claude_top_p') || '1.0');
     let MAX_TOKENS = parseInt(localStorage.getItem('claude_max_tokens') || '1024');
+    let MAX_SENTENCES = parseInt(localStorage.getItem('claude_max_sentences') || '3');
     let FREQ_PENALTY = parseFloat(localStorage.getItem('claude_freq_penalty') || '0.1'), PRES_PENALTY = parseFloat(localStorage.getItem('claude_pres_penalty') || '0.1');
     let THEME_MODE = localStorage.getItem('claude_theme') || 'auto';
     let conversationHistory = [], diary = {}, calendarMarks = {}, memoryBank = { about_you: [], about_us: [] }, usageLog = [];
     let pendingImage = null, selectedMessageId = null, editingMsgTimestamp = null;
     let calendarFilter = 'calendar', currentMonth = new Date().getMonth(), currentYear = new Date().getFullYear(), selectedDate = null, activeMarkDate = null;
     let currentMusic = null, notificationPermission = false;
-    let currentAbortController = null;
-    let userInputTimer = null;
-    const TYPING_DELAY = 1500;
-    const SENTENCE_PAUSE = 1200;
+    let currentAbortController = null, userInputTimer = null;
+    const TYPING_DELAY = 1500, SENTENCE_PAUSE = 800;
 
     const MEMORY_WINDOW = 40, RECENT_KEEP = 20;
-    const PRICING_PRESETS = { 'deepseek-v3':{input:1,output:2}, 'deepseek-r1':{input:4,output:16}, 'claude-sonnet':{input:3,output:15}, 'claude-opus':{input:15,output:75}, 'gpt-4o':{input:2.5,output:10} };
+    const PRICING_PRESETS = { 'deepseek-v3':{input:1,output:2}, 'deepseek-r1':{input:4,output:16} };
 
     // ========== 密码系统 ==========
     async function sha256(m){ const b = new TextEncoder().encode(m); const h = await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join(''); }
@@ -380,72 +413,65 @@
     function isPasswordSet(){ return !!getStoredHash(); }
     async function checkPassword(e){ const s = getStoredHash(); if(!s) return false; return await sha256(e) === s; }
     async function setPassword(p){ localStorage.setItem(PW_HASH_KEY, await sha256(p)); }
-    function updatePasswordUI(){
-        if(isPasswordSet()){ pwSub.textContent='请输入密码'; pwSetupHint.style.display='none'; passwordInput.placeholder='密码'; }
-        else { pwSub.textContent='设置密码'; pwSetupHint.style.display='block'; passwordInput.placeholder='设置密码'; }
-    }
-    async function handlePasswordSubmit(){
-        const v = passwordInput.value.trim(); if(!v){ pwError.textContent='请输入密码'; return; }
-        if(!isPasswordSet()){ await setPassword(v); passwordScreen.classList.add('hidden'); passwordInput.value=''; updatePasswordUI(); setTimeout(()=>userInput.focus(),100); showToast('密码已设置'); return; }
-        if(await checkPassword(v)){ passwordScreen.classList.add('hidden'); passwordInput.value=''; setTimeout(()=>userInput.focus(),100); }
-        else { pwError.textContent='密码错误'; passwordInput.value=''; passwordInput.focus(); }
-    }
-    async function handleChangePassword(){
-        const o=$('oldPasswordInput').value, n=$('newPasswordInput').value; if(!o||!n){showToast('请填写旧密码和新密码');return;}
-        if(!await checkPassword(o)){showToast('旧密码错误');return;} await setPassword(n); $('changePasswordModal').classList.add('hidden');
-        $('oldPasswordInput').value=''; $('newPasswordInput').value=''; showToast('密码已修改');
-    }
-    pwSubmitBtn.addEventListener('click',handlePasswordSubmit);
-    passwordInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handlePasswordSubmit();}});
-    $('changePasswordItem').addEventListener('click',()=>{$('oldPasswordInput').value='';$('newPasswordInput').value='';$('changePasswordModal').classList.remove('hidden');});
+    function updatePasswordUI(){ if(isPasswordSet()){ pwSub.textContent='请输入密码'; pwSetupHint.style.display='none'; passwordInput.placeholder='密码'; } else { pwSub.textContent='设置密码'; pwSetupHint.style.display='block'; passwordInput.placeholder='设置密码'; } }
+    async function handlePasswordSubmit(){ const v = passwordInput.value.trim(); if(!v){ pwError.textContent='请输入密码'; return; } if(!isPasswordSet()){ await setPassword(v); passwordScreen.classList.add('hidden'); passwordInput.value=''; updatePasswordUI(); setTimeout(()=>userInput.focus(),100); showToast('密码已设置'); return; } if(await checkPassword(v)){ passwordScreen.classList.add('hidden'); passwordInput.value=''; setTimeout(()=>userInput.focus(),100); } else { pwError.textContent='密码错误'; passwordInput.value=''; passwordInput.focus(); } }
+    async function handleChangePassword(){ const o=$('oldPasswordInput').value, n=$('newPasswordInput').value; if(!o||!n){showToast('请填写旧密码和新密码');return;} if(!await checkPassword(o)){showToast('旧密码错误');return;} await setPassword(n); $('changePasswordModal').classList.add('hidden'); $('oldPasswordInput').value=''; $('newPasswordInput').value=''; showToast('密码已修改'); }
+    pwSubmitBtn.addEventListener('click',handlePasswordSubmit); passwordInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handlePasswordSubmit();}});
+    $('changePasswordSettings').addEventListener('click',()=>{$('oldPasswordInput').value='';$('newPasswordInput').value='';$('changePasswordModal').classList.remove('hidden');});
     $('cancelChangePwBtn').addEventListener('click',()=>$('changePasswordModal').classList.add('hidden'));
     $('saveChangePwBtn').addEventListener('click',handleChangePassword);
 
-    // ========== 清空对话（安全版） ==========
-    $('clearItem').addEventListener('click',()=>{
-        $('clearChatConfirmInput').value='';
-        $('confirmClearChatBtn').disabled=true;
-        $('confirmClearChatBtn').style.opacity='0.5';
-        $('clearChatModal').classList.remove('hidden');
-    });
+    // ========== 清空对话 ==========
+    function openClearChatModal(){ $('clearChatConfirmInput').value=''; $('confirmClearChatBtn').disabled=true; $('confirmClearChatBtn').style.opacity='0.5'; $('clearChatModal').classList.remove('hidden'); }
+    $('clearItem').addEventListener('click', openClearChatModal);
+    $('clearChatSettings').addEventListener('click', openClearChatModal);
     $('cancelClearChatBtn').addEventListener('click',()=>$('clearChatModal').classList.add('hidden'));
-    $('clearChatConfirmInput').addEventListener('input',function(){
-        const ok = this.value.trim() === '确认删除';
-        $('confirmClearChatBtn').disabled = !ok;
-        $('confirmClearChatBtn').style.opacity = ok ? '1' : '0.5';
-    });
-    $('confirmClearChatBtn').addEventListener('click',()=>{
-        if($('clearChatConfirmInput').value.trim()!=='确认删除') return;
-        conversationHistory=[{role:'assistant',versions:['记忆被清空了。重新认识一下。'],currentVersion:0,timestamp:Date.now()}];
-        saveHistory(); rebuildChatFromHistory(); $('clearChatModal').classList.add('hidden'); showToast('已清空');
-    });
+    $('clearChatConfirmInput').addEventListener('input',function(){ const ok=this.value.trim()==='确认删除'; $('confirmClearChatBtn').disabled=!ok; $('confirmClearChatBtn').style.opacity=ok?'1':'0.5'; });
+    $('confirmClearChatBtn').addEventListener('click',()=>{ if($('clearChatConfirmInput').value.trim()!=='确认删除')return; conversationHistory=[{role:'assistant',versions:['记忆被清空了。重新认识一下。'],currentVersion:0,timestamp:Date.now()}]; saveHistory(); rebuildChatFromHistory(); $('clearChatModal').classList.add('hidden'); showToast('已清空'); });
 
-    // ========== 系统设置折叠 ==========
-    let systemCollapsed = true;
-    $('systemSectionTitle').addEventListener('click',()=>{
-        systemCollapsed = !systemCollapsed;
-        $('systemSectionBody').classList.toggle('collapsed', systemCollapsed);
-        $('systemSectionTitle').textContent = systemCollapsed ? '系统 ▸' : '系统 ▾';
-    });
-    $('systemSectionBody').classList.add('collapsed');
+    // ========== 系统设置子抽屉 ==========
+    $('settingsEntry').addEventListener('click', ()=>{ settingsDrawer.classList.add('open'); refreshSettingsUI(); });
+    $('settingsBackBtn').addEventListener('click', ()=>{ settingsDrawer.classList.remove('open'); });
+    settingsTabs.addEventListener('click', (e)=>{ if(e.target.classList.contains('tab')){ document.querySelectorAll('#settingsTabs .tab').forEach(t=>t.classList.remove('active')); e.target.classList.add('active'); const tabId=e.target.dataset.tab; document.querySelectorAll('.settings-tab-content').forEach(c=>c.classList.remove('active')); $(tabId).classList.add('active'); } });
 
-    // ========== 原有逻辑 ==========
-    function getCurrentKey(){ return API_KEYS[currentKeyIndex]||''; }
-    function getCurrentModel(){ return API_MODELS[currentKeyIndex]||API_MODELS[0]||'deepseek-chat'; }
-    function buildSystemPrompt(){
-        let p=SYSTEM_PROMPT; const pts=[];
-        if(memoryBank.about_you&&memoryBank.about_you.length) pts.push('【关于你的记忆】\n'+memoryBank.about_you.map(m=>'- '+(m.text||m)).join('\n'));
-        if(memoryBank.about_us&&memoryBank.about_us.length) pts.push('【我们之间的记忆】\n'+memoryBank.about_us.map(m=>'- '+(m.text||m)).join('\n'));
-        if(pts.length) p+='\n\n'+pts.join('\n\n'); return p;
+    function refreshSettingsUI(){
+        $('apiKeyValue').textContent = API_KEYS.length ? `已设置 ${API_KEYS.length} 个` : '未设置';
+        $('apiKeyValue').addEventListener('click', ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); });
+        const currentModel = getCurrentModel();
+        if(currentModel === 'deepseek-chat') $('modelSelect').value = 'deepseek-chat';
+        else if(currentModel === 'deepseek-reasoner') $('modelSelect').value = 'deepseek-reasoner';
+        else { $('modelSelect').value = 'custom'; $('customModelInput').value = currentModel; $('customModelItem').style.display = 'flex'; }
+        $('modelSelect').onchange = function(){
+            if(this.value==='custom'){ $('customModelItem').style.display='flex'; }
+            else { $('customModelItem').style.display='none'; API_MODELS=[this.value]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); }
+        };
+        $('customModelInput').onchange = function(){ const v=this.value.trim(); if(v){ API_MODELS=[v]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); } };
+        $('pricingValue').textContent = `¥${INPUT_PRICE}/¥${OUTPUT_PRICE}`;
+        $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
+
+        $('tempSlider').value = TEMPERATURE; $('tempValue').textContent = TEMPERATURE;
+        $('topPSlider').value = TOP_P; $('topPValue').textContent = TOP_P;
+        $('maxSentencesSlider').value = MAX_SENTENCES; $('maxSentencesValue').textContent = MAX_SENTENCES;
+        $('maxTokensSlider').value = MAX_TOKENS; $('maxTokensValue').textContent = MAX_TOKENS;
+        $('freqPenaltySlider').value = FREQ_PENALTY; $('freqPenaltyValue').textContent = FREQ_PENALTY;
+        $('presPenaltySlider').value = PRES_PENALTY; $('presPenaltyValue').textContent = PRES_PENALTY;
+
+        $('tempSlider').oninput = function(){ TEMPERATURE=parseFloat(this.value); $('tempValue').textContent=this.value; saveParams(); };
+        $('topPSlider').oninput = function(){ TOP_P=parseFloat(this.value); $('topPValue').textContent=this.value; saveParams(); };
+        $('maxSentencesSlider').oninput = function(){ MAX_SENTENCES=parseInt(this.value); $('maxSentencesValue').textContent=this.value; localStorage.setItem('claude_max_sentences', MAX_SENTENCES); };
+        $('maxTokensSlider').oninput = function(){ MAX_TOKENS=parseInt(this.value); $('maxTokensValue').textContent=this.value; saveParams(); };
+        $('freqPenaltySlider').oninput = function(){ FREQ_PENALTY=parseFloat(this.value); $('freqPenaltyValue').textContent=this.value; saveParams(); };
+        $('presPenaltySlider').oninput = function(){ PRES_PENALTY=parseFloat(this.value); $('presPenaltyValue').textContent=this.value; saveParams(); };
+
+        $('themeSelect').value = THEME_MODE;
+        $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
+        const imgTgl = $('imageToggleSettings');
+        imgTgl.classList.toggle('on', IMAGE_ENABLED);
+        imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
+        $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
+        $('usageEntrySettings').onclick = ()=>{ usagePage.classList.add('open'); renderUsagePage(); };
     }
-    function getAPIEndpoint(){
-        const m=getCurrentModel().toLowerCase();
-        if(m.includes('claude')) return {url:'https://api.anthropic.com/v1/messages',type:'anthropic'};
-        if(m.includes('gemini')) return {url:'https://generativelanguage.googleapis.com/v1beta/models/'+getCurrentModel()+':streamGenerateContent?key='+getCurrentKey(),type:'gemini'};
-        if(m.includes('deepseek')) return {url:'https://api.deepseek.com/v1/chat/completions',type:'openai'};
-        if(m.includes('gpt')||m.includes('openai')) return {url:'https://api.openai.com/v1/chat/completions',type:'openai'};
-        return {url:'https://api.deepseek.com/v1/chat/completions',type:'openai'};
-    }
+
     function saveKeys(){ localStorage.setItem('claude_api_keys',API_KEYS.join(',')); localStorage.setItem('claude_models',API_MODELS.join(',')); localStorage.setItem('claude_key_index',currentKeyIndex); }
     function saveHistory(){ localStorage.setItem('claude_chat_history_v2',JSON.stringify(conversationHistory)); }
     function saveDiary(){ localStorage.setItem('claude_diary',JSON.stringify(diary)); }
@@ -455,11 +481,14 @@
     function savePricing(){ localStorage.setItem('claude_input_price',INPUT_PRICE); localStorage.setItem('claude_output_price',OUTPUT_PRICE); }
     function saveParams(){ localStorage.setItem('claude_temperature',TEMPERATURE); localStorage.setItem('claude_top_p',TOP_P); localStorage.setItem('claude_max_tokens',MAX_TOKENS); localStorage.setItem('claude_freq_penalty',FREQ_PENALTY); localStorage.setItem('claude_pres_penalty',PRES_PENALTY); }
     function saveTheme(){ localStorage.setItem('claude_theme',THEME_MODE); }
-    function applyTheme(){
-        const d=THEME_MODE==='dark'||(THEME_MODE==='auto'&&window.matchMedia('(prefers-color-scheme:dark)').matches);
-        document.body.classList.toggle('dark-mode',d); const m=document.querySelector('meta[name="theme-color"]'); if(m) m.content=d?'#1A1A1A':'#FAF7F2';
-    }
+    function applyTheme(){ const d=THEME_MODE==='dark'||(THEME_MODE==='auto'&&window.matchMedia('(prefers-color-scheme:dark)').matches); document.body.classList.toggle('dark-mode',d); const m=document.querySelector('meta[name="theme-color"]'); if(m) m.content=d?'#1A1A1A':'#FAF7F2'; }
     function switchToNextKey(){ if(currentKeyIndex<API_KEYS.length-1){currentKeyIndex++;saveKeys();showToast(`已切换到第 ${currentKeyIndex+1} 个 Key`);return true;} return false; }
+
+    function getCurrentKey(){ return API_KEYS[currentKeyIndex]||''; }
+    function getCurrentModel(){ return API_MODELS[currentKeyIndex]||API_MODELS[0]||'deepseek-chat'; }
+    function buildSystemPrompt(){ let p=SYSTEM_PROMPT; const pts=[]; if(memoryBank.about_you&&memoryBank.about_you.length) pts.push('【关于你的记忆】\n'+memoryBank.about_you.map(m=>'- '+(m.text||m)).join('\n')); if(memoryBank.about_us&&memoryBank.about_us.length) pts.push('【我们之间的记忆】\n'+memoryBank.about_us.map(m=>'- '+(m.text||m)).join('\n')); if(pts.length) p+='\n\n'+pts.join('\n\n'); return p; }
+    function getAPIEndpoint(){ const m=getCurrentModel().toLowerCase(); if(m.includes('claude')) return {url:'https://api.anthropic.com/v1/messages',type:'anthropic'}; if(m.includes('gemini')) return {url:'https://generativelanguage.googleapis.com/v1beta/models/'+getCurrentModel()+':streamGenerateContent?key='+getCurrentKey(),type:'gemini'}; if(m.includes('deepseek')) return {url:'https://api.deepseek.com/v1/chat/completions',type:'openai'}; if(m.includes('gpt')||m.includes('openai')) return {url:'https://api.openai.com/v1/chat/completions',type:'openai'}; return {url:'https://api.deepseek.com/v1/chat/completions',type:'openai'}; }
+
     function loadData(){
         const sc=localStorage.getItem('claude_chat_history_v2'); if(sc){try{conversationHistory=JSON.parse(sc).map(m=>{if(!m.versions)m.versions=[m.content||''];if(m.currentVersion===undefined)m.currentVersion=0;return m;});rebuildChatFromHistory();}catch(e){conversationHistory=[];}}
         if(!conversationHistory.length){const n=Date.now();conversationHistory=[{role:'assistant',versions:['嗨，我在。'],currentVersion:0,timestamp:n}];saveHistory();renderMessage('assistant',conversationHistory[0]);}
@@ -469,319 +498,40 @@
         const su=localStorage.getItem('claude_usage_log'); if(su){try{usageLog=JSON.parse(su);}catch(e){usageLog=[];}}
         applyForgettingCurve();
     }
-    function applyForgettingCurve(){
-        const n=Date.now(),D=86400000; const f=(a)=>a.filter(i=>{if(i.manual)return true;const t=i.ts||0;const age=(n-t)/D;if(age<=7)return true;if(age<=14)return Math.random()<0.5;if(age<=30)return Math.random()<0.25;return false;});
-        memoryBank.about_you=f(memoryBank.about_you); memoryBank.about_us=f(memoryBank.about_us); saveMemory();
-    }
-    function applyUI(){
-        topBarName.textContent=PARTNER_NAME;$('drawerName').textContent=PARTNER_NAME;
-        if(PARTNER_AVATAR){topAvatarBtn.innerHTML=`<img src="${PARTNER_AVATAR}">`;$('drawerAvatar').innerHTML=`<img src="${PARTNER_AVATAR}">`;}
-        else{topAvatarBtn.innerHTML='👤';$('drawerAvatar').innerHTML='👤';}
-        imageToggle.classList.toggle('on',IMAGE_ENABLED);attachBtn.style.display=IMAGE_ENABLED?'flex':'none';
-    }
+    function applyForgettingCurve(){ const n=Date.now(),D=86400000; const f=(a)=>a.filter(i=>{if(i.manual)return true;const t=i.ts||0;const age=(n-t)/D;if(age<=7)return true;if(age<=14)return Math.random()<0.5;if(age<=30)return Math.random()<0.25;return false;}); memoryBank.about_you=f(memoryBank.about_you); memoryBank.about_us=f(memoryBank.about_us); saveMemory(); }
+    function applyUI(){ topBarName.textContent=PARTNER_NAME;$('drawerName').textContent=PARTNER_NAME; if(PARTNER_AVATAR){topAvatarBtn.innerHTML=`<img src="${PARTNER_AVATAR}">`;$('drawerAvatar').innerHTML=`<img src="${PARTNER_AVATAR}">`;}else{topAvatarBtn.innerHTML='👤';$('drawerAvatar').innerHTML='👤';} $('imageToggleSettings').classList.toggle('on',IMAGE_ENABLED); attachBtn.style.display=IMAGE_ENABLED?'flex':'none'; }
     function rebuildChatFromHistory(){chatLog.innerHTML='';conversationHistory.forEach(m=>renderMessage(m.role,m));scrollToBottom();}
     function getCurrentContent(m){return m.versions?.[m.currentVersion]||'';}
 
-    // ========== 复制（统一方案） ==========
-    function selectTextForManualCopy(text){
-        const old=document.getElementById('__copy_overlay'); if(old) old.remove();
-        const o=document.createElement('div'); o.id='__copy_overlay';
-        o.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999;background:rgba(0,0,0,0.03);display:flex;align-items:center;justify-content:center;';
-        const c=document.createElement('div'); c.style.cssText='background:var(--card-bg,#fff);border-radius:16px;padding:20px 20px 16px;max-width:85vw;max-height:60vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.2);word-break:break-word;font-size:15px;line-height:1.6;color:var(--text,#2D2D2C);user-select:text;-webkit-user-select:text;';
-        c.textContent=text;
-        const h=document.createElement('div'); h.style.cssText='text-align:center;font-size:11px;color:var(--text-secondary,#8B8A87);margin-top:12px;'; h.textContent='长按上方文字 → 系统菜单 → 拷贝，然后点空白处关闭';
-        o.appendChild(c); o.appendChild(h); document.body.appendChild(o);
-        const r=document.createRange(); r.selectNodeContents(c); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
-        o.addEventListener('click',function(e){if(e.target===o){o.remove();s.removeAllRanges();}});
-    }
+    // ========== 复制 ==========
+    function selectTextForManualCopy(text){ const old=document.getElementById('__copy_overlay'); if(old) old.remove(); const o=document.createElement('div'); o.id='__copy_overlay'; o.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999;background:rgba(0,0,0,0.03);display:flex;align-items:center;justify-content:center;'; const c=document.createElement('div'); c.style.cssText='background:var(--card-bg,#fff);border-radius:16px;padding:20px 20px 16px;max-width:85vw;max-height:60vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.2);word-break:break-word;font-size:15px;line-height:1.6;color:var(--text,#2D2D2C);user-select:text;-webkit-user-select:text;'; c.textContent=text; const h=document.createElement('div'); h.style.cssText='text-align:center;font-size:11px;color:var(--text-secondary,#8B8A87);margin-top:12px;'; h.textContent='长按上方文字 → 系统菜单 → 拷贝，然后点空白处关闭'; o.appendChild(c); o.appendChild(h); document.body.appendChild(o); const r=document.createRange(); r.selectNodeContents(c); const s=window.getSelection(); s.removeAllRanges(); s.addRange(r); o.addEventListener('click',function(e){if(e.target===o){o.remove();s.removeAllRanges();}}); }
 
-    // ========== 统一长按菜单 ==========
-    function showMessageContextMenu(msg, event, div){
-        hideContextMenu();
-        const role = msg.role;
-        let html = `<div class="menu-title">消息操作</div>`;
-        html += `<div class="menu-item" data-action="copy">📋 复制</div>`;
-        if(role === 'user'){
-            html += `<div class="menu-item" data-action="edit">✏️ 编辑</div>`;
-        }
-        html += `<div class="menu-item danger" data-action="delete">🗑 删除</div>`;
-        contextMenu.innerHTML = html;
-        const x = event.touches?.[0]?.clientX || event.clientX;
-        const y = event.touches?.[0]?.clientY || event.clientY;
-        contextMenu.style.left = Math.min(x, window.innerWidth - 180) + 'px';
-        contextMenu.style.top = Math.min(y, window.innerHeight - 160) + 'px';
-        contextMenu.classList.add('show'); contextMenu.style.display = 'block';
-
-        contextMenu.querySelector('[data-action="copy"]').addEventListener('click',()=>{
-            hideContextMenu(); selectTextForManualCopy(getCurrentContent(msg));
-        });
-        contextMenu.querySelector('[data-action="edit"]')?.addEventListener('click',()=>{
-            hideContextMenu(); setTimeout(()=>startEditUserMsg(msg.timestamp),100);
-        });
-        contextMenu.querySelector('[data-action="delete"]').addEventListener('click',()=>{
-            hideContextMenu(); deleteSingleMessage(msg.timestamp);
-        });
-
-        setTimeout(()=>{
-            const ch=(e)=>{if(!contextMenu.contains(e.target)){hideContextMenu();document.removeEventListener('click',ch);document.removeEventListener('touchstart',ch);}};
-            document.addEventListener('click',ch); document.addEventListener('touchstart',ch);
-        },50);
-    }
-
-    function deleteSingleMessage(timestamp){
-        const idx = conversationHistory.findIndex(m=>m.timestamp===timestamp);
-        if(idx===-1) return;
-        conversationHistory.splice(idx,1);
-        saveHistory(); rebuildChatFromHistory(); showToast('已删除');
-    }
-
+    function showMessageContextMenu(msg, event, div){ hideContextMenu(); const role=msg.role; let html=`<div class="menu-title">消息操作</div>`; html+=`<div class="menu-item" data-action="copy">📋 复制</div>`; if(role==='user'){ html+=`<div class="menu-item" data-action="edit">✏️ 编辑</div>`; } html+=`<div class="menu-item danger" data-action="delete">🗑 删除</div>`; contextMenu.innerHTML=html; const x=event.touches?.[0]?.clientX||event.clientX; const y=event.touches?.[0]?.clientY||event.clientY; contextMenu.style.left=Math.min(x,window.innerWidth-180)+'px'; contextMenu.style.top=Math.min(y,window.innerHeight-160)+'px'; contextMenu.classList.add('show'); contextMenu.style.display='block'; contextMenu.querySelector('[data-action="copy"]').addEventListener('click',()=>{hideContextMenu();selectTextForManualCopy(getCurrentContent(msg));}); contextMenu.querySelector('[data-action="edit"]')?.addEventListener('click',()=>{hideContextMenu();setTimeout(()=>startEditUserMsg(msg.timestamp),100);}); contextMenu.querySelector('[data-action="delete"]').addEventListener('click',()=>{hideContextMenu();deleteSingleMessage(msg.timestamp);}); setTimeout(()=>{ const ch=(e)=>{if(!contextMenu.contains(e.target)){hideContextMenu();document.removeEventListener('click',ch);document.removeEventListener('touchstart',ch);}}; document.addEventListener('click',ch); document.addEventListener('touchstart',ch); },50); }
+    function deleteSingleMessage(timestamp){ const idx=conversationHistory.findIndex(m=>m.timestamp===timestamp); if(idx===-1)return; conversationHistory.splice(idx,1); saveHistory(); rebuildChatFromHistory(); showToast('已删除'); }
     function hideContextMenu(){ contextMenu.classList.remove('show'); contextMenu.style.display='none'; }
 
-    // ========== 消息渲染 ==========
-    function renderMessage(role, msg){
-        const content = getCurrentContent(msg);
-        const div = document.createElement('div'); div.className=`message ${role}`; div.dataset.ts=msg.timestamp; div.dataset.role=role;
-        const timeStr = new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
-        let inner = '';
-        if(msg.image) inner += `<img src="${msg.image}" alt="图片" onclick="event.stopPropagation();window.showImageOverlay('${msg.image}')">`;
-        if(content) inner += role==='assistant' ? `<div class="bubble">${parseMarkdown(content)}</div>` : `<div class="bubble">${escapeHtml(content)}</div>`;
-        inner += `<div class="timestamp"><span>${timeStr}</span>`;
-        if(msg.edited) inner += `<span class="edited-tag">已编辑</span>`;
-        inner += `</div>`;
-        if(role==='assistant'){
-            inner += `<div class="rewind-row"><button class="prev-ver-btn" ${msg.versions.length<=1?'disabled':''}>◂</button><span class="ver-indicator">${msg.currentVersion+1}/${msg.versions.length}</span><button class="next-ver-btn" ${msg.versions.length<=1?'disabled':''}>▸</button><button class="regen-btn">↺ 重新生成</button></div>`;
-        }
-        div.innerHTML = inner;
-        chatLog.appendChild(div); scrollToBottom();
+    function renderMessage(role, msg){ const content=getCurrentContent(msg); const div=document.createElement('div'); div.className=`message ${role}`; div.dataset.ts=msg.timestamp; div.dataset.role=role; const timeStr=new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); let inner=''; if(msg.image) inner+=`<img src="${msg.image}" alt="图片" onclick="event.stopPropagation();window.showImageOverlay('${msg.image}')">`; if(content) inner+=role==='assistant'?`<div class="bubble">${parseMarkdown(content)}</div>`:`<div class="bubble">${escapeHtml(content)}</div>`; inner+=`<div class="timestamp"><span>${timeStr}</span>`; if(msg.edited) inner+=`<span class="edited-tag">已编辑</span>`; inner+=`</div>`; if(role==='assistant'){ inner+=`<div class="rewind-row"><button class="prev-ver-btn" ${msg.versions.length<=1?'disabled':''}>◂</button><span class="ver-indicator">${msg.currentVersion+1}/${msg.versions.length}</span><button class="next-ver-btn" ${msg.versions.length<=1?'disabled':''}>▸</button><button class="regen-btn">↺ 重新生成</button></div>`; } div.innerHTML=inner; chatLog.appendChild(div); scrollToBottom(); const bubble=div.querySelector('.bubble'); if(bubble){ bubble.addEventListener('click',(e)=>{e.stopPropagation();handleBubbleClick(role,msg.timestamp,div);}); } let pressTimer; let isLongPress=false; div.addEventListener('touchstart',(e)=>{isLongPress=false;pressTimer=setTimeout(()=>{isLongPress=true;showMessageContextMenu(msg,e,div);},450);}); div.addEventListener('touchend',()=>{clearTimeout(pressTimer);}); div.addEventListener('touchmove',()=>{clearTimeout(pressTimer);isLongPress=false;}); if(role==='assistant'){ div.querySelector('.prev-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,-1,div);}); div.querySelector('.next-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,1,div);}); div.querySelector('.regen-btn')?.addEventListener('click',(e)=>{e.stopPropagation();regenerateResponse(msg);}); } if(role==='user'){ const et=bubble||div; et.addEventListener('dblclick',(e)=>{e.stopPropagation();startEditUserMsg(msg.timestamp);}); } }
 
-        const bubble = div.querySelector('.bubble');
-        if(bubble){
-            bubble.addEventListener('click',(e)=>{ e.stopPropagation(); handleBubbleClick(role, msg.timestamp, div); });
-        }
-        // 统一长按
-        let pressTimer; let isLongPress=false;
-        div.addEventListener('touchstart',(e)=>{
-            isLongPress=false;
-            pressTimer=setTimeout(()=>{ isLongPress=true; showMessageContextMenu(msg, e, div); },450);
-        });
-        div.addEventListener('touchend',()=>{ clearTimeout(pressTimer); });
-        div.addEventListener('touchmove',()=>{ clearTimeout(pressTimer); isLongPress=false; });
-
-        if(role==='assistant'){
-            div.querySelector('.prev-ver-btn')?.addEventListener('click',(e)=>{ e.stopPropagation(); changeVersion(msg,-1,div); });
-            div.querySelector('.next-ver-btn')?.addEventListener('click',(e)=>{ e.stopPropagation(); changeVersion(msg,1,div); });
-            div.querySelector('.regen-btn')?.addEventListener('click',(e)=>{ e.stopPropagation(); regenerateResponse(msg); });
-        }
-        if(role==='user'){
-            const et = bubble || div;
-            et.addEventListener('dblclick',(e)=>{ e.stopPropagation(); startEditUserMsg(msg.timestamp); });
-        }
-    }
-
-    function startEditUserMsg(timestamp){
-        const old=document.getElementById('__copy_overlay'); if(old) old.remove(); window.getSelection().removeAllRanges();
-        const msg=conversationHistory.find(m=>m.timestamp===timestamp); if(!msg||msg.role!=='user') return;
-        editingMsgTimestamp=timestamp; userInput.value=getCurrentContent(msg); userInput.focus();
-        userInput.setSelectionRange(userInput.value.length,userInput.value.length);
-        userInput.style.height='auto'; userInput.style.height=Math.min(userInput.scrollHeight,100)+'px';
-        sendBtn.textContent='✏️'; sendBtn.classList.add('edit-mode'); editCancelBtn.classList.add('visible');
-        deselectAllMessages(); selectedMessageId=null; userInput.scrollIntoView({behavior:'smooth',block:'end'});
-    }
-    function cancelEditMode(){
-        editingMsgTimestamp=null; userInput.value=''; userInput.style.height='auto';
-        sendBtn.textContent='↑'; sendBtn.classList.remove('edit-mode'); editCancelBtn.classList.remove('visible');
-    }
+    function startEditUserMsg(timestamp){ const old=document.getElementById('__copy_overlay'); if(old) old.remove(); window.getSelection().removeAllRanges(); const msg=conversationHistory.find(m=>m.timestamp===timestamp); if(!msg||msg.role!=='user') return; editingMsgTimestamp=timestamp; userInput.value=getCurrentContent(msg); userInput.focus(); userInput.setSelectionRange(userInput.value.length,userInput.value.length); userInput.style.height='auto'; userInput.style.height=Math.min(userInput.scrollHeight,100)+'px'; sendBtn.textContent='✏️'; sendBtn.classList.add('edit-mode'); editCancelBtn.classList.add('visible'); deselectAllMessages(); selectedMessageId=null; userInput.scrollIntoView({behavior:'smooth',block:'end'}); }
+    function cancelEditMode(){ editingMsgTimestamp=null; userInput.value=''; userInput.style.height='auto'; sendBtn.textContent='↑'; sendBtn.classList.remove('edit-mode'); editCancelBtn.classList.remove('visible'); }
     editCancelBtn.addEventListener('click',cancelEditMode);
-
-    function handleBubbleClick(role,timestamp,div){
-        if(editingMsgTimestamp) return;
-        if(role==='assistant'){
-            if(selectedMessageId===timestamp){deselectAllMessages();selectedMessageId=null;}
-            else{deselectAllMessages();selectedMessageId=timestamp;div.classList.add('selected');}
-        }else{deselectAllMessages();selectedMessageId=null;}
-    }
+    function handleBubbleClick(role,timestamp,div){ if(editingMsgTimestamp) return; if(role==='assistant'){ if(selectedMessageId===timestamp){deselectAllMessages();selectedMessageId=null;} else{deselectAllMessages();selectedMessageId=timestamp;div.classList.add('selected');} }else{deselectAllMessages();selectedMessageId=null;} }
     function deselectAllMessages(){document.querySelectorAll('.message.selected').forEach(m=>m.classList.remove('selected'));}
+    function trimHistoryAfter(timestamp){ const idx=conversationHistory.findIndex(m=>m.timestamp===timestamp); if(idx===-1)return; conversationHistory=conversationHistory.slice(0,idx); saveHistory(); rebuildChatFromHistory(); }
+    async function sendMessageAfterEdit(newContent){ userInput.value=''; userInput.style.height='auto'; cancelEditMode(); const m={role:'user',versions:[newContent],currentVersion:0,timestamp:Date.now(),edited:true}; renderMessage('user',m); conversationHistory.push(m); saveHistory(); triggerAIResponse(); }
+    function changeVersion(msg,delta,div){ const ni=msg.currentVersion+delta; if(ni<0||ni>=msg.versions.length)return; msg.currentVersion=ni; saveHistory(); const b=div.querySelector('.bubble'); if(b)b.innerHTML=parseMarkdown(msg.versions[ni]); const vi=div.querySelector('.ver-indicator'); if(vi)vi.textContent=`${ni+1}/${msg.versions.length}`; const pb=div.querySelector('.prev-ver-btn'),nb=div.querySelector('.next-ver-btn'); if(pb)pb.disabled=ni===0; if(nb)nb.disabled=ni===msg.versions.length-1; showToast(`切到第 ${ni+1} 个版本`); }
+    async function regenerateResponse(msg){ if(!getCurrentKey()||!SYSTEM_PROMPT){showToast('请先设置 API Key 和互动指令');return;} const idx=conversationHistory.findIndex(m=>m.timestamp===msg.timestamp); if(idx===-1)return; conversationHistory=conversationHistory.slice(0,idx+1); saveHistory(); rebuildChatFromHistory(); triggerAIResponse(); }
+    function extractStreamText(type,parsed){ if(type==='anthropic')return parsed.type==='content_block_delta'&&parsed.delta?.text?parsed.delta.text:''; return parsed.choices?.[0]?.delta?.content||''; }
+    async function makeAPIRequest(endpoint,messages,signal){ const key=getCurrentKey(); if(endpoint.type==='anthropic')return fetch(endpoint.url,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:getCurrentModel(),max_tokens:MAX_TOKENS,temperature:TEMPERATURE,top_p:TOP_P,stream:true,messages}),signal}); return fetch(endpoint.url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:getCurrentModel(),max_tokens:MAX_TOKENS,temperature:TEMPERATURE,top_p:TOP_P,frequency_penalty:FREQ_PENALTY,presence_penalty:PRES_PENALTY,stream:true,messages}),signal}); }
 
-    function trimHistoryAfter(timestamp){
-        const idx=conversationHistory.findIndex(m=>m.timestamp===timestamp); if(idx===-1) return;
-        conversationHistory=conversationHistory.slice(0,idx); saveHistory(); rebuildChatFromHistory();
-    }
+    function createTypingBubble(){ const div=document.createElement('div'); div.className='message assistant'; div.dataset.typing='true'; const b=document.createElement('div'); b.className='typing-bubble'; b.innerHTML='<span>●</span><span>●</span><span>●</span>'; div.appendChild(b); chatLog.appendChild(div); scrollToBottom(); return div; }
+    function replaceTypingBubble(typingDiv, content, msg){ typingDiv.dataset.typing='false'; typingDiv.innerHTML=''; const timeStr=new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); let inner=`<div class="bubble">${parseMarkdown(content)}</div>`; inner+=`<div class="timestamp"><span>${timeStr}</span></div>`; inner+=`<div class="rewind-row"><button class="prev-ver-btn" disabled>◂</button><span class="ver-indicator">1/1</span><button class="next-ver-btn" disabled>▸</button><button class="regen-btn">↺ 重新生成</button></div>`; typingDiv.innerHTML=inner; const bubble=typingDiv.querySelector('.bubble'); if(bubble){ bubble.addEventListener('click',(e)=>{e.stopPropagation();handleBubbleClick('assistant',msg.timestamp,typingDiv);}); } typingDiv.querySelector('.regen-btn')?.addEventListener('click',(e)=>{e.stopPropagation();regenerateResponse(msg);}); let pt; let ilp=false; typingDiv.addEventListener('touchstart',(e)=>{ilp=false;pt=setTimeout(()=>{ilp=true;showMessageContextMenu(msg,e,typingDiv);},450);}); typingDiv.addEventListener('touchend',()=>{clearTimeout(pt);}); typingDiv.addEventListener('touchmove',()=>{clearTimeout(pt);ilp=false;}); scrollToBottom(); }
+    function appendToTypingBubble(typingDiv, newChunk){ const bubble=typingDiv.querySelector('.bubble'); if(!bubble){ const timeStr=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); typingDiv.innerHTML=`<div class="bubble">${parseMarkdown(newChunk)}</div><div class="timestamp"><span>${timeStr}</span></div>`; return; } const currentText=bubble.textContent||''; bubble.innerHTML=parseMarkdown(currentText+newChunk); scrollToBottom(); }
 
-    async function sendMessageAfterEdit(newContent){
-        userInput.value=''; userInput.style.height='auto'; cancelEditMode();
-        const m={role:'user',versions:[newContent],currentVersion:0,timestamp:Date.now(),edited:true};
-        renderMessage('user',m); conversationHistory.push(m); saveHistory();
-        triggerAIResponse();
-    }
+    function resetTypingTimer(){ if(userInputTimer) clearTimeout(userInputTimer); userInputTimer=setTimeout(()=>{userInputTimer=null;triggerAIResponse();},TYPING_DELAY); }
 
-    function changeVersion(msg,delta,div){
-        const ni=msg.currentVersion+delta; if(ni<0||ni>=msg.versions.length) return;
-        msg.currentVersion=ni; saveHistory();
-        const b=div.querySelector('.bubble'); if(b) b.innerHTML=parseMarkdown(msg.versions[ni]);
-        const vi=div.querySelector('.ver-indicator'); if(vi) vi.textContent=`${ni+1}/${msg.versions.length}`;
-        const pb=div.querySelector('.prev-ver-btn'),nb=div.querySelector('.next-ver-btn');
-        if(pb) pb.disabled=ni===0; if(nb) nb.disabled=ni===msg.versions.length-1;
-        showToast(`切到第 ${ni+1} 个版本`);
-    }
+    async function triggerAIResponse(){ if(!getCurrentKey()||!SYSTEM_PROMPT) return; if(currentAbortController){currentAbortController.abort();currentAbortController=null;} const oldTyping=document.querySelector('[data-typing="true"]'); if(oldTyping) oldTyping.remove(); const typingDiv=createTypingBubble(); currentAbortController=new AbortController(); const signal=currentAbortController.signal; let fullResponse=''; try{ const timeCtx=getTimeContext(); const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))]; msgs.splice(1,0,{role:'user',content:timeCtx}); const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,msgs,signal); if(!resp.ok){if(resp.status===429||resp.status===402){if(switchToNextKey()){triggerAIResponse();return;}}throw new Error(`API 错误 ${resp.status}`);} const reader=resp.body.getReader(); const dec=new TextDecoder('utf-8'); let buf=''; let lastChunk=''; let pendingText=''; let sentenceCount=0; let sentenceTimer=null; const flushPending=()=>{if(pendingText){appendToTypingBubble(typingDiv,pendingText);pendingText='';}}; while(true){ const{done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const l of lines){ if(l.startsWith('data: ')){ const d=l.slice(6); if(d==='[DONE]') continue; try{ const p=JSON.parse(d); const txt=extractStreamText(endpoint.type,p); if(txt){ fullResponse+=txt; pendingText+=txt; if(/[。！？\n]/.test(txt)){ sentenceCount++; flushPending(); if(sentenceCount>=MAX_SENTENCES){ reader.cancel(); break; } if(sentenceTimer) clearTimeout(sentenceTimer); await new Promise(r=>{sentenceTimer=setTimeout(r,SENTENCE_PAUSE);}); } else { if(sentenceTimer) clearTimeout(sentenceTimer); sentenceTimer=setTimeout(flushPending,300); } } if(p.usage) lastChunk=d; }catch(e){} } } if(sentenceCount>=MAX_SENTENCES) break; } flushPending(); if(lastChunk){try{const usage=JSON.parse(lastChunk).usage;if(usage)recordUsage(usage);}catch(e){}} const newMsg={role:'assistant',versions:[fullResponse],currentVersion:0,timestamp:Date.now()}; conversationHistory.push(newMsg); saveHistory(); replaceTypingBubble(typingDiv,fullResponse,newMsg); checkDiaryTriggers(); }catch(e){if(e.name==='AbortError'){}else{if(typingDiv.parentNode)typingDiv.remove();const errDiv=document.createElement('div');errDiv.className='message assistant';errDiv.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(errDiv);}} finally{currentAbortController=null;userInput.focus();} }
 
-    async function regenerateResponse(msg){
-        if(!getCurrentKey()||!SYSTEM_PROMPT){showToast('请先设置 API Key 和互动指令');return;}
-        // 找到这条消息在 history 中的位置，只把这条消息之后的都去掉（但保持这条消息本身还在）
-        const idx = conversationHistory.findIndex(m=>m.timestamp===msg.timestamp);
-        if(idx===-1) return;
-        // 保留到这条消息为止（包含这条消息），然后追加新的 AI 回复
-        conversationHistory = conversationHistory.slice(0, idx+1);
-        saveHistory(); rebuildChatFromHistory();
-        triggerAIResponse();
-    }
-
-    function extractStreamText(type,parsed){
-        if(type==='anthropic') return parsed.type==='content_block_delta'&&parsed.delta?.text?parsed.delta.text:'';
-        return parsed.choices?.[0]?.delta?.content||'';
-    }
-
-    async function makeAPIRequest(endpoint,messages,signal){
-        const key=getCurrentKey();
-        if(endpoint.type==='anthropic') return fetch(endpoint.url,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:getCurrentModel(),max_tokens:MAX_TOKENS,temperature:TEMPERATURE,top_p:TOP_P,stream:true,messages}),signal});
-        return fetch(endpoint.url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:getCurrentModel(),max_tokens:MAX_TOKENS,temperature:TEMPERATURE,top_p:TOP_P,frequency_penalty:FREQ_PENALTY,presence_penalty:PRES_PENALTY,stream:true,messages}),signal});
-    }
-
-    // ========== iMessage 风格输入气泡 ==========
-    function createTypingBubble(){
-        const div=document.createElement('div'); div.className='message assistant'; div.dataset.typing='true';
-        const b=document.createElement('div'); b.className='typing-bubble';
-        b.innerHTML='<span>●</span><span>●</span><span>●</span>';
-        div.appendChild(b); chatLog.appendChild(div); scrollToBottom(); return div;
-    }
-    function replaceTypingBubble(typingDiv, content, msg){
-        typingDiv.dataset.typing='false';
-        typingDiv.innerHTML = '';
-        const timeStr = new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
-        let inner = `<div class="bubble">${parseMarkdown(content)}</div>`;
-        inner += `<div class="timestamp"><span>${timeStr}</span></div>`;
-        inner += `<div class="rewind-row"><button class="prev-ver-btn" disabled>◂</button><span class="ver-indicator">1/1</span><button class="next-ver-btn" disabled>▸</button><button class="regen-btn">↺ 重新生成</button></div>`;
-        typingDiv.innerHTML = inner;
-        const bubble = typingDiv.querySelector('.bubble');
-        if(bubble){
-            bubble.addEventListener('click',(e)=>{ e.stopPropagation(); handleBubbleClick('assistant',msg.timestamp,typingDiv); });
-        }
-        typingDiv.querySelector('.regen-btn')?.addEventListener('click',(e)=>{ e.stopPropagation(); regenerateResponse(msg); });
-        // 绑定长按
-        let pt; let ilp=false;
-        typingDiv.addEventListener('touchstart',(e)=>{ ilp=false; pt=setTimeout(()=>{ ilp=true; showMessageContextMenu(msg,e,typingDiv); },450); });
-        typingDiv.addEventListener('touchend',()=>{ clearTimeout(pt); });
-        typingDiv.addEventListener('touchmove',()=>{ clearTimeout(pt); ilp=false; });
-        scrollToBottom();
-    }
-    // 分句追加
-    function appendToTypingBubble(typingDiv, newChunk){
-        const bubble = typingDiv.querySelector('.bubble');
-        if(!bubble){
-            // 如果还没有 bubble，创建一个
-            const timeStr = new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
-            typingDiv.innerHTML = `<div class="bubble">${parseMarkdown(newChunk)}</div><div class="timestamp"><span>${timeStr}</span></div>`;
-            return;
-        }
-        const currentText = bubble.textContent || '';
-        bubble.innerHTML = parseMarkdown(currentText + newChunk);
-        scrollToBottom();
-    }
-
-    // ========== 核心：带缓冲和打断的 AI 回复触发 ==========
-    function resetTypingTimer(){
-        if(userInputTimer) clearTimeout(userInputTimer);
-        userInputTimer = setTimeout(()=>{
-            userInputTimer = null;
-            triggerAIResponse();
-        }, TYPING_DELAY);
-    }
-
-    async function triggerAIResponse(){
-        if(!getCurrentKey()||!SYSTEM_PROMPT) return;
-        // 打断正在进行的回复
-        if(currentAbortController){
-            currentAbortController.abort();
-            currentAbortController = null;
-        }
-        // 移除旧的 typing 气泡
-        const oldTyping = document.querySelector('[data-typing="true"]');
-        if(oldTyping) oldTyping.remove();
-
-        const typingDiv = createTypingBubble();
-        currentAbortController = new AbortController();
-        const signal = currentAbortController.signal;
-
-        let fullResponse = '';
-        try{
-            const timeCtx = getTimeContext();
-            const msgs = [{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))];
-            msgs.splice(1,0,{role:'user',content:timeCtx});
-            const endpoint = getAPIEndpoint();
-            const resp = await makeAPIRequest(endpoint, msgs, signal);
-            if(!resp.ok){ if(resp.status===429||resp.status===402){if(switchToNextKey()){triggerAIResponse();return;}} throw new Error(`API 错误 ${resp.status}`); }
-            const reader = resp.body.getReader(); const dec = new TextDecoder('utf-8'); let buf = ''; let lastChunk = '';
-            let pendingText = '';
-            let sentenceTimer = null;
-
-            const flushPending = () => {
-                if(pendingText){
-                    appendToTypingBubble(typingDiv, pendingText);
-                    pendingText = '';
-                }
-            };
-
-            while(true){
-                const {done, value} = await reader.read();
-                if(done) break;
-                buf += dec.decode(value, {stream:true});
-                const lines = buf.split('\n'); buf = lines.pop()||'';
-                for(const l of lines){
-                    if(l.startsWith('data: ')){
-                        const d = l.slice(6); if(d==='[DONE]') continue;
-                        try{
-                            const p = JSON.parse(d); const txt = extractStreamText(endpoint.type, p);
-                            if(txt){
-                                fullResponse += txt;
-                                pendingText += txt;
-                                // 检测分句标记
-                                if(/[。！？\n]/.test(txt)){
-                                    flushPending();
-                                    // 短暂停顿
-                                    if(sentenceTimer) clearTimeout(sentenceTimer);
-                                    await new Promise(r=>{ sentenceTimer = setTimeout(r, SENTENCE_PAUSE); });
-                                } else {
-                                    // 每 300ms 刷新一次，避免逐字刷新
-                                    if(sentenceTimer) clearTimeout(sentenceTimer);
-                                    sentenceTimer = setTimeout(flushPending, 300);
-                                }
-                            }
-                            if(p.usage) lastChunk = d;
-                        }catch(e){}
-                    }
-                }
-            }
-            flushPending();
-            if(lastChunk){ try{const usage=JSON.parse(lastChunk).usage;if(usage)recordUsage(usage);}catch(e){} }
-            const newMsg = {role:'assistant',versions:[fullResponse],currentVersion:0,timestamp:Date.now()};
-            conversationHistory.push(newMsg); saveHistory();
-            replaceTypingBubble(typingDiv, fullResponse, newMsg);
-            checkDiaryTriggers();
-        }catch(e){
-            if(e.name==='AbortError'){
-                // 被打断，typing 气泡已经被移除
-            }else{
-                if(typingDiv.parentNode) typingDiv.remove();
-                const errDiv = document.createElement('div'); errDiv.className='message assistant';
-                errDiv.innerHTML=`<div class="bubble">（连接断开了……）</div>`; chatLog.appendChild(errDiv);
-            }
-        }
-        finally{
-            currentAbortController = null;
-            userInput.focus();
-        }
-    }
-
-    // ========== 工具函数 ==========
     window.showImageOverlay=function(src){const o=document.createElement('div');o.className='image-overlay';o.innerHTML=`<img src="${src}">`;o.addEventListener('click',()=>o.remove());document.body.appendChild(o);};
     function scrollToBottom(){chatLog.scrollTop=chatLog.scrollHeight;}
     function escapeHtml(t){if(!t)return'';return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -796,7 +546,7 @@
     splashScreen.addEventListener('click',()=>{splashScreen.classList.add('hidden');setTimeout(()=>userInput.focus(),100);});
 
     function openLeft(){drawerLeft.classList.add('open');overlayMask.classList.add('show');updateDrawerDays();}
-    function closeLeft(){drawerLeft.classList.remove('open');overlayMask.classList.remove('show');memoryPage.classList.remove('open');usagePage.classList.remove('open');}
+    function closeLeft(){drawerLeft.classList.remove('open');overlayMask.classList.remove('show');memoryPage.classList.remove('open');usagePage.classList.remove('open');settingsDrawer.classList.remove('open');}
     function openRight(){drawerRight.classList.add('open');overlayMask.classList.add('show');renderCalendarPanel();}
     function closeRight(){drawerRight.classList.remove('open');overlayMask.classList.remove('show');}
     topAvatarBtn.addEventListener('click',()=>{if(drawerRight.classList.contains('open'))closeRight();openLeft();});
@@ -806,7 +556,15 @@
     overlayMask.addEventListener('click',()=>{closeLeft();closeRight();hideContextMenu();});
     function updateDrawerDays(){const ft=conversationHistory.length>0?conversationHistory[0].timestamp:Date.now();$('drawerDays').textContent=`在一起 ${Math.floor((Date.now()-ft)/86400000)} 天`;}
 
-    // ========== 事件绑定（精简） ==========
+    // ========== API Key Modal ==========
+    $('cancelApiKeyBtn').addEventListener('click',()=>$('editApiKeyModal').classList.add('hidden'));
+    $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);refreshSettingsUI();});
+
+    // ========== Pricing Modal ==========
+    $('pricingPreset').addEventListener('change',function(){const p=PRICING_PRESETS[this.value];if(p){$('editInputPrice').value=p.input;$('editOutputPrice').value=p.output;}});
+    $('cancelPricingBtn').addEventListener('click',()=>$('editPricingModal').classList.add('hidden'));
+    $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');refreshSettingsUI();});
+
     $('editNameItem').addEventListener('click',()=>{$('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden');});
     $('cancelNameBtn').addEventListener('click',()=>$('editNameModal').classList.add('hidden'));
     $('saveNameBtn').addEventListener('click',()=>{PARTNER_NAME=$('editNameInput').value.trim()||'七次元';localStorage.setItem('claude_partner_name',PARTNER_NAME);applyUI();$('editNameModal').classList.add('hidden');showToast('名字已更新');});
@@ -815,43 +573,11 @@
     $('savePromptBtn').addEventListener('click',()=>{SYSTEM_PROMPT=$('editPromptInput').value.trim();if(!SYSTEM_PROMPT){showToast('指令不能为空');return;}localStorage.setItem('claude_system_prompt',SYSTEM_PROMPT);$('editPromptModal').classList.add('hidden');showToast('互动指令已更新');});
     $('memoryEntry').addEventListener('click',()=>{memoryPage.classList.add('open');renderMemoryPage();});
     $('memBackBtn').addEventListener('click',()=>memoryPage.classList.remove('open'));
-    $('apiKeyItem').addEventListener('click',()=>{$('editApiKeyInput').value=API_KEYS.join(',');$('editApiKeyModal').classList.remove('hidden');});
-    $('cancelApiKeyBtn').addEventListener('click',()=>$('editApiKeyModal').classList.add('hidden'));
-    $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);});
-    $('modelItem').addEventListener('click',()=>{$('editModelInput').value=API_MODELS.join(',');$('editModelModal').classList.remove('hidden');});
-    $('cancelModelBtn').addEventListener('click',()=>$('editModelModal').classList.add('hidden'));
-    $('saveModelBtn').addEventListener('click',()=>{API_MODELS=$('editModelInput').value.split(',').filter(m=>m.trim());if(!API_MODELS.length)API_MODELS=['deepseek-chat'];currentKeyIndex=0;saveKeys();$('editModelModal').classList.add('hidden');showToast(`已保存 ${API_MODELS.length} 个模型`);});
-    $('paramsEntry').addEventListener('click',()=>{$('editTemperature').value=TEMPERATURE;$('editTopP').value=TOP_P;$('editMaxTokens').value=MAX_TOKENS;$('editFreqPenalty').value=FREQ_PENALTY;$('editPresPenalty').value=PRES_PENALTY;$('editParamsModal').classList.remove('hidden');});
-    $('cancelParamsBtn').addEventListener('click',()=>$('editParamsModal').classList.add('hidden'));
-    $('saveParamsBtn').addEventListener('click',()=>{TEMPERATURE=parseFloat($('editTemperature').value)||0.9;TOP_P=parseFloat($('editTopP').value)||1.0;MAX_TOKENS=parseInt($('editMaxTokens').value)||1024;FREQ_PENALTY=parseFloat($('editFreqPenalty').value)||0.1;PRES_PENALTY=parseFloat($('editPresPenalty').value)||0.1;saveParams();$('editParamsModal').classList.add('hidden');showToast('推理参数已更新');});
-    $('pricingEntry').addEventListener('click',()=>{$('editInputPrice').value=INPUT_PRICE;$('editOutputPrice').value=OUTPUT_PRICE;$('pricingPreset').value='custom';for(const[k,v]of Object.entries(PRICING_PRESETS)){if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){$('pricingPreset').value=k;break;}}$('editPricingModal').classList.remove('hidden');});
-    $('pricingPreset').addEventListener('change',function(){const p=PRICING_PRESETS[this.value];if(p){$('editInputPrice').value=p.input;$('editOutputPrice').value=p.output;}});
-    $('cancelPricingBtn').addEventListener('click',()=>$('editPricingModal').classList.add('hidden'));
-    $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');});
-    $('usageEntry').addEventListener('click',()=>{usagePage.classList.add('open');renderUsagePage();});
-    $('usageBackBtn').addEventListener('click',()=>usagePage.classList.remove('open'));
-    $('themeEntry').addEventListener('click',()=>{$('themeSelect').value=THEME_MODE;$('editThemeModal').classList.remove('hidden');});
-    $('cancelThemeBtn').addEventListener('click',()=>$('editThemeModal').classList.add('hidden'));
-    $('saveThemeBtn').addEventListener('click',()=>{THEME_MODE=$('themeSelect').value;saveTheme();applyTheme();$('editThemeModal').classList.add('hidden');showToast('主题已切换');});
-    imageToggle.addEventListener('click',()=>{IMAGE_ENABLED=!IMAGE_ENABLED;localStorage.setItem('claude_image_enabled',IMAGE_ENABLED);applyUI();showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭');});
-    $('musicEntry').addEventListener('click',()=>{$('musicModal').classList.remove('hidden');});
-    $('cancelMusicBtn').addEventListener('click',()=>$('musicModal').classList.add('hidden'));
-    $('readClipboardBtn').addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(t){const m=t.match(/(.+?)\s*[-–—]\s*(.+?)(?:\s*[\[\(]|$)/);if(m){$('musicSongInput').value=m[1]?.trim()||t.slice(0,30);$('musicArtistInput').value=m[2]?.trim()||'';}else{$('musicSongInput').value=t.slice(0,50);}showToast('已从剪贴板读取');}else{showToast('剪贴板为空');}}catch(e){showToast('无法读取剪贴板');}});
-    $('saveMusicBtn').addEventListener('click',()=>{const s=$('musicSongInput').value.trim(),a=$('musicArtistInput').value.trim();if(!s){showToast('请输入歌名');return;}const t=a?`${s} - ${a}`:s;currentMusic=t;musicBarText.textContent=`正在听：${t}`;musicBar.classList.remove('hidden');$('musicModal').classList.add('hidden');addSystemMessage(`我开始听《${t}》了`);const m={role:'user',versions:[`[正在听《${t}》]`],currentVersion:0,timestamp:Date.now()};conversationHistory.push(m);saveHistory();resetTypingTimer();});
-    musicCloseBtn.addEventListener('click',()=>{currentMusic=null;musicBar.classList.add('hidden');addSystemMessage('音乐已停止');});
-    bannerCloseBtn.addEventListener('click',()=>reminderBanner.classList.add('hidden'));
     $('exportItem').addEventListener('click',()=>{const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,memory:memoryBank,usage:usageLog,inputPrice:INPUT_PRICE,outputPrice:OUTPUT_PRICE,temperature:TEMPERATURE,topP:TOP_P,maxTokens:MAX_TOKENS,freqPenalty:FREQ_PENALTY,presPenalty:PRES_PENALTY,theme:THEME_MODE};const b=new Blob([JSON.stringify(d)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`七次元_备份_${new Date().toISOString().slice(0,10)}.json`;a.click();showToast('导出成功');});
     $('importItem').addEventListener('click',()=>{const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);if(d.name){PARTNER_NAME=d.name;localStorage.setItem('claude_partner_name',d.name);}if(d.avatar!==undefined){PARTNER_AVATAR=d.avatar;localStorage.setItem('claude_partner_avatar',d.avatar);}if(d.chat){conversationHistory=d.chat;saveHistory();rebuildChatFromHistory();}if(d.diary){diary=d.diary;saveDiary();}if(d.marks){calendarMarks=d.marks;saveMarks();}if(d.memory){memoryBank=d.memory;saveMemory();}if(d.usage){usageLog=d.usage;saveUsage();}if(d.inputPrice!==undefined){INPUT_PRICE=d.inputPrice;savePricing();}if(d.outputPrice!==undefined){OUTPUT_PRICE=d.outputPrice;savePricing();}if(d.temperature!==undefined){TEMPERATURE=d.temperature;saveParams();}if(d.topP!==undefined){TOP_P=d.topP;saveParams();}if(d.maxTokens!==undefined){MAX_TOKENS=d.maxTokens;saveParams();}if(d.freqPenalty!==undefined){FREQ_PENALTY=d.freqPenalty;saveParams();}if(d.presPenalty!==undefined){PRES_PENALTY=d.presPenalty;saveParams();}if(d.theme!==undefined){THEME_MODE=d.theme;saveTheme();applyTheme();}applyUI();showToast('导入成功');}catch(err){alert('文件格式错误');}};r.readAsText(f);};i.click();});
     $('drawerAvatar').addEventListener('click',()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{PARTNER_AVATAR=ev.target.result;localStorage.setItem('claude_partner_avatar',PARTNER_AVATAR);applyUI();showToast('头像已更新');};r.readAsDataURL(f);};i.click();});
 
-    function renderMemoryPage(){
-        const ay=$('memAboutYou'),au=$('memAboutUs');const cy=memoryBank.about_you.length,cu=memoryBank.about_us.length;
-        ay.innerHTML=`<div class="mem-section-header" id="aboutYouHeader"><span>关于你 · ${cy}条</span><span class="mem-arrow" id="aboutYouArrow">▼</span></div><div class="mem-section-body" id="aboutYouBody" style="display:none;">${cy===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_you.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_you" data-idx="${i}">✕</button></div>`).join('')}</div>`;
-        au.innerHTML=`<div class="mem-section-header" id="aboutUsHeader"><span>我们之间 · ${cu}条</span><span class="mem-arrow" id="aboutUsArrow">▼</span></div><div class="mem-section-body" id="aboutUsBody" style="display:none;">${cu===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_us.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_us" data-idx="${i}">✕</button></div>`).join('')}</div>`;
-        const tg=(hId,bId,aId)=>{const h=document.getElementById(hId),b=document.getElementById(bId),a=document.getElementById(aId);if(!h||!b||!a)return;h.addEventListener('click',()=>{if(b.style.display==='none'){b.style.display='block';a.textContent='▲';}else{b.style.display='none';a.textContent='▼';}});};
-        tg('aboutYouHeader','aboutYouBody','aboutYouArrow');tg('aboutUsHeader','aboutUsBody','aboutUsArrow');
-        document.querySelectorAll('.mem-delete').forEach(b=>{b.addEventListener('click',(e)=>{const c=e.target.dataset.cat,i=parseInt(e.target.dataset.idx);memoryBank[c].splice(i,1);saveMemory();renderMemoryPage();});});
-    }
+    function renderMemoryPage(){ const ay=$('memAboutYou'),au=$('memAboutUs');const cy=memoryBank.about_you.length,cu=memoryBank.about_us.length; ay.innerHTML=`<div class="mem-section-header" id="aboutYouHeader"><span>关于你 · ${cy}条</span><span class="mem-arrow" id="aboutYouArrow">▼</span></div><div class="mem-section-body" id="aboutYouBody" style="display:none;">${cy===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_you.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_you" data-idx="${i}">✕</button></div>`).join('')}</div>`; au.innerHTML=`<div class="mem-section-header" id="aboutUsHeader"><span>我们之间 · ${cu}条</span><span class="mem-arrow" id="aboutUsArrow">▼</span></div><div class="mem-section-body" id="aboutUsBody" style="display:none;">${cu===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_us.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_us" data-idx="${i}">✕</button></div>`).join('')}</div>`; const tg=(hId,bId,aId)=>{const h=document.getElementById(hId),b=document.getElementById(bId),a=document.getElementById(aId);if(!h||!b||!a)return;h.addEventListener('click',()=>{if(b.style.display==='none'){b.style.display='block';a.textContent='▲';}else{b.style.display='none';a.textContent='▼';}});}; tg('aboutYouHeader','aboutYouBody','aboutYouArrow');tg('aboutUsHeader','aboutUsBody','aboutUsArrow'); document.querySelectorAll('.mem-delete').forEach(b=>{b.addEventListener('click',(e)=>{const c=e.target.dataset.cat,i=parseInt(e.target.dataset.idx);memoryBank[c].splice(i,1);saveMemory();renderMemoryPage();});}); }
     $('addMemBtn').addEventListener('click',()=>$('addMemoryModal').classList.remove('hidden'));
     $('cancelMemBtn').addEventListener('click',()=>$('addMemoryModal').classList.add('hidden'));
     $('saveMemBtn').addEventListener('click',()=>{const c=$('memCategorySelect').value,v=$('memContentInput').value.trim();if(!v)return;memoryBank[c].push({text:v,ts:Date.now(),manual:true});saveMemory();renderMemoryPage();$('addMemoryModal').classList.add('hidden');$('memContentInput').value='';});
@@ -864,19 +590,7 @@
     function checkReminders(){const td=getTodayDateStr();const tm=new Date();tm.setDate(tm.getDate()+1);const ts=`${tm.getFullYear()}-${String(tm.getMonth()+1).padStart(2,'0')}-${String(tm.getDate()).padStart(2,'0')}`;const rm=[];for(const[ds,mk]of Object.entries(calendarMarks)){if(!mk.reminder||mk.reminder==='none')continue;const t=mk.title||(mk.type==='anniversary'?'纪念日':mk.type==='period-start'?'经期开始':'日程');if(ds===td&&(mk.reminder==='same-day'||mk.reminder==='one-hour'))rm.push(`今天：${t}`);if(ds===ts&&mk.reminder==='day-before')rm.push(`明天：${t}`);}if(rm.length>0){reminderBannerText.textContent=rm.join(' | ');reminderBanner.classList.remove('hidden');if(notificationPermission){rm.forEach(t=>{new Notification('日程提醒',{body:t});});}}}
     if('Notification'in window){Notification.requestPermission().then(p=>{notificationPermission=p==='granted';});}
 
-    function renderCalendarPanel(){
-        if(calendarFilter==='search')return;const td=new Date();const fd=new Date(currentYear,currentMonth,1).getDay();const dm=new Date(currentYear,currentMonth+1,0).getDate();const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-        let h=`<div class="calendar-header"><button id="prevMonthBtn">‹</button><span class="month-label">${mn[currentMonth]}</span><span class="year-label" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button></div><div class="calendar-grid"><div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>`;
-        for(let i=0;i<fd;i++)h+=`<div class="day-cell other-month"></div>`;
-        for(let d=1;d<=dm;d++){const ds=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const it=d===td.getDate()&&currentMonth===td.getMonth()&&currentYear===td.getFullYear();const hd=!!diary[ds];const mk=calendarMarks[ds];const pa=isPeriodActive(ds);let cl='day-cell';if(it)cl+=' today';if(hd&&(calendarFilter==='calendar'||calendarFilter==='diary'))cl+=' has-diary';if(pa)cl+=' mark-period';if(mk){if(mk.type==='anniversary')cl+=' mark-anniversary';if(mk.type==='custom')cl+=' mark-custom';if(mk.title&&(mk.type==='anniversary'||mk.type==='custom'))cl+=' has-schedule';}if(selectedDate===ds)cl+=' selected';h+=`<div class="${cl}" data-date="${ds}">${d}</div>`;}
-        h+=`</div>`;calendarContainer.innerHTML=h;
-        $('prevMonthBtn').addEventListener('click',()=>{if(currentMonth===0){currentMonth=11;currentYear--;}else currentMonth--;renderCalendarPanel();});
-        $('nextMonthBtn').addEventListener('click',()=>{if(currentMonth===11){currentMonth=0;currentYear++;}else currentMonth++;renderCalendarPanel();});
-        $('yearLabel').addEventListener('click',()=>{const ty=new Date().getFullYear();$('yearList').innerHTML=Array.from({length:21},(_,i)=>{const y=ty+10-i;return`<div class="year-item${y===currentYear?' active':''}" data-year="${y}">${y}年</div>`;}).join('');$('yearPickerModal').classList.remove('hidden');document.querySelector('.year-item.active')?.scrollIntoView({block:'center'});document.querySelectorAll('.year-item').forEach(i=>i.addEventListener('click',function(){currentYear=parseInt(this.dataset.year);$('yearPickerModal').classList.add('hidden');renderCalendarPanel();}));});
-        $('cancelYearBtn').addEventListener('click',()=>$('yearPickerModal').classList.add('hidden'));
-        document.querySelectorAll('.day-cell:not(.other-month)').forEach(c=>{c.addEventListener('click',function(){selectedDate=this.dataset.date;renderCalendarPanel();if(calendarFilter==='diary')showDiary(selectedDate);});let pt;c.addEventListener('touchstart',(e)=>{pt=setTimeout(()=>showDateContextMenu(c.dataset.date,e),500);});c.addEventListener('touchend',()=>clearTimeout(pt));c.addEventListener('touchmove',()=>clearTimeout(pt));c.addEventListener('contextmenu',(e)=>{e.preventDefault();showDateContextMenu(c.dataset.date,e);});});
-    }
-
+    function renderCalendarPanel(){ if(calendarFilter==='search')return;const td=new Date();const fd=new Date(currentYear,currentMonth,1).getDay();const dm=new Date(currentYear,currentMonth+1,0).getDate();const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']; let h=`<div class="calendar-header"><button id="prevMonthBtn">‹</button><span class="month-label">${mn[currentMonth]}</span><span class="year-label" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button></div><div class="calendar-grid"><div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>`; for(let i=0;i<fd;i++)h+=`<div class="day-cell other-month"></div>`; for(let d=1;d<=dm;d++){const ds=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const it=d===td.getDate()&&currentMonth===td.getMonth()&&currentYear===td.getFullYear();const hd=!!diary[ds];const mk=calendarMarks[ds];const pa=isPeriodActive(ds);let cl='day-cell';if(it)cl+=' today';if(hd&&(calendarFilter==='calendar'||calendarFilter==='diary'))cl+=' has-diary';if(pa)cl+=' mark-period';if(mk){if(mk.type==='anniversary')cl+=' mark-anniversary';if(mk.type==='custom')cl+=' mark-custom';if(mk.title&&(mk.type==='anniversary'||mk.type==='custom'))cl+=' has-schedule';}if(selectedDate===ds)cl+=' selected';h+=`<div class="${cl}" data-date="${ds}">${d}</div>`;} h+=`</div>`;calendarContainer.innerHTML=h; $('prevMonthBtn').addEventListener('click',()=>{if(currentMonth===0){currentMonth=11;currentYear--;}else currentMonth--;renderCalendarPanel();}); $('nextMonthBtn').addEventListener('click',()=>{if(currentMonth===11){currentMonth=0;currentYear++;}else currentMonth++;renderCalendarPanel();}); $('yearLabel').addEventListener('click',()=>{const ty=new Date().getFullYear();$('yearList').innerHTML=Array.from({length:21},(_,i)=>{const y=ty+10-i;return`<div class="year-item${y===currentYear?' active':''}" data-year="${y}">${y}年</div>`;}).join('');$('yearPickerModal').classList.remove('hidden');document.querySelector('.year-item.active')?.scrollIntoView({block:'center'});document.querySelectorAll('.year-item').forEach(i=>i.addEventListener('click',function(){currentYear=parseInt(this.dataset.year);$('yearPickerModal').classList.add('hidden');renderCalendarPanel();}));}); $('cancelYearBtn').addEventListener('click',()=>$('yearPickerModal').classList.add('hidden')); document.querySelectorAll('.day-cell:not(.other-month)').forEach(c=>{c.addEventListener('click',function(){selectedDate=this.dataset.date;renderCalendarPanel();if(calendarFilter==='diary')showDiary(selectedDate);});let pt;c.addEventListener('touchstart',(e)=>{pt=setTimeout(()=>showDateContextMenu(c.dataset.date,e),500);});c.addEventListener('touchend',()=>clearTimeout(pt));c.addEventListener('touchmove',()=>clearTimeout(pt));c.addEventListener('contextmenu',(e)=>{e.preventDefault();showDateContextMenu(c.dataset.date,e);});}); }
     function showDateContextMenu(d,e){activeMarkDate=d;const mk=calendarMarks[d];const df=new Date(d).toLocaleDateString('zh-CN',{month:'long',day:'numeric'});let h=`<div class="menu-title">${df}</div><div class="menu-item" data-action="add-anniversary">+ 添加纪念日</div><div class="menu-item" data-action="add-custom">+ 添加日程</div><div class="menu-item" data-action="add-period-start">+ 经期开始</div><div class="menu-item" data-action="add-period-end">+ 经期结束</div>`;if(mk){h+=`<div class="menu-item" data-action="edit">✏️ 编辑</div><div class="menu-item danger" data-action="delete">🗑 删除</div>`;}contextMenu.innerHTML=h;contextMenu.style.display='block';contextMenu.style.left=Math.min(e.touches?.[0]?.clientX||e.clientX,window.innerWidth-180)+'px';contextMenu.style.top=Math.min(e.touches?.[0]?.clientY||e.clientY,window.innerHeight-260)+'px';contextMenu.classList.add('show');contextMenu.querySelectorAll('.menu-item').forEach(i=>{i.addEventListener('click',function(){const a=this.dataset.action;hideContextMenu();if(a==='add-anniversary')openMarkModal('anniversary');if(a==='add-custom')openMarkModal('custom');if(a==='add-period-start')openMarkModal('period-start');if(a==='add-period-end')openMarkModal('period-end');if(a==='edit')openMarkModal(mk.type,mk);if(a==='delete'){delete calendarMarks[activeMarkDate];saveMarks();renderCalendarPanel();showToast('已删除');}});});}
     document.addEventListener('click',(e)=>{if(!contextMenu.contains(e.target))hideContextMenu();});
     function openMarkModal(t,em=null){$('markTypeSelect').value=t;$('markTitleInput').value=em?.title||'';$('markNoteInput').value=em?.note||'';$('markReminderSelect').value=em?.reminder||'none';$('editMarkDate').value=activeMarkDate;$('editMarkIsNew').value=em?'false':'true';$('addMarkTitle').textContent=em?'编辑日程':'添加日程';$('deleteMarkBtn').style.display=em?'inline-block':'none';$('addMarkModal').classList.remove('hidden');}
@@ -891,7 +605,7 @@
     imageInput.addEventListener('change',()=>{const f=imageInput.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{pendingImage=e.target.result;imagePreviewThumb.src=pendingImage;imagePreviewRow.classList.remove('hidden');};r.readAsDataURL(f);imageInput.value='';});
     imagePreviewRemove.addEventListener('click',()=>{pendingImage=null;imagePreviewRow.classList.add('hidden');});
 
-    async function sendImageMessage(img){if(!getCurrentKey()||!SYSTEM_PROMPT)return;if(currentAbortController){currentAbortController.abort();currentAbortController=null;}const old=document.querySelector('[data-typing="true"]');if(old)old.remove();const td=createTypingBubble();currentAbortController=new AbortController();const sig=currentAbortController.signal;let fr='';try{const ms=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,ms,sig);if(!rp.ok){if(rp.status===429||rp.status===402){if(switchToNextKey()){sendImageMessage(img);return;}}throw new Error(`API 错误 ${rp.status}`);}const rd=rp.body.getReader();const dc=new TextDecoder('utf-8');let bf='';let lc='';while(true){const{done,value}=await rd.read();if(done)break;bf+=dc.decode(value,{stream:true});const ls=bf.split('\n');bf=ls.pop()||'';for(const l of ls){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const t=extractStreamText(ep.type,p);if(t){fr+=t;appendToTypingBubble(td,t);} if(p.usage)lc=d;}catch(e){}}}}if(lc){try{const u=JSON.parse(lc).usage;if(u)recordUsage(u);}catch(e){}}const nm={role:'assistant',versions:[fr],currentVersion:0,timestamp:Date.now()};conversationHistory.push(nm);saveHistory();replaceTypingBubble(td,fr,nm);checkDiaryTriggers();}catch(e){if(e.name==='AbortError'){}else{if(td.parentNode)td.remove();const ed=document.createElement('div');ed.className='message assistant';ed.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(ed);}}finally{currentAbortController=null;userInput.focus();}}
+    async function sendImageMessage(img){if(!getCurrentKey()||!SYSTEM_PROMPT)return;if(currentAbortController){currentAbortController.abort();currentAbortController=null;}const old=document.querySelector('[data-typing="true"]');if(old)old.remove();const td=createTypingBubble();currentAbortController=new AbortController();const sig=currentAbortController.signal;let fr='';try{const ms=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,ms,sig);if(!rp.ok){if(rp.status===429||rp.status===402){if(switchToNextKey()){sendImageMessage(img);return;}}throw new Error(`API 错误 ${rp.status}`);}const rd=rp.body.getReader();const dc=new TextDecoder('utf-8');let bf='';let lc='';let sc=0;let pt='';let st=null;const fp=()=>{if(pt){appendToTypingBubble(td,pt);pt='';}};while(true){const{done,value}=await rd.read();if(done)break;bf+=dc.decode(value,{stream:true});const ls=bf.split('\n');bf=ls.pop()||'';for(const l of ls){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const t=extractStreamText(ep.type,p);if(t){fr+=t;pt+=t;if(/[。！？\n]/.test(t)){sc++;fp();if(sc>=MAX_SENTENCES){rd.cancel();break;}if(st)clearTimeout(st);await new Promise(r=>{st=setTimeout(r,SENTENCE_PAUSE);});}else{if(st)clearTimeout(st);st=setTimeout(fp,300);}}if(p.usage)lc=d;}catch(e){}}} if(sc>=MAX_SENTENCES)break;} fp();if(lc){try{const u=JSON.parse(lc).usage;if(u)recordUsage(u);}catch(e){}}const nm={role:'assistant',versions:[fr],currentVersion:0,timestamp:Date.now()};conversationHistory.push(nm);saveHistory();replaceTypingBubble(td,fr,nm);checkDiaryTriggers();}catch(e){if(e.name==='AbortError'){}else{if(td.parentNode)td.remove();const ed=document.createElement('div');ed.className='message assistant';ed.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(ed);}}finally{currentAbortController=null;userInput.focus();}}
 
     async function summarizeMessages(ms){if(!getCurrentKey())return null;const t=ms.map(m=>`${m.role}: ${getCurrentContent(m)}`).join('\n');const p=`请用一段简短的话总结以下对话的关键内容，保留重要的记忆、决定、情绪和事件：\n${t}`;try{const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,[{role:'user',content:p}]);if(!rp.ok)return null;const d=await rp.json();if(ep.type==='anthropic')return d.content?.[0]?.text?.trim()||null;return d.choices?.[0]?.message?.content?.trim()||null;}catch(e){return null;}}
     function getLastUserMessageTime(){for(let i=conversationHistory.length-1;i>=0;i--)if(conversationHistory[i].role==='user')return conversationHistory[i].timestamp;return 0;}
@@ -902,38 +616,17 @@
     window.addEventListener('focus',()=>{checkDiaryTriggers();checkReminders();});
     function addSystemMessage(t){const d=document.createElement('div');d.className='message assistant';d.innerHTML=`<div class="bubble" style="background:var(--hover-bg);color:var(--text-secondary);border-color:var(--border);">🔔 ${t}</div>`;chatLog.appendChild(d);scrollToBottom();}
 
-    // ========== 发送消息（带缓冲+打断） ==========
-    sendBtn.addEventListener('click',()=>{
-        if(editingMsgTimestamp){
-            const nc=userInput.value.trim();if(!nc){showToast('消息不能为空');return;}
-            trimHistoryAfter(editingMsgTimestamp); sendMessageAfterEdit(nc); return;
-        }
-        const text=userInput.value.trim();const hasImage=!!pendingImage;
-        if(!text&&!hasImage)return;
-        if(hasImage){
-            const now=Date.now();const c=text||'';
-            const m={role:'user',versions:[c],currentVersion:0,timestamp:now,image:pendingImage};
-            renderMessage('user',m);conversationHistory.push(m);saveHistory();
-            pendingImage=null;imagePreviewRow.classList.add('hidden');
-            userInput.value='';userInput.style.height='auto';
-            sendImageMessage(m.image);
-        }else{
-            const m={role:'user',versions:[text],currentVersion:0,timestamp:Date.now()};
-            renderMessage('user',m);conversationHistory.push(m);saveHistory();
-            userInput.value='';userInput.style.height='auto';
-            if(userInputTimer) clearTimeout(userInputTimer);
-            userInputTimer = null;
-            resetTypingTimer();
-        }
-    });
+    $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
+    $('cancelMusicBtn').addEventListener('click',()=>$('musicModal').classList.add('hidden'));
+    $('readClipboardBtn').addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(t){const m=t.match(/(.+?)\s*[-–—]\s*(.+?)(?:\s*[\[\(]|$)/);if(m){$('musicSongInput').value=m[1]?.trim()||t.slice(0,30);$('musicArtistInput').value=m[2]?.trim()||'';}else{$('musicSongInput').value=t.slice(0,50);}showToast('已从剪贴板读取');}else{showToast('剪贴板为空');}}catch(e){showToast('无法读取剪贴板');}});
+    $('saveMusicBtn').addEventListener('click',()=>{const s=$('musicSongInput').value.trim(),a=$('musicArtistInput').value.trim();if(!s){showToast('请输入歌名');return;}const t=a?`${s} - ${a}`:s;currentMusic=t;musicBarText.textContent=`正在听：${t}`;musicBar.classList.remove('hidden');$('musicModal').classList.add('hidden');addSystemMessage(`我开始听《${t}》了`);const m={role:'user',versions:[`[正在听《${t}》]`],currentVersion:0,timestamp:Date.now()};conversationHistory.push(m);saveHistory();resetTypingTimer();});
+    musicCloseBtn.addEventListener('click',()=>{currentMusic=null;musicBar.classList.add('hidden');addSystemMessage('音乐已停止');});
+    bannerCloseBtn.addEventListener('click',()=>reminderBanner.classList.add('hidden'));
+
+    // ========== 发送消息 ==========
+    sendBtn.addEventListener('click',()=>{ if(editingMsgTimestamp){ const nc=userInput.value.trim();if(!nc){showToast('消息不能为空');return;} trimHistoryAfter(editingMsgTimestamp); sendMessageAfterEdit(nc); return; } const text=userInput.value.trim();const hasImage=!!pendingImage; if(!text&&!hasImage)return; if(hasImage){ const now=Date.now();const c=text||''; const m={role:'user',versions:[c],currentVersion:0,timestamp:now,image:pendingImage}; renderMessage('user',m);conversationHistory.push(m);saveHistory(); pendingImage=null;imagePreviewRow.classList.add('hidden'); userInput.value='';userInput.style.height='auto'; sendImageMessage(m.image); }else{ const m={role:'user',versions:[text],currentVersion:0,timestamp:Date.now()}; renderMessage('user',m);conversationHistory.push(m);saveHistory(); userInput.value='';userInput.style.height='auto'; if(userInputTimer) clearTimeout(userInputTimer); userInputTimer=null; resetTypingTimer(); } });
     userInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();}});
-    userInput.addEventListener('input',()=>{
-        userInput.style.height='auto';userInput.style.height=Math.min(userInput.scrollHeight,100)+'px';
-        // 重置缓冲计时器
-        if(!editingMsgTimestamp){
-            resetTypingTimer();
-        }
-    });
+    userInput.addEventListener('input',()=>{ userInput.style.height='auto';userInput.style.height=Math.min(userInput.scrollHeight,100)+'px'; if(!editingMsgTimestamp){ resetTypingTimer(); } });
     chatLog.addEventListener('click',(e)=>{if(e.target===chatLog){deselectAllMessages();selectedMessageId=null;}});
 
     loadData();applyTheme();applyUI();renderCalendarPanel();
