@@ -547,13 +547,8 @@
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    function getStoredHash() {
-        return localStorage.getItem(PW_HASH_KEY);
-    }
-
-    function isPasswordSet() {
-        return !!getStoredHash();
-    }
+    function getStoredHash() { return localStorage.getItem(PW_HASH_KEY); }
+    function isPasswordSet() { return !!getStoredHash(); }
 
     async function checkPassword(entered) {
         const storedHash = getStoredHash();
@@ -581,10 +576,7 @@
 
     async function handlePasswordSubmit() {
         const entered = passwordInput.value.trim();
-        if (!entered) {
-            pwError.textContent = '请输入密码';
-            return;
-        }
+        if (!entered) { pwError.textContent = '请输入密码'; return; }
         if (!isPasswordSet()) {
             await setPassword(entered);
             pwError.textContent = '';
@@ -611,15 +603,9 @@
     async function handleChangePassword() {
         const oldPw = $('oldPasswordInput').value;
         const newPw = $('newPasswordInput').value;
-        if (!oldPw || !newPw) {
-            showToast('请填写旧密码和新密码');
-            return;
-        }
+        if (!oldPw || !newPw) { showToast('请填写旧密码和新密码'); return; }
         const ok = await checkPassword(oldPw);
-        if (!ok) {
-            showToast('旧密码错误');
-            return;
-        }
+        if (!ok) { showToast('旧密码错误'); return; }
         await setPassword(newPw);
         $('changePasswordModal').classList.add('hidden');
         $('oldPasswordInput').value = '';
@@ -628,32 +614,20 @@
     }
 
     pwSubmitBtn.addEventListener('click', handlePasswordSubmit);
-    passwordInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); handlePasswordSubmit(); }
-    });
-
-    $('changePasswordItem').addEventListener('click', () => {
-        $('oldPasswordInput').value = '';
-        $('newPasswordInput').value = '';
-        $('changePasswordModal').classList.remove('hidden');
-    });
+    passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); handlePasswordSubmit(); } });
+    $('changePasswordItem').addEventListener('click', () => { $('oldPasswordInput').value = ''; $('newPasswordInput').value = ''; $('changePasswordModal').classList.remove('hidden'); });
     $('cancelChangePwBtn').addEventListener('click', () => $('changePasswordModal').classList.add('hidden'));
     $('saveChangePwBtn').addEventListener('click', handleChangePassword);
 
     // ========== 原有逻辑 ==========
-
     function getCurrentKey() { return API_KEYS[currentKeyIndex] || ''; }
     function getCurrentModel() { return API_MODELS[currentKeyIndex] || API_MODELS[0] || 'deepseek-chat'; }
 
     function buildSystemPrompt() {
         let prompt = SYSTEM_PROMPT;
         const parts = [];
-        if (memoryBank.about_you && memoryBank.about_you.length > 0) {
-            parts.push('【关于你的记忆】\n' + memoryBank.about_you.map(m => '- ' + (m.text || m)).join('\n'));
-        }
-        if (memoryBank.about_us && memoryBank.about_us.length > 0) {
-            parts.push('【我们之间的记忆】\n' + memoryBank.about_us.map(m => '- ' + (m.text || m)).join('\n'));
-        }
+        if (memoryBank.about_you && memoryBank.about_you.length > 0) parts.push('【关于你的记忆】\n' + memoryBank.about_you.map(m => '- ' + (m.text || m)).join('\n'));
+        if (memoryBank.about_us && memoryBank.about_us.length > 0) parts.push('【我们之间的记忆】\n' + memoryBank.about_us.map(m => '- ' + (m.text || m)).join('\n'));
         if (parts.length > 0) prompt += '\n\n' + parts.join('\n\n');
         return prompt;
     }
@@ -685,165 +659,106 @@
     }
 
     function switchToNextKey() {
-        if (currentKeyIndex < API_KEYS.length - 1) {
-            currentKeyIndex++;
-            saveKeys();
-            showToast(`已切换到第 ${currentKeyIndex + 1} 个 Key`);
-            return true;
-        }
+        if (currentKeyIndex < API_KEYS.length - 1) { currentKeyIndex++; saveKeys(); showToast(`已切换到第 ${currentKeyIndex + 1} 个 Key`); return true; }
         return false;
     }
 
     function loadData() {
         const savedChat = localStorage.getItem('claude_chat_history_v2');
-        if (savedChat) {
-            try {
-                conversationHistory = JSON.parse(savedChat).map(msg => {
-                    if (!msg.versions) msg.versions = [msg.content || ''];
-                    if (msg.currentVersion === undefined) msg.currentVersion = 0;
-                    return msg;
-                });
-                rebuildChatFromHistory();
-            } catch(e) { conversationHistory = []; }
-        }
-        if (conversationHistory.length === 0) {
-            const now = Date.now();
-            conversationHistory = [{ role: 'assistant', versions: ['嗨，我在。'], currentVersion: 0, timestamp: now }];
-            saveHistory();
-            renderMessage('assistant', conversationHistory[0]);
-        }
-        const savedDiary = localStorage.getItem('claude_diary');
-        if (savedDiary) { try { diary = JSON.parse(savedDiary); } catch(e) { diary = {}; } }
-        const savedMarks = localStorage.getItem('claude_calendar_marks');
-        if (savedMarks) { try { calendarMarks = JSON.parse(savedMarks); } catch(e) { calendarMarks = {}; } }
-        const savedMem = localStorage.getItem('claude_memory_bank');
-        if (savedMem) { try { memoryBank = JSON.parse(savedMem); } catch(e) { memoryBank = { about_you: [], about_us: [] }; } }
-        const savedUsage = localStorage.getItem('claude_usage_log');
-        if (savedUsage) { try { usageLog = JSON.parse(savedUsage); } catch(e) { usageLog = []; } }
+        if (savedChat) { try { conversationHistory = JSON.parse(savedChat).map(msg => { if (!msg.versions) msg.versions = [msg.content || '']; if (msg.currentVersion === undefined) msg.currentVersion = 0; return msg; }); rebuildChatFromHistory(); } catch(e) { conversationHistory = []; } }
+        if (conversationHistory.length === 0) { const now = Date.now(); conversationHistory = [{ role: 'assistant', versions: ['嗨，我在。'], currentVersion: 0, timestamp: now }]; saveHistory(); renderMessage('assistant', conversationHistory[0]); }
+        const savedDiary = localStorage.getItem('claude_diary'); if (savedDiary) { try { diary = JSON.parse(savedDiary); } catch(e) { diary = {}; } }
+        const savedMarks = localStorage.getItem('claude_calendar_marks'); if (savedMarks) { try { calendarMarks = JSON.parse(savedMarks); } catch(e) { calendarMarks = {}; } }
+        const savedMem = localStorage.getItem('claude_memory_bank'); if (savedMem) { try { memoryBank = JSON.parse(savedMem); } catch(e) { memoryBank = { about_you: [], about_us: [] }; } }
+        const savedUsage = localStorage.getItem('claude_usage_log'); if (savedUsage) { try { usageLog = JSON.parse(savedUsage); } catch(e) { usageLog = []; } }
         applyForgettingCurve();
     }
 
     function applyForgettingCurve() {
-        const now = Date.now();
-        const DAY = 86400000;
-        const filterOld = (arr) => arr.filter(item => {
-            if (item.manual) return true;
-            const ts = item.ts || 0;
-            const age = (now - ts) / DAY;
-            if (age <= 7) return true;
-            if (age <= 14) return Math.random() < 0.5;
-            if (age <= 30) return Math.random() < 0.25;
-            return false;
-        });
-        memoryBank.about_you = filterOld(memoryBank.about_you);
-        memoryBank.about_us = filterOld(memoryBank.about_us);
-        saveMemory();
+        const now = Date.now(); const DAY = 86400000;
+        const filterOld = (arr) => arr.filter(item => { if (item.manual) return true; const ts = item.ts || 0; const age = (now - ts) / DAY; if (age <= 7) return true; if (age <= 14) return Math.random() < 0.5; if (age <= 30) return Math.random() < 0.25; return false; });
+        memoryBank.about_you = filterOld(memoryBank.about_you); memoryBank.about_us = filterOld(memoryBank.about_us); saveMemory();
     }
 
     function applyUI() {
-        topBarName.textContent = PARTNER_NAME;
-        $('drawerName').textContent = PARTNER_NAME;
-        if (PARTNER_AVATAR) {
-            topAvatarBtn.innerHTML = `<img src="${PARTNER_AVATAR}">`;
-            $('drawerAvatar').innerHTML = `<img src="${PARTNER_AVATAR}">`;
-        } else {
-            topAvatarBtn.innerHTML = '👤';
-            $('drawerAvatar').innerHTML = '👤';
-        }
-        imageToggle.classList.toggle('on', IMAGE_ENABLED);
-        attachBtn.style.display = IMAGE_ENABLED ? 'flex' : 'none';
+        topBarName.textContent = PARTNER_NAME; $('drawerName').textContent = PARTNER_NAME;
+        if (PARTNER_AVATAR) { topAvatarBtn.innerHTML = `<img src="${PARTNER_AVATAR}">`; $('drawerAvatar').innerHTML = `<img src="${PARTNER_AVATAR}">`; }
+        else { topAvatarBtn.innerHTML = '👤'; $('drawerAvatar').innerHTML = '👤'; }
+        imageToggle.classList.toggle('on', IMAGE_ENABLED); attachBtn.style.display = IMAGE_ENABLED ? 'flex' : 'none';
     }
 
     function rebuildChatFromHistory() { chatLog.innerHTML = ''; conversationHistory.forEach(msg => renderMessage(msg.role, msg)); scrollToBottom(); }
     function getCurrentContent(msg) { return msg.versions?.[msg.currentVersion] || ''; }
 
-    // ========== 复制功能（终极降级方案） ==========
-    function copyText(text) {
-        return new Promise((resolve, reject) => {
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(resolve).catch(() => {
-                    fallbackCopy(text) ? resolve() : reject();
-                });
-            } else {
-                fallbackCopy(text) ? resolve() : reject();
+    // ========== 复制功能（极简修复版） ==========
+    // 核心思路：放弃 JS 自动复制，改为选中文本让用户手动用系统菜单拷贝
+    function selectTextForManualCopy(text) {
+        // 移除旧的全屏选区
+        const old = document.getElementById('__copy_overlay');
+        if (old) old.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = '__copy_overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.left = '0'; overlay.style.top = '0';
+        overlay.style.width = '100%'; overlay.style.height = '100%';
+        overlay.style.zIndex = '9999';
+        overlay.style.background = 'rgba(0,0,0,0.03)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+
+        const card = document.createElement('div');
+        card.style.background = 'var(--card-bg, #fff)';
+        card.style.borderRadius = '16px';
+        card.style.padding = '20px 20px 16px';
+        card.style.maxWidth = '85vw';
+        card.style.maxHeight = '60vh';
+        card.style.overflowY = 'auto';
+        card.style.boxShadow = '0 10px 40px rgba(0,0,0,0.2)';
+        card.style.wordBreak = 'break-word';
+        card.style.fontSize = '15px';
+        card.style.lineHeight = '1.6';
+        card.style.color = 'var(--text, #2D2D2C)';
+        card.style.userSelect = 'text';
+        card.style.webkitUserSelect = 'text';
+        card.textContent = text;
+
+        const hint = document.createElement('div');
+        hint.style.textAlign = 'center';
+        hint.style.fontSize = '11px';
+        hint.style.color = 'var(--text-secondary, #8B8A87)';
+        hint.style.marginTop = '12px';
+        hint.textContent = '长按上方文字 → 系统菜单 → 拷贝，然后点空白处关闭';
+
+        overlay.appendChild(card);
+        overlay.appendChild(hint);
+        document.body.appendChild(overlay);
+
+        // 选中文本
+        const range = document.createRange();
+        range.selectNodeContents(card);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+
+        // 点击空白处关闭
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                overlay.remove();
+                sel.removeAllRanges();
             }
         });
     }
 
-    function fallbackCopy(text) {
-        const el = document.createElement('div');
-        el.contentEditable = true;
-        el.textContent = text;
-        el.style.position = 'fixed';
-        el.style.left = '-9999px';
-        el.style.top = '-9999px';
-        el.style.opacity = '0';
-        el.style.width = '1px';
-        el.style.height = '1px';
-        document.body.appendChild(el);
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-        let success = false;
-        try { success = document.execCommand('copy'); } catch(e) {}
-        document.body.removeChild(el);
-        sel.removeAllRanges();
-        if (!success) {
-            // 终极兜底：在页面上创建一个可见的可编辑区域让用户手动选择拷贝
-            const tempDiv = document.createElement('div');
-            tempDiv.contentEditable = true;
-            tempDiv.textContent = text;
-            tempDiv.style.position = 'fixed';
-            tempDiv.style.left = '10px';
-            tempDiv.style.right = '10px';
-            tempDiv.style.top = '30%';
-            tempDiv.style.padding = '16px';
-            tempDiv.style.background = 'var(--card-bg)';
-            tempDiv.style.border = '2px solid var(--border)';
-            tempDiv.style.borderRadius = '14px';
-            tempDiv.style.zIndex = '9999';
-            tempDiv.style.fontSize = '15px';
-            tempDiv.style.lineHeight = '1.5';
-            tempDiv.style.wordBreak = 'break-word';
-            tempDiv.style.maxHeight = '50vh';
-            tempDiv.style.overflowY = 'auto';
-            tempDiv.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = '关闭';
-            closeBtn.style.position = 'absolute';
-            closeBtn.style.top = '8px';
-            closeBtn.style.right = '12px';
-            closeBtn.style.background = 'var(--hover-bg)';
-            closeBtn.style.border = 'none';
-            closeBtn.style.borderRadius = '8px';
-            closeBtn.style.padding = '4px 12px';
-            closeBtn.style.cursor = 'pointer';
-            closeBtn.style.color = 'var(--text)';
-            closeBtn.style.fontSize = '13px';
-            tempDiv.appendChild(closeBtn);
-            document.body.appendChild(tempDiv);
-            showToast('请手动选择文本，然后点拷贝');
-            const r2 = document.createRange();
-            r2.selectNodeContents(tempDiv.firstChild);
-            const s2 = window.getSelection();
-            s2.removeAllRanges();
-            s2.addRange(r2);
-            closeBtn.addEventListener('click', () => {
-                document.body.removeChild(tempDiv);
-                s2.removeAllRanges();
-            });
-            tempDiv.addEventListener('blur', () => {
-                setTimeout(() => {
-                    if (document.body.contains(tempDiv)) {
-                        document.body.removeChild(tempDiv);
-                        s2.removeAllRanges();
-                    }
-                }, 300);
-            });
-        }
-        return success;
+    function copyText(text) {
+        return new Promise((resolve, reject) => {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(resolve).catch(() => reject());
+            } else {
+                reject();
+            }
+        });
     }
 
     function renderMessage(role, msg) {
@@ -870,10 +785,11 @@
             div.querySelector('.prev-ver-btn')?.addEventListener('click', (e) => { e.stopPropagation(); changeVersion(msg, -1, div); });
             div.querySelector('.next-ver-btn')?.addEventListener('click', (e) => { e.stopPropagation(); changeVersion(msg, 1, div); });
             div.querySelector('.regen-btn')?.addEventListener('click', (e) => { e.stopPropagation(); regenerateResponse(msg); });
+            // AI消息长按：弹出选中框让用户手动复制
             if (bubble) addCopyLongPress(bubble, msg);
         }
         if (role === 'user') {
-            // 用户消息：长按弹出菜单（复制 / 编辑），绑定到整个 message div（图片也能触发）
+            // 用户消息长按：弹出菜单（复制 / 编辑）
             let pressTimer; let isLongPress = false;
             div.addEventListener('touchstart', (e) => {
                 isLongPress = false;
@@ -882,13 +798,8 @@
                     showUserMsgContextMenu(msg, e, div);
                 }, 450);
             });
-            div.addEventListener('touchend', () => {
-                clearTimeout(pressTimer);
-            });
-            div.addEventListener('touchmove', () => {
-                clearTimeout(pressTimer);
-                isLongPress = false;
-            });
+            div.addEventListener('touchend', () => { clearTimeout(pressTimer); });
+            div.addEventListener('touchmove', () => { clearTimeout(pressTimer); isLongPress = false; });
             const editTarget = bubble || div;
             editTarget.addEventListener('dblclick', (e) => { e.stopPropagation(); startEditUserMsg(msg.timestamp); });
         }
@@ -907,18 +818,14 @@
         contextMenu.classList.add('show');
         contextMenu.style.display = 'block';
 
-        contextMenu.querySelector('[data-action="copy"]').addEventListener('click', async () => {
+        contextMenu.querySelector('[data-action="copy"]').addEventListener('click', () => {
             hideContextMenu();
-            try {
-                await copyText(getCurrentContent(msg));
-                showToast('已复制');
-            } catch(e) {
-                showToast('复制失败，请尝试截图');
-            }
+            selectTextForManualCopy(getCurrentContent(msg));
         });
         contextMenu.querySelector('[data-action="edit"]').addEventListener('click', () => {
             hideContextMenu();
-            startEditUserMsg(msg.timestamp);
+            // 延迟一下确保菜单完全关闭再进入编辑模式
+            setTimeout(() => startEditUserMsg(msg.timestamp), 100);
         });
 
         setTimeout(() => {
@@ -934,7 +841,23 @@
         }, 50);
     }
 
+    function addCopyLongPress(bubble, msg) {
+        let pressTimer;
+        bubble.addEventListener('touchstart', (e) => {
+            pressTimer = setTimeout(() => {
+                selectTextForManualCopy(getCurrentContent(msg));
+            }, 600);
+        });
+        bubble.addEventListener('touchend', () => clearTimeout(pressTimer));
+        bubble.addEventListener('touchmove', () => clearTimeout(pressTimer));
+    }
+
     function startEditUserMsg(timestamp) {
+        // 先清除任何残留的全屏复制框
+        const old = document.getElementById('__copy_overlay');
+        if (old) old.remove();
+        window.getSelection().removeAllRanges();
+
         const msg = conversationHistory.find(m => m.timestamp === timestamp);
         if (!msg || msg.role !== 'user') return;
         editingMsgTimestamp = timestamp;
@@ -969,17 +892,14 @@
         const idx = conversationHistory.findIndex(m => m.timestamp === timestamp);
         if (idx === -1) return;
         conversationHistory = conversationHistory.slice(0, idx);
-        saveHistory();
-        rebuildChatFromHistory();
+        saveHistory(); rebuildChatFromHistory();
     }
 
     async function sendMessageAfterEdit(newContent) {
         userInput.value = ''; userInput.style.height = 'auto';
         cancelEditMode();
         const m = { role: 'user', versions: [newContent], currentVersion: 0, timestamp: Date.now(), edited: true };
-        renderMessage('user', m);
-        conversationHistory.push(m);
-        saveHistory();
+        renderMessage('user', m); conversationHistory.push(m); saveHistory();
         await sendMessageInternal(newContent, false);
     }
 
@@ -991,8 +911,7 @@
         const verInd = div.querySelector('.ver-indicator'); if (verInd) verInd.textContent = `${newIdx+1}/${msg.versions.length}`;
         const pb = div.querySelector('.prev-ver-btn'), nb = div.querySelector('.next-ver-btn');
         if (pb) pb.disabled = newIdx === 0; if (nb) nb.disabled = newIdx === msg.versions.length-1;
-        showToast(`切到第 ${newIdx+1} 个版本`);
-        trimHistoryAfter(msg.timestamp);
+        showToast(`切到第 ${newIdx+1} 个版本`); trimHistoryAfter(msg.timestamp);
     }
 
     async function regenerateResponse(msg) {
@@ -1003,15 +922,13 @@
         sendBtn.disabled = true; userInput.disabled = true;
         const sb = createStreamingBubble(); let fr = '';
         try {
-            const endpoint = getAPIEndpoint();
-            const resp = await makeAPIRequest(endpoint, messages);
+            const endpoint = getAPIEndpoint(); const resp = await makeAPIRequest(endpoint, messages);
             if (!resp.ok) { if (resp.status === 429 || resp.status === 402) { if (switchToNextKey()) { regenerateResponse(msg); return; } } throw new Error(`API 错误 ${resp.status}`); }
             const reader = resp.body.getReader(); const dec = new TextDecoder('utf-8'); let buf = ''; let lastChunk = '';
             while (true) { const { done, value } = await reader.read(); if (done) break; buf += dec.decode(value, { stream:true }); const lines = buf.split('\n'); buf = lines.pop()||''; for (const l of lines) { if (l.startsWith('data: ')) { const d = l.slice(6); if (d === '[DONE]') continue; try { const p = JSON.parse(d); const txt = extractStreamText(endpoint.type, p); if (txt) { fr += txt; sb.bubble.innerHTML = parseMarkdown(fr); scrollToBottom(); } if (p.usage) lastChunk = d; } catch(e) {} } } }
             if (lastChunk) { try { const usage = JSON.parse(lastChunk).usage; if (usage) recordUsage(usage); } catch(e) {} }
             const newMsg = { role: 'assistant', versions: [fr], currentVersion: 0, timestamp: Date.now() };
-            conversationHistory.push(newMsg); saveHistory();
-            sb.finalize(fr, newMsg); showToast('新版本已生成'); checkDiaryTriggers();
+            conversationHistory.push(newMsg); saveHistory(); sb.finalize(fr, newMsg); showToast('新版本已生成'); checkDiaryTriggers();
         } catch(e) { sb.bubble.textContent='（连接断开了……）'; sb.bubble.classList.remove('typing-cursor'); }
         finally { sendBtn.disabled = false; userInput.disabled = false; userInput.focus(); }
     }
@@ -1023,9 +940,7 @@
 
     async function makeAPIRequest(endpoint, messages) {
         const key = getCurrentKey();
-        if (endpoint.type === 'anthropic') {
-            return fetch(endpoint.url, { method:'POST', headers:{ 'Content-Type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' }, body:JSON.stringify({ model:getCurrentModel(), max_tokens:MAX_TOKENS, temperature:TEMPERATURE, top_p:TOP_P, stream:true, messages }) });
-        }
+        if (endpoint.type === 'anthropic') return fetch(endpoint.url, { method:'POST', headers:{ 'Content-Type':'application/json', 'x-api-key':key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' }, body:JSON.stringify({ model:getCurrentModel(), max_tokens:MAX_TOKENS, temperature:TEMPERATURE, top_p:TOP_P, stream:true, messages }) });
         return fetch(endpoint.url, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':`Bearer ${key}` }, body:JSON.stringify({ model:getCurrentModel(), max_tokens:MAX_TOKENS, temperature:TEMPERATURE, top_p:TOP_P, frequency_penalty:FREQ_PENALTY, presence_penalty:PRES_PENALTY, stream:true, messages }) });
     }
 
@@ -1034,23 +949,8 @@
         const bubble = document.createElement('div'); bubble.className = 'bubble typing-cursor';
         const ts = document.createElement('div'); ts.className = 'timestamp';
         ts.textContent = new Date().toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' });
-        div.appendChild(bubble); div.appendChild(ts);
-        chatLog.appendChild(div); scrollToBottom();
-        return {
-            bubble,
-            finalize: (t, msg) => {
-                bubble.innerHTML = parseMarkdown(t);
-                bubble.classList.remove('typing-cursor');
-                const rewindRow = document.createElement('div');
-                rewindRow.className = 'rewind-row';
-                rewindRow.innerHTML = `<button class="prev-ver-btn" disabled>◂</button><span class="ver-indicator">1/1</span><button class="next-ver-btn" disabled>▸</button><button class="regen-btn">↺ 重新生成</button>`;
-                div.appendChild(rewindRow);
-                bubble.addEventListener('click', (e) => { e.stopPropagation(); handleBubbleClick('assistant', msg.timestamp, div); });
-                rewindRow.querySelector('.regen-btn')?.addEventListener('click', (e) => { e.stopPropagation(); regenerateResponse(msg); });
-                addCopyLongPress(bubble, msg);
-                scrollToBottom();
-            }
-        };
+        div.appendChild(bubble); div.appendChild(ts); chatLog.appendChild(div); scrollToBottom();
+        return { bubble, finalize: (t, msg) => { bubble.innerHTML = parseMarkdown(t); bubble.classList.remove('typing-cursor'); const rewindRow = document.createElement('div'); rewindRow.className = 'rewind-row'; rewindRow.innerHTML = `<button class="prev-ver-btn" disabled>◂</button><span class="ver-indicator">1/1</span><button class="next-ver-btn" disabled>▸</button><button class="regen-btn">↺ 重新生成</button>`; div.appendChild(rewindRow); bubble.addEventListener('click', (e) => { e.stopPropagation(); handleBubbleClick('assistant', msg.timestamp, div); }); rewindRow.querySelector('.regen-btn')?.addEventListener('click', (e) => { e.stopPropagation(); regenerateResponse(msg); }); addCopyLongPress(bubble, msg); scrollToBottom(); } };
     }
 
     window.showImageOverlay = function(src) {
@@ -1064,95 +964,32 @@
 
     function parseMarkdown(text) {
         if (!text) return '';
-        return text
-            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-            .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-            .replace(/\*(.+?)\*/g,'<em>$1</em>')
-            .replace(/`([^`]+)`/g,'<code style="background:var(--hover-bg);padding:1px 5px;border-radius:4px;font-size:13px;font-family:monospace;">$1</code>')
-            .replace(/\n{2,}/g,'<br><br>')
-            .replace(/\n/g,'<br>');
+        return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code style="background:var(--hover-bg);padding:1px 5px;border-radius:4px;font-size:13px;font-family:monospace;">$1</code>').replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');
     }
 
-    function addCopyLongPress(bubble, msg) {
-        let pressTimer;
-        bubble.addEventListener('touchstart', (e) => {
-            pressTimer = setTimeout(async () => {
-                try {
-                    await copyText(getCurrentContent(msg));
-                    showToast('已复制');
-                } catch(e) {
-                    showToast('复制失败，请尝试截图');
-                }
-            }, 600);
-        });
-        bubble.addEventListener('touchend', () => clearTimeout(pressTimer));
-        bubble.addEventListener('touchmove', () => clearTimeout(pressTimer));
-    }
     function showToast(text) { toast.textContent = text; toast.classList.add('show'); clearTimeout(window._tt); window._tt = setTimeout(() => toast.classList.remove('show'), 2000); }
 
-    function recordUsage(usage) {
-        const inputTokens = usage.input_tokens || usage.prompt_tokens || 0;
-        const outputTokens = usage.output_tokens || usage.completion_tokens || 0;
-        if (!inputTokens && !outputTokens) return;
-        const now = Date.now();
-        const cost = (inputTokens / 1000000) * INPUT_PRICE + (outputTokens / 1000000) * OUTPUT_PRICE;
-        usageLog.push({ ts: now, input: inputTokens, output: outputTokens, cost });
-        saveUsage();
-    }
+    function recordUsage(usage) { const inputTokens = usage.input_tokens || usage.prompt_tokens || 0; const outputTokens = usage.output_tokens || usage.completion_tokens || 0; if (!inputTokens && !outputTokens) return; const now = Date.now(); const cost = (inputTokens / 1000000) * INPUT_PRICE + (outputTokens / 1000000) * OUTPUT_PRICE; usageLog.push({ ts: now, input: inputTokens, output: outputTokens, cost }); saveUsage(); }
 
     function getUsageStats() {
-        const now = Date.now();
-        const dayStart = new Date(); dayStart.setHours(0,0,0,0);
-        const weekStart = new Date(dayStart); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-        const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+        const now = Date.now(); const dayStart = new Date(); dayStart.setHours(0,0,0,0); const weekStart = new Date(dayStart); weekStart.setDate(weekStart.getDate() - weekStart.getDay()); const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
         const sum = (arr) => arr.reduce((a,b) => a+b, 0);
-        const today = usageLog.filter(u => u.ts >= dayStart.getTime());
-        const week = usageLog.filter(u => u.ts >= weekStart.getTime());
-        const month = usageLog.filter(u => u.ts >= monthStart.getTime());
-        const all = usageLog;
-        return {
-            today: { input: sum(today.map(u=>u.input)), output: sum(today.map(u=>u.output)), cost: sum(today.map(u=>u.cost)) },
-            week: { input: sum(week.map(u=>u.input)), output: sum(week.map(u=>u.output)), cost: sum(week.map(u=>u.cost)) },
-            month: { input: sum(month.map(u=>u.input)), output: sum(month.map(u=>u.output)), cost: sum(month.map(u=>u.cost)) },
-            total: { input: sum(all.map(u=>u.input)), output: sum(all.map(u=>u.output)), cost: sum(all.map(u=>u.cost)) }
-        };
+        const today = usageLog.filter(u => u.ts >= dayStart.getTime()); const week = usageLog.filter(u => u.ts >= weekStart.getTime()); const month = usageLog.filter(u => u.ts >= monthStart.getTime()); const all = usageLog;
+        return { today: { input: sum(today.map(u=>u.input)), output: sum(today.map(u=>u.output)), cost: sum(today.map(u=>u.cost)) }, week: { input: sum(week.map(u=>u.input)), output: sum(week.map(u=>u.output)), cost: sum(week.map(u=>u.cost)) }, month: { input: sum(month.map(u=>u.input)), output: sum(month.map(u=>u.output)), cost: sum(month.map(u=>u.cost)) }, total: { input: sum(all.map(u=>u.input)), output: sum(all.map(u=>u.output)), cost: sum(all.map(u=>u.cost)) } };
     }
 
     function renderUsagePage() {
-        const stats = getUsageStats();
-        const monthTotal = stats.month.input + stats.month.output;
-        const quota = 1000000;
-        const pct = Math.min(100, Math.round((monthTotal / quota) * 100));
-        $('monthProgress').style.width = pct + '%';
-        $('monthProgressLabel').textContent = `本月已用 ${monthTotal.toLocaleString()} token · ${pct}%`;
-        const formatTokens = (n) => n >= 1000 ? (n/1000).toFixed(1) + 'k' : n.toString();
-        const formatCost = (n) => '¥' + n.toFixed(4);
-        const cards = [
-            { title: '今日', s: stats.today },
-            { title: '本周', s: stats.week },
-            { title: '本月', s: stats.month },
-            { title: '总计', s: stats.total }
-        ];
-        $('usageStatsCards').innerHTML = cards.map(c => `
-            <div class="stat-card">
-                <div class="stat-title">${c.title}</div>
-                <div class="stat-values">
-                    <div class="stat-tokens">输入 ${formatTokens(c.s.input)} · 输出 ${formatTokens(c.s.output)}</div>
-                    <div class="stat-cost">费用 ${formatCost(c.s.cost)}</div>
-                </div>
-            </div>
-        `).join('');
+        const stats = getUsageStats(); const monthTotal = stats.month.input + stats.month.output; const quota = 1000000; const pct = Math.min(100, Math.round((monthTotal / quota) * 100));
+        $('monthProgress').style.width = pct + '%'; $('monthProgressLabel').textContent = `本月已用 ${monthTotal.toLocaleString()} token · ${pct}%`;
+        const formatTokens = (n) => n >= 1000 ? (n/1000).toFixed(1) + 'k' : n.toString(); const formatCost = (n) => '¥' + n.toFixed(4);
+        const cards = [{ title: '今日', s: stats.today },{ title: '本周', s: stats.week },{ title: '本月', s: stats.month },{ title: '总计', s: stats.total }];
+        $('usageStatsCards').innerHTML = cards.map(c => `<div class="stat-card"><div class="stat-title">${c.title}</div><div class="stat-values"><div class="stat-tokens">输入 ${formatTokens(c.s.input)} · 输出 ${formatTokens(c.s.output)}</div><div class="stat-cost">费用 ${formatCost(c.s.cost)}</div></div></div>`).join('');
     }
 
-    const hour = new Date().getHours();
-    let g = '晚上好'; if (hour < 12) g = '早上好'; else if (hour < 18) g = '下午好';
+    const hour = new Date().getHours(); let g = '晚上好'; if (hour < 12) g = '早上好'; else if (hour < 18) g = '下午好';
     $('splashGreeting').textContent = g;
-
     updatePasswordUI();
-    if (!isPasswordSet()) {
-        passwordInput.focus();
-    }
-
+    if (!isPasswordSet()) passwordInput.focus();
     splashScreen.addEventListener('click', () => { splashScreen.classList.add('hidden'); setTimeout(() => userInput.focus(), 100); });
 
     function openLeft() { drawerLeft.classList.add('open'); overlayMask.classList.add('show'); updateDrawerDays(); }
@@ -1165,10 +1002,7 @@
     $('closeCalendarBtn').addEventListener('click', closeRight);
     overlayMask.addEventListener('click', () => { closeLeft(); closeRight(); hideContextMenu(); });
 
-    function updateDrawerDays() {
-        const ft = conversationHistory.length > 0 ? conversationHistory[0].timestamp : Date.now();
-        $('drawerDays').textContent = `在一起 ${Math.floor((Date.now() - ft) / 86400000)} 天`;
-    }
+    function updateDrawerDays() { const ft = conversationHistory.length > 0 ? conversationHistory[0].timestamp : Date.now(); $('drawerDays').textContent = `在一起 ${Math.floor((Date.now() - ft) / 86400000)} 天`; }
 
     $('editNameItem').addEventListener('click',()=>{ $('editNameInput').value=PARTNER_NAME; $('editNameModal').classList.remove('hidden'); });
     $('cancelNameBtn').addEventListener('click',()=> $('editNameModal').classList.add('hidden'));
@@ -1210,8 +1044,7 @@
     $('drawerAvatar').addEventListener('click',()=>{ const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*'; inp.onchange=(e)=>{const file=e.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=(ev)=>{PARTNER_AVATAR=ev.target.result; localStorage.setItem('claude_partner_avatar',PARTNER_AVATAR); applyUI(); showToast('头像已更新');}; reader.readAsDataURL(file);}; inp.click(); });
 
     function renderMemoryPage() {
-        const ay = $('memAboutYou'), au = $('memAboutUs');
-        const countYou = memoryBank.about_you.length, countUs = memoryBank.about_us.length;
+        const ay = $('memAboutYou'), au = $('memAboutUs'); const countYou = memoryBank.about_you.length, countUs = memoryBank.about_us.length;
         ay.innerHTML = `<div class="mem-section-header" id="aboutYouHeader"><span>关于你 · ${countYou}条</span><span class="mem-arrow" id="aboutYouArrow">▼</span></div><div class="mem-section-body" id="aboutYouBody" style="display:none;">${countYou===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_you.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_you" data-idx="${i}">✕</button></div>`).join('')}</div>`;
         au.innerHTML = `<div class="mem-section-header" id="aboutUsHeader"><span>我们之间 · ${countUs}条</span><span class="mem-arrow" id="aboutUsArrow">▼</span></div><div class="mem-section-body" id="aboutUsBody" style="display:none;">${countUs===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_us.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_us" data-idx="${i}">✕</button></div>`).join('')}</div>`;
         const toggle = (hId,bId,aId) => { const h=document.getElementById(hId),b=document.getElementById(bId),a=document.getElementById(aId); if(!h||!b||!a)return; h.addEventListener('click',()=>{ if(b.style.display==='none'){b.style.display='block';a.textContent='▲';}else{b.style.display='none';a.textContent='▼';} }); };
@@ -1228,47 +1061,23 @@
     function getTodayDateStr(){ const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
     function getTimeContext() {
-        const now = new Date();
-        const timeStr = `现在是${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日${now.getHours()}点${now.getMinutes()}分。`;
-        const today = getTodayDateStr();
-        const marksToday = [];
-        const mark = calendarMarks[today];
-        if (mark) {
-            if (mark.type === 'period-start') marksToday.push(`今天是经期开始日（${mark.title||''}）`);
-            else if (mark.type === 'period-end') marksToday.push(`今天是经期结束日`);
-            else if (mark.type === 'anniversary') marksToday.push(`今天是${mark.title||'纪念日'}`);
-            else if (mark.type === 'custom') marksToday.push(`今天有日程：${mark.title||'事件'}`);
-        }
+        const now = new Date(); const timeStr = `现在是${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日${now.getHours()}点${now.getMinutes()}分。`; const today = getTodayDateStr(); const marksToday = []; const mark = calendarMarks[today];
+        if (mark) { if (mark.type === 'period-start') marksToday.push(`今天是经期开始日（${mark.title||''}）`); else if (mark.type === 'period-end') marksToday.push(`今天是经期结束日`); else if (mark.type === 'anniversary') marksToday.push(`今天是${mark.title||'纪念日'}`); else if (mark.type === 'custom') marksToday.push(`今天有日程：${mark.title||'事件'}`); }
         if (isPeriodActive(today) && !mark) marksToday.push('今天在经期中');
-        const markStr = marksToday.length > 0 ? `今天有：${marksToday.join('；')}。` : '今天没有特殊标记。';
-        return `[系统时间上下文] ${timeStr} ${markStr}`;
+        return `[系统时间上下文] ${timeStr} ${marksToday.length > 0 ? '今天有：'+marksToday.join('；')+'。' : '今天没有特殊标记。'}`;
     }
 
     function checkReminders() {
-        const today = getTodayDateStr();
-        const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
-        const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,'0')}-${String(tomorrow.getDate()).padStart(2,'0')}`;
-        const reminders = [];
-        for (const [dateStr, mark] of Object.entries(calendarMarks)) {
-            if (!mark.reminder || mark.reminder === 'none') continue;
-            const title = mark.title || (mark.type==='anniversary'?'纪念日':mark.type==='period-start'?'经期开始':'日程');
-            if (dateStr === today && (mark.reminder === 'same-day' || mark.reminder === 'one-hour')) { reminders.push(`今天：${title}`); }
-            if (dateStr === tomorrowStr && mark.reminder === 'day-before') { reminders.push(`明天：${title}`); }
-        }
-        if (reminders.length > 0) {
-            reminderBannerText.textContent = reminders.join(' | ');
-            reminderBanner.classList.remove('hidden');
-            if (notificationPermission) { reminders.forEach(text => { new Notification('日程提醒', { body: text }); }); }
-        }
+        const today = getTodayDateStr(); const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1); const tomorrowStr = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,'0')}-${String(tomorrow.getDate()).padStart(2,'0')}`; const reminders = [];
+        for (const [dateStr, mark] of Object.entries(calendarMarks)) { if (!mark.reminder || mark.reminder === 'none') continue; const title = mark.title || (mark.type==='anniversary'?'纪念日':mark.type==='period-start'?'经期开始':'日程'); if (dateStr === today && (mark.reminder === 'same-day' || mark.reminder === 'one-hour')) reminders.push(`今天：${title}`); if (dateStr === tomorrowStr && mark.reminder === 'day-before') reminders.push(`明天：${title}`); }
+        if (reminders.length > 0) { reminderBannerText.textContent = reminders.join(' | '); reminderBanner.classList.remove('hidden'); if (notificationPermission) { reminders.forEach(text => { new Notification('日程提醒', { body: text }); }); } }
     }
 
     if ('Notification' in window) { Notification.requestPermission().then(perm => { notificationPermission = perm === 'granted'; }); }
 
     function renderCalendarPanel() {
         if (calendarFilter === 'search') return;
-        const today = new Date();
-        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const today = new Date(); const firstDay = new Date(currentYear, currentMonth, 1).getDay(); const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
         let html = `<div class="calendar-header"><button id="prevMonthBtn">‹</button><span class="month-label">${monthNames[currentMonth]}</span><span class="year-label" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button></div>`;
         html += `<div class="calendar-grid"><div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>`;
@@ -1276,23 +1085,13 @@
         for (let d = 1; d <= daysInMonth; d++) {
             const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const isToday = d === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
-            const hasDiary = !!diary[ds];
-            const mark = calendarMarks[ds];
-            const periodActive = isPeriodActive(ds);
-            let cls = 'day-cell';
-            if (isToday) cls += ' today';
-            if (hasDiary && (calendarFilter==='calendar'||calendarFilter==='diary')) cls += ' has-diary';
-            if (periodActive) cls += ' mark-period';
-            if (mark) {
-                if (mark.type==='anniversary') cls += ' mark-anniversary';
-                if (mark.type==='custom') cls += ' mark-custom';
-                if (mark.title && (mark.type==='anniversary'||mark.type==='custom')) cls += ' has-schedule';
-            }
+            const hasDiary = !!diary[ds]; const mark = calendarMarks[ds]; const periodActive = isPeriodActive(ds);
+            let cls = 'day-cell'; if (isToday) cls += ' today'; if (hasDiary && (calendarFilter==='calendar'||calendarFilter==='diary')) cls += ' has-diary'; if (periodActive) cls += ' mark-period';
+            if (mark) { if (mark.type==='anniversary') cls += ' mark-anniversary'; if (mark.type==='custom') cls += ' mark-custom'; if (mark.title && (mark.type==='anniversary'||mark.type==='custom')) cls += ' has-schedule'; }
             if (selectedDate === ds) cls += ' selected';
             html += `<div class="${cls}" data-date="${ds}">${d}</div>`;
         }
-        html += `</div>`;
-        calendarContainer.innerHTML = html;
+        html += `</div>`; calendarContainer.innerHTML = html;
         $('prevMonthBtn').addEventListener('click',()=>{if(currentMonth===0){currentMonth=11;currentYear--;}else currentMonth--;renderCalendarPanel();});
         $('nextMonthBtn').addEventListener('click',()=>{if(currentMonth===11){currentMonth=0;currentYear++;}else currentMonth++;renderCalendarPanel();});
         $('yearLabel').addEventListener('click',()=>{ const ty=new Date().getFullYear(); $('yearList').innerHTML=Array.from({length:21},(_,i)=>{const y=ty+10-i;return`<div class="year-item${y===currentYear?' active':''}" data-year="${y}">${y}年</div>`;}).join(''); $('yearPickerModal').classList.remove('hidden'); document.querySelector('.year-item.active')?.scrollIntoView({block:'center'}); document.querySelectorAll('.year-item').forEach(item=>item.addEventListener('click',function(){currentYear=parseInt(this.dataset.year);$('yearPickerModal').classList.add('hidden');renderCalendarPanel();})); });
@@ -1301,17 +1100,10 @@
     }
 
     function showDateContextMenu(dateStr, event) {
-        activeMarkDate = dateStr;
-        const mark = calendarMarks[dateStr];
-        const df = new Date(dateStr).toLocaleDateString('zh-CN',{month:'long',day:'numeric'});
-        let html = `<div class="menu-title">${df}</div>`;
-        html += `<div class="menu-item" data-action="add-anniversary">+ 添加纪念日</div>`;
-        html += `<div class="menu-item" data-action="add-custom">+ 添加日程</div>`;
-        html += `<div class="menu-item" data-action="add-period-start">+ 经期开始</div>`;
-        html += `<div class="menu-item" data-action="add-period-end">+ 经期结束</div>`;
+        activeMarkDate = dateStr; const mark = calendarMarks[dateStr]; const df = new Date(dateStr).toLocaleDateString('zh-CN',{month:'long',day:'numeric'});
+        let html = `<div class="menu-title">${df}</div>` + `<div class="menu-item" data-action="add-anniversary">+ 添加纪念日</div>` + `<div class="menu-item" data-action="add-custom">+ 添加日程</div>` + `<div class="menu-item" data-action="add-period-start">+ 经期开始</div>` + `<div class="menu-item" data-action="add-period-end">+ 经期结束</div>`;
         if (mark) { html += `<div class="menu-item" data-action="edit">✏️ 编辑</div>`; html += `<div class="menu-item danger" data-action="delete">🗑 删除</div>`; }
-        contextMenu.innerHTML = html;
-        contextMenu.style.display = 'block';
+        contextMenu.innerHTML = html; contextMenu.style.display = 'block';
         contextMenu.style.left = Math.min(event.touches?.[0]?.clientX || event.clientX, window.innerWidth - 180) + 'px';
         contextMenu.style.top = Math.min(event.touches?.[0]?.clientY || event.clientY, window.innerHeight - 260) + 'px';
         contextMenu.classList.add('show');
@@ -1335,13 +1127,10 @@
     imagePreviewRemove.addEventListener('click',()=>{pendingImage=null;imagePreviewRow.classList.add('hidden');});
 
     async function sendImageMessage(imageBase64) {
-        if(!getCurrentKey()||!SYSTEM_PROMPT)return;
-        sendBtn.disabled=true;userInput.disabled=true;
-        const sb=createStreamingBubble();let fr='';
+        if(!getCurrentKey()||!SYSTEM_PROMPT)return; sendBtn.disabled=true;userInput.disabled=true; const sb=createStreamingBubble();let fr='';
         try{
             const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];
-            const endpoint=getAPIEndpoint();
-            const resp=await makeAPIRequest(endpoint,msgs);
+            const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,msgs);
             if(!resp.ok){ if(resp.status===429||resp.status===402){if(switchToNextKey()){sendImageMessage(imageBase64);return;}} throw new Error(`API 错误 ${resp.status}`); }
             const reader=resp.body.getReader();const dec=new TextDecoder('utf-8');let buf='';let lastChunk='';
             while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split('\n');buf=lines.pop()||'';for(const l of lines){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const txt=extractStreamText(endpoint.type,p);if(txt){fr+=txt;sb.bubble.innerHTML=parseMarkdown(fr);scrollToBottom();} if(p.usage)lastChunk=d;}catch(e){}}}}
@@ -1355,14 +1144,10 @@
         if(!getCurrentKey()||!SYSTEM_PROMPT)return;
         if(addToHistory){const m={role:'user',versions:[userMessage],currentVersion:0,timestamp:Date.now()};renderMessage('user',m);conversationHistory.push(m);saveHistory();}
         if(conversationHistory.length > MEMORY_WINDOW){const toKeep=conversationHistory.slice(-RECENT_KEEP);const toCompress=conversationHistory.slice(0,-RECENT_KEEP);const summary=await summarizeMessages(toCompress);if(summary){memoryBank.about_you.push({text:`[早期对话摘要] ${summary}`,ts:Date.now()});saveMemory();}conversationHistory=toKeep;saveHistory();rebuildChatFromHistory();}
-        sendBtn.disabled=true;userInput.disabled=true;
-        const sb=createStreamingBubble();let fr='';
+        sendBtn.disabled=true;userInput.disabled=true; const sb=createStreamingBubble();let fr='';
         try{
-            const timeCtx=getTimeContext();
-            const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))];
-            msgs.splice(1,0,{role:'user',content:timeCtx});
-            const endpoint=getAPIEndpoint();
-            const resp=await makeAPIRequest(endpoint,msgs);
+            const timeCtx=getTimeContext(); const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))]; msgs.splice(1,0,{role:'user',content:timeCtx});
+            const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,msgs);
             if(!resp.ok){ if(resp.status===429||resp.status===402){if(switchToNextKey()){sendMessageInternal(userMessage,false);return;}} throw new Error(`API 错误 ${resp.status}`); }
             const reader=resp.body.getReader();const dec=new TextDecoder('utf-8');let buf='';let lastChunk='';
             while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split('\n');buf=lines.pop()||'';for(const l of lines){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const txt=extractStreamText(endpoint.type,p);if(txt){fr+=txt;sb.bubble.innerHTML=parseMarkdown(fr);scrollToBottom();} if(p.usage)lastChunk=d;}catch(e){}}}}
@@ -1374,38 +1159,13 @@
 
     async function summarizeMessages(msgs) {
         if (!getCurrentKey()) return null;
-        const text = msgs.map(m => `${m.role}: ${getCurrentContent(m)}`).join('\n');
-        const prompt = `请用一段简短的话总结以下对话的关键内容，保留重要的记忆、决定、情绪和事件：\n${text}`;
-        try {
-            const endpoint = getAPIEndpoint();
-            const resp = await makeAPIRequest(endpoint, [{role:'user',content:prompt}]);
-            if (!resp.ok) return null;
-            const data = await resp.json();
-            if (endpoint.type === 'anthropic') return data.content?.[0]?.text?.trim() || null;
-            return data.choices?.[0]?.message?.content?.trim() || null;
-        } catch(e) { return null; }
+        const text = msgs.map(m => `${m.role}: ${getCurrentContent(m)}`).join('\n'); const prompt = `请用一段简短的话总结以下对话的关键内容，保留重要的记忆、决定、情绪和事件：\n${text}`;
+        try { const endpoint = getAPIEndpoint(); const resp = await makeAPIRequest(endpoint, [{role:'user',content:prompt}]); if (!resp.ok) return null; const data = await resp.json(); if (endpoint.type === 'anthropic') return data.content?.[0]?.text?.trim() || null; return data.choices?.[0]?.message?.content?.trim() || null; } catch(e) { return null; }
     }
 
     function getLastUserMessageTime(){for(let i=conversationHistory.length-1;i>=0;i--)if(conversationHistory[i].role==='user')return conversationHistory[i].timestamp;return 0;}
     function hasGoodnight(){const now=Date.now();const regex=/晚安|睡吧|好梦|睡了|去睡|休息了|安/i;for(let i=conversationHistory.length-1;i>=0;i--){const m=conversationHistory[i];if(m.timestamp<now-1800000)break;if(regex.test(getCurrentContent(m)))return true;}return false;}
-    async function generateDiaryForDate(dateStr){
-        if(!getCurrentKey())return;
-        const start=new Date(dateStr+'T00:00:00').getTime(),end=new Date(dateStr+'T23:59:59').getTime();
-        const msgs=conversationHistory.filter(m=>m.timestamp>=start&&m.timestamp<=end);
-        if(!msgs.length)return;
-        const mark=calendarMarks[dateStr];
-        let extra='';
-        if(mark)extra=mark.type==='period-start'?`（经期第1天）`:mark.type==='period'?`（经期中）`:`（${mark.title||'特殊日子'}）`;
-        const prompt=`你是${PARTNER_NAME}，写一篇简短日记（200字内）记录今天。${extra}\n对话：\n${msgs.map(m=>`${m.role==='user'?'我':'你'}:${getCurrentContent(m)}`).join('\n')}`;
-        try{
-            const endpoint=getAPIEndpoint();
-            const resp=await makeAPIRequest(endpoint,[{role:'user',content:prompt}]);
-            if(!resp.ok)return;
-            const data=await resp.json();
-            const content=endpoint.type==='anthropic'?data.content?.[0]?.text?.trim():data.choices?.[0]?.message?.content?.trim();
-            if(content){diary[dateStr]={content,generatedAt:Date.now()};saveDiary();}
-        }catch(e){}
-    }
+    async function generateDiaryForDate(dateStr){ if(!getCurrentKey())return; const start=new Date(dateStr+'T00:00:00').getTime(),end=new Date(dateStr+'T23:59:59').getTime(); const msgs=conversationHistory.filter(m=>m.timestamp>=start&&m.timestamp<=end); if(!msgs.length)return; const mark=calendarMarks[dateStr]; let extra=''; if(mark)extra=mark.type==='period-start'?`（经期第1天）`:mark.type==='period'?`（经期中）`:`（${mark.title||'特殊日子'}）`; const prompt=`你是${PARTNER_NAME}，写一篇简短日记（200字内）记录今天。${extra}\n对话：\n${msgs.map(m=>`${m.role==='user'?'我':'你'}:${getCurrentContent(m)}`).join('\n')}`; try{ const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,[{role:'user',content:prompt}]); if(!resp.ok)return; const data=await resp.json(); const content=endpoint.type==='anthropic'?data.content?.[0]?.text?.trim():data.choices?.[0]?.message?.content?.trim(); if(content){diary[dateStr]={content,generatedAt:Date.now()};saveDiary();} }catch(e){} }
     async function checkDiaryTriggers(){ const now=Date.now(),hourNow=new Date().getHours(),today=getTodayDateStr(); if(diary[today])return; const last=getLastUserMessageTime(); if(last&&(now-last)>1800000&&hasGoodnight()){await generateDiaryForDate(today);return;} if((hourNow>=22||hourNow<6)&&last&&(now-last)>7200000){await generateDiaryForDate(today);} }
     setInterval(()=>{if(!document.hidden){checkDiaryTriggers();checkReminders();}},60000);
     window.addEventListener('focus',()=>{checkDiaryTriggers();checkReminders();});
@@ -1417,10 +1177,7 @@
     userInput.addEventListener('input',()=>{userInput.style.height='auto';userInput.style.height=Math.min(userInput.scrollHeight,100)+'px';});
     chatLog.addEventListener('click',(e)=>{if(e.target===chatLog){deselectAllMessages();selectedMessageId=null;}});
 
-    loadData();
-    applyTheme();
-    applyUI();
-    renderCalendarPanel();
+    loadData(); applyTheme(); applyUI(); renderCalendarPanel();
     setTimeout(()=>{checkDiaryTriggers();checkReminders();},2000);
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (THEME_MODE === 'auto') applyTheme(); });
 })();
