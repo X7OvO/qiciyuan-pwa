@@ -212,24 +212,22 @@
         .settings-item .settings-value { font-size:14px; color:var(--text-secondary); cursor:pointer; }
         .settings-item select { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; max-width:150px; }
         .settings-item input { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; max-width:120px; }
-        .param-options { display:flex; gap:4px; }
-        .param-options .param-btn { padding:6px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; background:var(--card-bg); color:var(--text-secondary); cursor:pointer; transition:0.15s; white-space:nowrap; }
-        .param-options .param-btn.active { background:var(--btn-primary); color:var(--btn-primary-text); border-color:var(--btn-primary); }
-        .settings-subpage { display:none; flex-direction:column; flex:1; overflow-y:auto; }
-        .settings-subpage.active { display:flex; }
-        .settings-subpage .subpage-header { padding:16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
-        .settings-subpage .subpage-back { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
-        .settings-subpage .subpage-title { font-size:16px; font-weight:500; color:var(--text); }
-        .settings-subpage .usage-section { padding:16px; border-bottom:1px solid var(--border); }
-        .settings-subpage .usage-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; letter-spacing:1px; margin-bottom:12px; }
-        .settings-subpage .progress-bar-wrap { background:var(--progress-bg); border-radius:8px; height:12px; margin-bottom:6px; overflow:hidden; }
-        .settings-subpage .progress-bar-fill { background:var(--progress-fill); height:100%; border-radius:8px; transition:width 0.5s; }
-        .settings-subpage .progress-label { font-size:11px; color:var(--text-secondary); }
-        .settings-subpage .stat-card { background:var(--card-bg); border-radius:14px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
-        .settings-subpage .stat-card .stat-title { font-size:13px; color:var(--text-secondary); }
-        .settings-subpage .stat-card .stat-values { text-align:right; }
-        .settings-subpage .stat-card .stat-tokens { font-size:15px; font-weight:500; color:var(--text); }
-        .settings-subpage .stat-card .stat-cost { font-size:11px; color:#B8A88A; margin-top:2px; }
+        /* 底部弹出抽屉 */
+        .bottom-sheet { position:absolute; bottom:0; left:0; width:100%; height:66%; background:var(--drawer-bg); z-index:56; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
+        .bottom-sheet.open { transform:translateY(0); }
+        .bottom-sheet .sheet-handle { width:40px; height:5px; background:var(--toggle-off); border-radius:3px; margin:10px auto 6px; flex-shrink:0; }
+        .bottom-sheet .sheet-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); }
+        .bottom-sheet .sheet-content { flex:1; overflow-y:auto; padding:12px 16px; }
+        .bottom-sheet .usage-section { padding:0 0 16px; border-bottom:1px solid var(--border); }
+        .bottom-sheet .usage-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; letter-spacing:1px; margin-bottom:12px; }
+        .bottom-sheet .progress-bar-wrap { background:var(--progress-bg); border-radius:8px; height:12px; margin-bottom:6px; overflow:hidden; }
+        .bottom-sheet .progress-bar-fill { background:var(--progress-fill); height:100%; border-radius:8px; transition:width 0.5s; }
+        .bottom-sheet .progress-label { font-size:11px; color:var(--text-secondary); }
+        .bottom-sheet .stat-card { background:var(--card-bg); border-radius:14px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+        .bottom-sheet .stat-card .stat-title { font-size:13px; color:var(--text-secondary); }
+        .bottom-sheet .stat-card .stat-values { text-align:right; }
+        .bottom-sheet .stat-card .stat-tokens { font-size:15px; font-weight:500; color:var(--text); }
+        .bottom-sheet .stat-card .stat-cost { font-size:11px; color:#B8A88A; margin-top:2px; }
     </style>
 </head>
 <body>
@@ -287,12 +285,6 @@
             <div class="drawer-item" id="editPromptItem"><span>互动指令</span><span class="item-arrow">›</span></div>
             <div class="drawer-item" id="memoryEntry"><span>记忆库</span><span class="item-arrow">›</span></div>
         </div>
-        <div class="drawer-section">
-            <div class="drawer-section-title">数据</div>
-            <div class="drawer-item" id="exportItem"><span>导出全部</span><span class="item-arrow">›</span></div>
-            <div class="drawer-item" id="importItem"><span>导入备份</span><span class="item-arrow">›</span></div>
-            <div class="drawer-item" id="clearItem"><span style="color:#C06050;">清空对话</span><span class="item-arrow" style="color:#C06050;">›</span></div>
-        </div>
         <div class="drawer-bottom">
             <div class="drawer-item" id="settingsEntry"><span>⚙️ 系统设置</span><span class="item-arrow">›</span></div>
         </div>
@@ -323,12 +315,12 @@
             <div class="settings-item"><span class="settings-label">费率设置</span><span class="settings-value" id="pricingValue">¥1/¥2</span></div>
         </div>
         <div class="settings-tab-content" id="tab-chat">
-            <div class="settings-item"><span class="settings-label">温度</span><div class="param-options" id="tempOptions"></div></div>
-            <div class="settings-item"><span class="settings-label">Top P</span><div class="param-options" id="topPOptions"></div></div>
-            <div class="settings-item"><span class="settings-label">回复句数</span><div class="param-options" id="maxSentencesOptions"></div></div>
-            <div class="settings-item"><span class="settings-label">最大长度</span><div class="param-options" id="maxTokensOptions"></div></div>
-            <div class="settings-item"><span class="settings-label">频率惩罚</span><div class="param-options" id="freqPenaltyOptions"></div></div>
-            <div class="settings-item"><span class="settings-label">存在惩罚</span><div class="param-options" id="presPenaltyOptions"></div></div>
+            <div class="settings-item" id="tempSettingItem"><span class="settings-label">温度</span><span class="settings-value" id="tempValueDisplay">平衡</span></div>
+            <div class="settings-item" id="topPSettingItem"><span class="settings-label">Top P</span><span class="settings-value" id="topPValueDisplay">1.0</span></div>
+            <div class="settings-item" id="sentencesSettingItem"><span class="settings-label">回复句数</span><span class="settings-value" id="sentencesValueDisplay">3句</span></div>
+            <div class="settings-item" id="maxTokensSettingItem"><span class="settings-label">最大长度</span><span class="settings-value" id="maxTokensValueDisplay">中</span></div>
+            <div class="settings-item" id="freqPenaltySettingItem"><span class="settings-label">频率惩罚</span><span class="settings-value" id="freqPenaltyValueDisplay">低</span></div>
+            <div class="settings-item" id="presPenaltySettingItem"><span class="settings-label">存在惩罚</span><span class="settings-value" id="presPenaltyValueDisplay">低</span></div>
         </div>
         <div class="settings-tab-content" id="tab-ui">
             <div class="settings-item"><span class="settings-label">主题模式</span><select id="themeSelect"><option value="auto">跟随系统</option><option value="light">白天模式</option><option value="dark">黑夜模式</option></select></div>
@@ -336,16 +328,19 @@
             <div class="settings-item"><span class="settings-label">一起听歌</span><span class="settings-value" id="musicEntrySettings">设置</span></div>
         </div>
         <div class="settings-tab-content" id="tab-data">
+            <div class="settings-item"><span class="settings-label">导出全部</span><span class="settings-value" id="exportEntrySettings">导出 ›</span></div>
+            <div class="settings-item"><span class="settings-label">导入备份</span><span class="settings-value" id="importEntrySettings">导入 ›</span></div>
             <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntrySettings">查看 ›</span></div>
             <div class="settings-item"><span class="settings-label">修改密码</span><span class="settings-value" id="changePasswordSettings">修改</span></div>
             <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearChatSettings" style="color:#C06050;">⚠️</span></div>
         </div>
-        <!-- 用量统计子页面 -->
-        <div class="settings-subpage" id="usageSubpage">
-            <div class="subpage-header">
-                <button class="subpage-back" id="usageSubpageBack">←</button>
-                <span class="subpage-title">用量统计</span>
-            </div>
+    </div>
+
+    <!-- 底部弹出用量抽屉 -->
+    <div class="bottom-sheet" id="usageBottomSheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">用量统计</div>
+        <div class="sheet-content">
             <div class="usage-section">
                 <div class="usage-section-title">本月概览</div>
                 <div class="progress-bar-wrap"><div class="progress-bar-fill" id="monthProgress" style="width:0%;"></div></div>
@@ -378,6 +373,8 @@
     <div class="modal-overlay hidden" id="yearPickerModal"><div class="modal-card"><h3>选择年份</h3><div class="year-list" id="yearList"></div><div class="btn-row"><button class="cancel-btn" id="cancelYearBtn">取消</button></div></div></div>
     <div class="modal-overlay hidden" id="addMarkModal"><div class="modal-card"><h3 id="addMarkTitle">添加日程</h3><input type="text" id="markTitleInput" placeholder="标题（必填）" maxlength="50"><select id="markTypeSelect"><option value="anniversary">纪念日</option><option value="period-start">经期开始</option><option value="period-end">经期结束</option><option value="custom">自定义日程</option></select><textarea id="markNoteInput" placeholder="备注（可选）" style="height:60px;"></textarea><select id="markReminderSelect"><option value="none">不提醒</option><option value="day-before">提前一天</option><option value="same-day">当天早上</option><option value="one-hour">提前一小时</option></select><input type="hidden" id="editMarkDate"><input type="hidden" id="editMarkIsNew" value="true"><div class="btn-row"><button class="cancel-btn" id="cancelMarkBtn">取消</button><button class="save-btn" id="saveMarkBtn">保存</button><button class="cancel-btn" id="deleteMarkBtn" style="display:none;color:#C06050;">删除</button></div></div></div>
     <div class="modal-overlay hidden" id="addMemoryModal"><div class="modal-card"><h3>添加记忆</h3><select id="memCategorySelect"><option value="about_you">关于你</option><option value="about_us">我们之间</option></select><textarea id="memContentInput" placeholder="写一条记忆..."></textarea><div class="btn-row"><button class="cancel-btn" id="cancelMemBtn">取消</button><button class="save-btn" id="saveMemBtn">保存</button></div></div></div>
+    <!-- 参数选择弹窗 -->
+    <div class="modal-overlay hidden" id="paramSelectModal"><div class="modal-card"><h3 id="paramSelectTitle">选择</h3><div id="paramSelectOptions" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div><div class="btn-row"><button class="cancel-btn" id="cancelParamSelectBtn">取消</button></div></div></div>
     <div class="toast" id="toast"></div>
 </div>
 
@@ -393,7 +390,7 @@
     const overlayMask = $('overlayMask'), contextMenu = $('contextMenu');
     const drawerLeft = $('drawerLeft'), drawerRight = $('drawerRight'), memoryPage = $('memoryPage');
     const settingsDrawer = $('settingsDrawer'), settingsTabs = $('settingsTabs');
-    const usageSubpage = $('usageSubpage');
+    const usageBottomSheet = $('usageBottomSheet');
     const searchContainer = $('searchContainer'), searchInput = $('searchInput'), searchResults = $('searchResults');
     const calendarContainer = $('calendarContainer'), diaryCard = $('diaryCard'), diaryEmpty = $('diaryEmpty');
     const toast = $('toast');
@@ -417,30 +414,18 @@
     let calendarFilter = 'calendar', currentMonth = new Date().getMonth(), currentYear = new Date().getFullYear(), selectedDate = null, activeMarkDate = null;
     let currentMusic = null, notificationPermission = false;
     let currentAbortController = null, userInputTimer = null;
-    const TYPING_DELAY = 1500, SENTENCE_PAUSE = 800;
+    const TYPING_DELAY = 1500;
 
     const MEMORY_WINDOW = 40, RECENT_KEEP = 20;
     const PRICING_PRESETS = { 'deepseek-v3':{input:1,output:2}, 'deepseek-r1':{input:4,output:16} };
 
-    // 参数预设
     const TEMP_PRESETS = [{label:'保守',value:0.3},{label:'平衡',value:0.9},{label:'创意',value:1.3},{label:'疯狂',value:1.8}];
     const TOPP_PRESETS = [{label:'0.1',value:0.1},{label:'0.3',value:0.3},{label:'0.5',value:0.5},{label:'0.7',value:0.7},{label:'0.9',value:0.9},{label:'1.0',value:1}];
     const SENTENCE_PRESETS = [{label:'1句',value:1},{label:'2句',value:2},{label:'3句',value:3},{label:'4句',value:4},{label:'5句',value:5},{label:'6句',value:6},{label:'7句',value:7},{label:'8句',value:8}];
     const TOKENS_PRESETS = [{label:'短',value:512},{label:'中',value:1024},{label:'长',value:2048},{label:'超长',value:4096}];
     const PENALTY_PRESETS = [{label:'无',value:0},{label:'低',value:0.1},{label:'中',value:0.5},{label:'高',value:1}];
 
-    function buildParamOptions(containerId, presets, currentValue, onChange){
-        const c = $(containerId); c.innerHTML = '';
-        presets.forEach(p => {
-            const btn = document.createElement('div'); btn.className = 'param-btn';
-            if(Math.abs(p.value - currentValue) < 0.001) btn.classList.add('active');
-            btn.textContent = p.label; btn.addEventListener('click', ()=>{
-                c.querySelectorAll('.param-btn').forEach(b=>b.classList.remove('active'));
-                btn.classList.add('active'); onChange(p.value);
-            });
-            c.appendChild(btn);
-        });
-    }
+    function getPresetLabel(presets, val){ const f=presets.find(p=>Math.abs(p.value-val)<0.001); return f?f.label:val.toString(); }
 
     // ========== 密码系统 ==========
     async function sha256(m){ const b = new TextEncoder().encode(m); const h = await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join(''); }
@@ -458,7 +443,6 @@
 
     // ========== 清空对话 ==========
     function openClearChatModal(){ $('clearChatConfirmInput').value=''; $('confirmClearChatBtn').disabled=true; $('confirmClearChatBtn').style.opacity='0.5'; $('clearChatModal').classList.remove('hidden'); }
-    $('clearItem').addEventListener('click', openClearChatModal);
     $('clearChatSettings').addEventListener('click', openClearChatModal);
     $('cancelClearChatBtn').addEventListener('click',()=>$('clearChatModal').classList.add('hidden'));
     $('clearChatConfirmInput').addEventListener('input',function(){ const ok=this.value.trim()==='确认删除'; $('confirmClearChatBtn').disabled=!ok; $('confirmClearChatBtn').style.opacity=ok?'1':'0.5'; });
@@ -466,8 +450,28 @@
 
     // ========== 系统设置子抽屉 ==========
     $('settingsEntry').addEventListener('click', ()=>{ settingsDrawer.classList.add('open'); refreshSettingsUI(); });
-    $('settingsBackBtn').addEventListener('click', ()=>{ settingsDrawer.classList.remove('open'); usageSubpage.classList.remove('active'); });
-    settingsTabs.addEventListener('click', (e)=>{ if(e.target.classList.contains('tab')){ document.querySelectorAll('#settingsTabs .tab').forEach(t=>t.classList.remove('active')); e.target.classList.add('active'); const tabId=e.target.dataset.tab; document.querySelectorAll('.settings-tab-content').forEach(c=>c.classList.remove('active')); $(tabId).classList.add('active'); usageSubpage.classList.remove('active'); } });
+    $('settingsBackBtn').addEventListener('click', ()=>{ settingsDrawer.classList.remove('open'); });
+    settingsTabs.addEventListener('click', (e)=>{ if(e.target.classList.contains('tab')){ document.querySelectorAll('#settingsTabs .tab').forEach(t=>t.classList.remove('active')); e.target.classList.add('active'); const tabId=e.target.dataset.tab; document.querySelectorAll('.settings-tab-content').forEach(c=>c.classList.remove('active')); $(tabId).classList.add('active'); } });
+
+    function openParamModal(title, presets, currentValue, onChange){
+        $('paramSelectTitle').textContent = title;
+        const opts = $('paramSelectOptions'); opts.innerHTML = '';
+        presets.forEach(p => {
+            const btn = document.createElement('div');
+            btn.textContent = p.label;
+            btn.style.cssText = 'padding:10px 16px;border:1px solid var(--border);border-radius:12px;font-size:14px;cursor:pointer;background:var(--card-bg);color:var(--text);min-width:60px;text-align:center;';
+            if(Math.abs(p.value - currentValue) < 0.001) btn.style.cssText += 'background:var(--btn-primary);color:var(--btn-primary-text);';
+            btn.addEventListener('click', ()=>{
+                onChange(p.value);
+                $('paramSelectModal').classList.add('hidden');
+                refreshSettingsUI();
+            });
+            opts.appendChild(btn);
+        });
+        $('paramSelectModal').classList.remove('hidden');
+    }
+
+    $('cancelParamSelectBtn').addEventListener('click', ()=>$('paramSelectModal').classList.add('hidden'));
 
     function refreshSettingsUI(){
         $('apiKeyValue').textContent = API_KEYS.length ? `已设置 ${API_KEYS.length} 个` : '未设置';
@@ -484,12 +488,19 @@
         $('pricingValue').textContent = `¥${INPUT_PRICE}/¥${OUTPUT_PRICE}`;
         $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
 
-        buildParamOptions('tempOptions', TEMP_PRESETS, TEMPERATURE, (v)=>{ TEMPERATURE=v; saveParams(); });
-        buildParamOptions('topPOptions', TOPP_PRESETS, TOP_P, (v)=>{ TOP_P=v; saveParams(); });
-        buildParamOptions('maxSentencesOptions', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{ MAX_SENTENCES=v; localStorage.setItem('claude_max_sentences', MAX_SENTENCES); });
-        buildParamOptions('maxTokensOptions', TOKENS_PRESETS, MAX_TOKENS, (v)=>{ MAX_TOKENS=v; saveParams(); });
-        buildParamOptions('freqPenaltyOptions', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{ FREQ_PENALTY=v; saveParams(); });
-        buildParamOptions('presPenaltyOptions', PENALTY_PRESETS, PRES_PENALTY, (v)=>{ PRES_PENALTY=v; saveParams(); });
+        $('tempValueDisplay').textContent = getPresetLabel(TEMP_PRESETS, TEMPERATURE);
+        $('topPValueDisplay').textContent = getPresetLabel(TOPP_PRESETS, TOP_P);
+        $('sentencesValueDisplay').textContent = getPresetLabel(SENTENCE_PRESETS, MAX_SENTENCES);
+        $('maxTokensValueDisplay').textContent = getPresetLabel(TOKENS_PRESETS, MAX_TOKENS);
+        $('freqPenaltyValueDisplay').textContent = getPresetLabel(PENALTY_PRESETS, FREQ_PENALTY);
+        $('presPenaltyValueDisplay').textContent = getPresetLabel(PENALTY_PRESETS, PRES_PENALTY);
+
+        $('tempSettingItem').onclick = ()=>openParamModal('温度', TEMP_PRESETS, TEMPERATURE, (v)=>{TEMPERATURE=v;saveParams();});
+        $('topPSettingItem').onclick = ()=>openParamModal('Top P', TOPP_PRESETS, TOP_P, (v)=>{TOP_P=v;saveParams();});
+        $('sentencesSettingItem').onclick = ()=>openParamModal('回复句数', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{MAX_SENTENCES=v;localStorage.setItem('claude_max_sentences',MAX_SENTENCES);});
+        $('maxTokensSettingItem').onclick = ()=>openParamModal('最大长度', TOKENS_PRESETS, MAX_TOKENS, (v)=>{MAX_TOKENS=v;saveParams();});
+        $('freqPenaltySettingItem').onclick = ()=>openParamModal('频率惩罚', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{FREQ_PENALTY=v;saveParams();});
+        $('presPenaltySettingItem').onclick = ()=>openParamModal('存在惩罚', PENALTY_PRESETS, PRES_PENALTY, (v)=>{PRES_PENALTY=v;saveParams();});
 
         $('themeSelect').value = THEME_MODE;
         $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
@@ -497,8 +508,27 @@
         imgTgl.classList.toggle('on', IMAGE_ENABLED);
         imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
         $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
-        $('usageEntrySettings').onclick = ()=>{ usageSubpage.classList.add('active'); renderUsagePage(); };
-        $('usageSubpageBack').onclick = ()=>{ usageSubpage.classList.remove('active'); };
+
+        $('exportEntrySettings').onclick = ()=>{ const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,memory:memoryBank,usage:usageLog,inputPrice:INPUT_PRICE,outputPrice:OUTPUT_PRICE,temperature:TEMPERATURE,topP:TOP_P,maxTokens:MAX_TOKENS,freqPenalty:FREQ_PENALTY,presPenalty:PRES_PENALTY,theme:THEME_MODE}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`七次元_备份_${new Date().toISOString().slice(0,10)}.json`;a.click();showToast('导出成功'); };
+        $('importEntrySettings').onclick = ()=>{ const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);if(d.name){PARTNER_NAME=d.name;localStorage.setItem('claude_partner_name',d.name);}if(d.avatar!==undefined){PARTNER_AVATAR=d.avatar;localStorage.setItem('claude_partner_avatar',d.avatar);}if(d.chat){conversationHistory=d.chat;saveHistory();rebuildChatFromHistory();}if(d.diary){diary=d.diary;saveDiary();}if(d.marks){calendarMarks=d.marks;saveMarks();}if(d.memory){memoryBank=d.memory;saveMemory();}if(d.usage){usageLog=d.usage;saveUsage();}if(d.inputPrice!==undefined){INPUT_PRICE=d.inputPrice;savePricing();}if(d.outputPrice!==undefined){OUTPUT_PRICE=d.outputPrice;savePricing();}if(d.temperature!==undefined){TEMPERATURE=d.temperature;saveParams();}if(d.topP!==undefined){TOP_P=d.topP;saveParams();}if(d.maxTokens!==undefined){MAX_TOKENS=d.maxTokens;saveParams();}if(d.freqPenalty!==undefined){FREQ_PENALTY=d.freqPenalty;saveParams();}if(d.presPenalty!==undefined){PRES_PENALTY=d.presPenalty;saveParams();}if(d.theme!==undefined){THEME_MODE=d.theme;saveTheme();applyTheme();}applyUI();showToast('导入成功');}catch(err){alert('文件格式错误');}};r.readAsText(f);};i.click(); };
+        $('usageEntrySettings').onclick = ()=>{ renderUsagePage(); usageBottomSheet.classList.add('open'); };
+
+        // 底部用量抽屉滑动关闭
+        let startY = 0;
+        usageBottomSheet.addEventListener('touchstart', (e)=>{ startY = e.touches[0].clientY; });
+        usageBottomSheet.addEventListener('touchmove', (e)=>{
+            const dy = e.touches[0].clientY - startY;
+            if(dy > 0){
+                usageBottomSheet.style.transition = 'none';
+                usageBottomSheet.style.transform = `translateY(${dy}px)`;
+            }
+        });
+        usageBottomSheet.addEventListener('touchend', (e)=>{
+            usageBottomSheet.style.transition = 'transform 0.35s cubic-bezier(0.25,0.1,0.25,1)';
+            const dy = e.changedTouches[0].clientY - startY;
+            if(dy > 80){ usageBottomSheet.classList.remove('open'); usageBottomSheet.style.transform = ''; }
+            else { usageBottomSheet.style.transform = ''; }
+        });
     }
 
     function saveKeys(){ localStorage.setItem('claude_api_keys',API_KEYS.join(',')); localStorage.setItem('claude_models',API_MODELS.join(',')); localStorage.setItem('claude_key_index',currentKeyIndex); }
@@ -574,7 +604,7 @@
     splashScreen.addEventListener('click',()=>{splashScreen.classList.add('hidden');setTimeout(()=>userInput.focus(),100);});
 
     function openLeft(){drawerLeft.classList.add('open');overlayMask.classList.add('show');updateDrawerDays();}
-    function closeLeft(){drawerLeft.classList.remove('open');overlayMask.classList.remove('show');memoryPage.classList.remove('open');settingsDrawer.classList.remove('open');}
+    function closeLeft(){drawerLeft.classList.remove('open');overlayMask.classList.remove('show');memoryPage.classList.remove('open');settingsDrawer.classList.remove('open');usageBottomSheet.classList.remove('open');}
     function openRight(){drawerRight.classList.add('open');overlayMask.classList.add('show');renderCalendarPanel();}
     function closeRight(){drawerRight.classList.remove('open');overlayMask.classList.remove('show');}
     topAvatarBtn.addEventListener('click',()=>{if(drawerRight.classList.contains('open'))closeRight();openLeft();});
@@ -584,11 +614,8 @@
     overlayMask.addEventListener('click',()=>{closeLeft();closeRight();hideContextMenu();});
     function updateDrawerDays(){const ft=conversationHistory.length>0?conversationHistory[0].timestamp:Date.now();$('drawerDays').textContent=`在一起 ${Math.floor((Date.now()-ft)/86400000)} 天`;}
 
-    // ========== API Key Modal ==========
     $('cancelApiKeyBtn').addEventListener('click',()=>$('editApiKeyModal').classList.add('hidden'));
     $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);refreshSettingsUI();});
-
-    // ========== Pricing Modal ==========
     $('pricingPreset').addEventListener('change',function(){const p=PRICING_PRESETS[this.value];if(p){$('editInputPrice').value=p.input;$('editOutputPrice').value=p.output;}});
     $('cancelPricingBtn').addEventListener('click',()=>$('editPricingModal').classList.add('hidden'));
     $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');refreshSettingsUI();});
@@ -601,8 +628,6 @@
     $('savePromptBtn').addEventListener('click',()=>{SYSTEM_PROMPT=$('editPromptInput').value.trim();if(!SYSTEM_PROMPT){showToast('指令不能为空');return;}localStorage.setItem('claude_system_prompt',SYSTEM_PROMPT);$('editPromptModal').classList.add('hidden');showToast('互动指令已更新');});
     $('memoryEntry').addEventListener('click',()=>{memoryPage.classList.add('open');renderMemoryPage();});
     $('memBackBtn').addEventListener('click',()=>memoryPage.classList.remove('open'));
-    $('exportItem').addEventListener('click',()=>{const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,memory:memoryBank,usage:usageLog,inputPrice:INPUT_PRICE,outputPrice:OUTPUT_PRICE,temperature:TEMPERATURE,topP:TOP_P,maxTokens:MAX_TOKENS,freqPenalty:FREQ_PENALTY,presPenalty:PRES_PENALTY,theme:THEME_MODE};const b=new Blob([JSON.stringify(d)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`七次元_备份_${new Date().toISOString().slice(0,10)}.json`;a.click();showToast('导出成功');});
-    $('importItem').addEventListener('click',()=>{const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);if(d.name){PARTNER_NAME=d.name;localStorage.setItem('claude_partner_name',d.name);}if(d.avatar!==undefined){PARTNER_AVATAR=d.avatar;localStorage.setItem('claude_partner_avatar',d.avatar);}if(d.chat){conversationHistory=d.chat;saveHistory();rebuildChatFromHistory();}if(d.diary){diary=d.diary;saveDiary();}if(d.marks){calendarMarks=d.marks;saveMarks();}if(d.memory){memoryBank=d.memory;saveMemory();}if(d.usage){usageLog=d.usage;saveUsage();}if(d.inputPrice!==undefined){INPUT_PRICE=d.inputPrice;savePricing();}if(d.outputPrice!==undefined){OUTPUT_PRICE=d.outputPrice;savePricing();}if(d.temperature!==undefined){TEMPERATURE=d.temperature;saveParams();}if(d.topP!==undefined){TOP_P=d.topP;saveParams();}if(d.maxTokens!==undefined){MAX_TOKENS=d.maxTokens;saveParams();}if(d.freqPenalty!==undefined){FREQ_PENALTY=d.freqPenalty;saveParams();}if(d.presPenalty!==undefined){PRES_PENALTY=d.presPenalty;saveParams();}if(d.theme!==undefined){THEME_MODE=d.theme;saveTheme();applyTheme();}applyUI();showToast('导入成功');}catch(err){alert('文件格式错误');}};r.readAsText(f);};i.click();});
     $('drawerAvatar').addEventListener('click',()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{PARTNER_AVATAR=ev.target.result;localStorage.setItem('claude_partner_avatar',PARTNER_AVATAR);applyUI();showToast('头像已更新');};r.readAsDataURL(f);};i.click();});
 
     function renderMemoryPage(){ const ay=$('memAboutYou'),au=$('memAboutUs');const cy=memoryBank.about_you.length,cu=memoryBank.about_us.length; ay.innerHTML=`<div class="mem-section-header" id="aboutYouHeader"><span>关于你 · ${cy}条</span><span class="mem-arrow" id="aboutYouArrow">▼</span></div><div class="mem-section-body" id="aboutYouBody" style="display:none;">${cy===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_you.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_you" data-idx="${i}">✕</button></div>`).join('')}</div>`; au.innerHTML=`<div class="mem-section-header" id="aboutUsHeader"><span>我们之间 · ${cu}条</span><span class="mem-arrow" id="aboutUsArrow">▼</span></div><div class="mem-section-body" id="aboutUsBody" style="display:none;">${cu===0?'<div style="color:var(--text-secondary);font-size:12px;">暂无</div>':memoryBank.about_us.map((item,i)=>`<div class="mem-item${(Date.now()-item.ts)>30*86400000?' faded':''}">${escapeHtml(item.text||item)} <button class="mem-delete" data-cat="about_us" data-idx="${i}">✕</button></div>`).join('')}</div>`; const tg=(hId,bId,aId)=>{const h=document.getElementById(hId),b=document.getElementById(bId),a=document.getElementById(aId);if(!h||!b||!a)return;h.addEventListener('click',()=>{if(b.style.display==='none'){b.style.display='block';a.textContent='▲';}else{b.style.display='none';a.textContent='▼';}});}; tg('aboutYouHeader','aboutYouBody','aboutYouArrow');tg('aboutUsHeader','aboutUsBody','aboutUsArrow'); document.querySelectorAll('.mem-delete').forEach(b=>{b.addEventListener('click',(e)=>{const c=e.target.dataset.cat,i=parseInt(e.target.dataset.idx);memoryBank[c].splice(i,1);saveMemory();renderMemoryPage();});}); }
@@ -638,7 +663,45 @@
     async function summarizeMessages(ms){if(!getCurrentKey())return null;const t=ms.map(m=>`${m.role}: ${getCurrentContent(m)}`).join('\n');const p=`请用一段简短的话总结以下对话的关键内容，保留重要的记忆、决定、情绪和事件：\n${t}`;try{const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,[{role:'user',content:p}]);if(!rp.ok)return null;const d=await rp.json();if(ep.type==='anthropic')return d.content?.[0]?.text?.trim()||null;return d.choices?.[0]?.message?.content?.trim()||null;}catch(e){return null;}}
     function getLastUserMessageTime(){for(let i=conversationHistory.length-1;i>=0;i--)if(conversationHistory[i].role==='user')return conversationHistory[i].timestamp;return 0;}
     function hasGoodnight(){const n=Date.now();const r=/晚安|睡吧|好梦|睡了|去睡|休息了|安/i;for(let i=conversationHistory.length-1;i>=0;i--){const m=conversationHistory[i];if(m.timestamp<n-1800000)break;if(r.test(getCurrentContent(m)))return true;}return false;}
-    async function generateDiaryForDate(ds){if(!getCurrentKey())return;const st=new Date(ds+'T00:00:00').getTime(),ed=new Date(ds+'T23:59:59').getTime();const ms=conversationHistory.filter(m=>m.timestamp>=st&&m.timestamp<=ed);if(!ms.length)return;const mk=calendarMarks[ds];let ex='';if(mk)ex=mk.type==='period-start'?`（经期第1天）`:mk.type==='period'?`（经期中）`:`（${mk.title||'特殊日子'}）`;const p=`你是${PARTNER_NAME}，写一篇简短日记（200字内）记录今天。${ex}\n对话：\n${ms.map(m=>`${m.role==='user'?'我':'你'}:${getCurrentContent(m)}`).join('\n')}`;try{const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,[{role:'user',content:p}]);if(!rp.ok)return;const d=await rp.json();const c=ep.type==='anthropic'?d.content?.[0]?.text?.trim():d.choices?.[0]?.message?.content?.trim();if(c){diary[ds]={content:c,generatedAt:Date.now()};saveDiary();}}catch(e){}}
+
+    // ========== 日记（增强版 + 自动提取记忆） ==========
+    async function generateDiaryForDate(ds){
+        if(!getCurrentKey()) return;
+        const start=new Date(ds+'T00:00:00').getTime(), end=new Date(ds+'T23:59:59').getTime();
+        const msgs=conversationHistory.filter(m=>m.timestamp>=start&&m.timestamp<=end);
+        if(!msgs.length) return;
+        const mark=calendarMarks[ds];
+        let extra='';
+        if(mark) extra = mark.type==='period-start'?`（经期第1天）`: mark.type==='period'?`（经期中）`:`（${mark.title||'特殊日子'}）`;
+
+        // 写日记
+        const diaryPrompt = `你是${PARTNER_NAME}，请以第一人称写一篇日记（300-500字），记录今天和我的对话、你的感受、以及你对这段关系的想法。像真人写日记一样，自然、真诚、不做作。不要写"今天用户说了什么"，而是写"今天他和我聊了……"。${extra}\n\n今天的对话内容：\n${msgs.map(m=>`${m.role==='user'?'他':'我'}:${getCurrentContent(m)}`).join('\n')}`;
+        try{
+            const endpoint=getAPIEndpoint();
+            const resp=await makeAPIRequest(endpoint,[{role:'user',content:diaryPrompt}]);
+            if(!resp.ok) return;
+            const data=await resp.json();
+            const content = endpoint.type==='anthropic'? data.content?.[0]?.text?.trim(): data.choices?.[0]?.message?.content?.trim();
+            if(content){
+                diary[ds] = {content, generatedAt:Date.now()};
+                saveDiary();
+
+                // 从日记中提取1-2条记忆
+                const extractPrompt = `从以下日记中提取1-2条关于"他"的关键信息（喜好、习惯、近期事件等），用简短的一句话表达，不超过30字。如果没有值得长期记忆的信息，回复"无"。\n\n日记：\n${content}`;
+                const extractResp = await makeAPIRequest(endpoint,[{role:'user',content:extractPrompt}]);
+                if(extractResp.ok){
+                    const extractData = await extractResp.json();
+                    const extractContent = endpoint.type==='anthropic'? extractData.content?.[0]?.text?.trim(): extractData.choices?.[0]?.message?.content?.trim();
+                    if(extractContent && extractContent!=='无'){
+                        // 存入"关于你"
+                        memoryBank.about_you.push({text:extractContent, ts:Date.now()});
+                        saveMemory();
+                    }
+                }
+            }
+        }catch(e){}
+    }
+
     async function checkDiaryTriggers(){const n=Date.now(),h=new Date().getHours(),td=getTodayDateStr();if(diary[td])return;const l=getLastUserMessageTime();if(l&&(n-l)>1800000&&hasGoodnight()){await generateDiaryForDate(td);return;}if((h>=22||h<6)&&l&&(n-l)>7200000){await generateDiaryForDate(td);}}
     setInterval(()=>{if(!document.hidden){checkDiaryTriggers();checkReminders();}},60000);
     window.addEventListener('focus',()=>{checkDiaryTriggers();checkReminders();});
