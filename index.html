@@ -51,10 +51,12 @@
         .main-content { flex:1; position:relative; overflow:hidden; }
         .page { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; opacity:0; transform:translateY(8px); transition: opacity 0.3s ease, transform 0.3s ease; pointer-events:none; overflow:hidden; }
         .page.active { opacity:1; transform:translateY(0); pointer-events:auto; }
-        .bottom-nav { display:flex; border-top:1px solid var(--border); background:var(--bg); padding-bottom:env(safe-area-inset-bottom, 0); z-index:20; }
-        .bottom-nav .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:8px 0 6px; cursor:pointer; color:var(--text-secondary); font-size:10px; gap:2px; transition:0.2s; }
+        .bottom-nav { display:flex; border-top:1px solid var(--border); background:var(--bg); padding-bottom:env(safe-area-inset-bottom, 0); z-index:20; align-items:flex-end; }
+        .bottom-nav .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:8px 0 6px; cursor:pointer; color:var(--text-secondary); font-size:10px; gap:2px; transition:0.2s; position:relative; z-index:1; }
         .bottom-nav .nav-item.active { color:var(--text); }
         .bottom-nav .nav-item .nav-icon { font-size:22px; }
+        .bottom-nav .nav-item.chat-btn .nav-icon-circle { width:48px; height:48px; border-radius:50%; background:var(--btn-primary); color:var(--btn-primary-text); display:flex; align-items:center; justify-content:center; font-size:22px; margin-top:-18px; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+        .bottom-nav .nav-item.chat-btn span { margin-top:2px; }
 
         /* 主页 */
         .home-page { align-items:center; justify-content:center; gap:20px; padding:20px; }
@@ -145,6 +147,33 @@
         .calendar-page .search-result-item .sr-date { font-size:10px; color:var(--text-secondary); }
         .calendar-page .search-result-item .sr-role { font-weight:500; font-size:11px; color:var(--text-secondary); }
 
+        /* 回忆页 */
+        .memory-page-wrapper { flex:1; display:flex; flex-direction:column; overflow-y:auto; }
+        .memory-header-row { padding:16px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--bg); z-index:10; border-bottom:1px solid var(--border); }
+        .memory-title { font-size:20px; font-weight:500; color:var(--text); letter-spacing:1px; }
+        .write-letter-btn { background:#B8A060; color:white; border:none; padding:8px 14px; border-radius:20px; font-size:13px; cursor:pointer; font-family:inherit; }
+        .memory-tags-row { display:flex; flex-wrap:wrap; gap:6px; padding:10px 16px; }
+        .memory-tag { display:inline-block; background:#FFF9E6; border:1px solid #F0E8C0; border-radius:12px; padding:5px 10px; font-size:11px; color:#8B7A3A; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+        .dark-mode .memory-tag { background:#3A3A20; border-color:#5A5A30; color:#C8C060; }
+        .memory-timeline { padding:0 12px 24px; display:flex; flex-direction:column; gap:16px; }
+        .month-divider { text-align:center; font-size:12px; color:var(--text-secondary); letter-spacing:2px; padding:12px 0 4px; }
+        .note-card { background:#FFFDF7; border-radius:4px 12px 12px 4px; padding:14px 14px 14px 26px; position:relative; box-shadow:0 1px 3px rgba(0,0,0,0.05); transform:rotate(-0.3deg); border:1px solid var(--border); margin:0 4px; }
+        .dark-mode .note-card { background:#2A2A22; }
+        .note-card:nth-child(even) { transform:rotate(0.4deg); }
+        .note-card .hole { position:absolute; left:6px; width:8px; height:8px; border-radius:50%; background:#D9D3C7; box-shadow:inset 0 1px 1px rgba(0,0,0,0.1), 0 0 0 2px var(--bg); }
+        .note-card .hole.top { top:14px; } .note-card .hole.bottom { bottom:14px; }
+        .note-card .card-date { font-size:10px; color:var(--text-secondary); margin-bottom:6px; }
+        .note-card .card-text { font-size:13px; line-height:1.7; color:var(--text); display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
+        .note-card.letter-card { border-left:3px solid #B8A060; background:linear-gradient(135deg, #FFFDF7 0%, #FFF9EC 100%); }
+        .dark-mode .note-card.letter-card { background:linear-gradient(135deg, #2A2A22 0%, #2A2A20 100%); }
+        .envelope-card { background:#F5EDD6; border-radius:10px; padding:18px 14px; position:relative; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.05); border:1px solid var(--border); margin:0 4px; text-align:center; transition:0.3s; }
+        .dark-mode .envelope-card { background:#3A3A25; }
+        .envelope-card .seal { width:28px; height:28px; border-radius:50%; background:#C0504A; box-shadow:0 2px 4px rgba(0,0,0,0.2); display:inline-flex; align-items:center; justify-content:center; font-size:14px; margin-bottom:6px; }
+        .envelope-card .envelope-hint { font-size:12px; color:var(--text-secondary); }
+        .envelope-card .envelope-body { display:none; text-align:left; font-size:13px; line-height:1.8; color:var(--text); padding-top:8px; }
+        .envelope-card.opened .envelope-hint { display:none; }
+        .envelope-card.opened .envelope-body { display:block; }
+
         /* 抽屉 */
         .drawer-left { position:absolute; top:0; left:0; width:85%; height:100%; background:var(--drawer-bg); z-index:50; transform:translateX(-100%); transition:transform 0.3s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; box-shadow:2px 0 20px rgba(0,0,0,0.05); overflow-y:auto; }
         .drawer-left.open { transform:translateX(0); }
@@ -232,35 +261,7 @@
         .year-list { max-height:50vh; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
         .year-list .year-item { padding:12px; text-align:center; border-radius:10px; cursor:pointer; font-size:16px; color:var(--text); }
         .year-list .year-item:hover { background:var(--hover-bg); }
-        .year-list .year-item.active/* 回忆页 */
-.memory-header { padding: 16px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg); z-index: 10; border-bottom: 1px solid var(--border); }
-.memory-title { font-size: 20px; font-weight: 500; color: var(--text); letter-spacing: 1px; }
-.write-letter-btn { background: #B8A060; color: white; border: none; padding: 8px 14px; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; }
-.memory-tags-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; }
-.memory-tag { display: inline-block; background: #FFF9E6; border: 1px solid #F0E8C0; border-radius: 12px; padding: 5px 10px; font-size: 11px; color: #8B7A3A; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.memory-timeline { padding: 0 12px 24px; display: flex; flex-direction: column; gap: 16px; }
-.month-divider { text-align: center; font-size: 12px; color: var(--text-secondary); letter-spacing: 2px; padding: 12px 0 4px; }
-.note-card { background: #FFFDF7; border-radius: 4px 12px 12px 4px; padding: 14px 14px 14px 26px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transform: rotate(-0.3deg); border: 1px solid var(--border); margin: 0 4px; }
-.note-card:nth-child(even) { transform: rotate(0.4deg); }
-.note-card .hole { position: absolute; left: 6px; width: 8px; height: 8px; border-radius: 50%; background: #D9D3C7; box-shadow: inset 0 1px 1px rgba(0,0,0,0.1), 0 0 0 2px var(--bg); }
-.note-card .hole.top { top: 14px; } .note-card .hole.bottom { bottom: 14px; }
-.note-card .card-date { font-size: 10px; color: var(--text-secondary); margin-bottom: 6px; }
-.note-card .card-text { font-size: 13px; line-height: 1.7; color: var(--text); display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
-.note-card.letter-card { border-left: 3px solid #B8A060; background: linear-gradient(135deg, #FFFDF7 0%, #FFF9EC 100%); }
-.envelope-card { background: #F5EDD6; border-radius: 10px; padding: 18px 14px; position: relative; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); margin: 0 4px; text-align: center; transition: 0.3s; }
-.envelope-card .seal { width: 28px; height: 28px; border-radius: 50%; background: #C0504A; box-shadow: 0 2px 4px rgba(0,0,0,0.2); display: inline-flex; align-items: center; justify-content: center; font-size: 14px; margin-bottom: 6px; }
-.envelope-card .envelope-hint { font-size: 12px; color: var(--text-secondary); }
-.envelope-card .envelope-body { display: none; text-align: left; font-size: 13px; line-height: 1.8; color: var(--text); padding-top: 8px; }
-.envelope-card.opened .envelope-hint { display: none; }
-.envelope-card.opened .envelope-body { display: block; }
-.photo-stack-inline { display: inline-flex; position: relative; width: 64px; height: 64px; cursor: pointer; float: right; margin: 2px 0 6px 10px; flex-shrink: 0; }
-.photo-stack-inline .stack-img { position: absolute; width: 100%; height: 100%; border-radius: 6px; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); object-fit: cover; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.photo-stack-inline .stack-img:nth-child(1) { z-index: 3; transform: rotate(-5deg) translate(-3px,-2px); }
-.photo-stack-inline .stack-img:nth-child(2) { z-index: 2; transform: rotate(3deg) translate(2px,3px); }
-.photo-stack-inline .stack-img:nth-child(3) { z-index: 1; transform: rotate(-2deg) translate(4px,-3px); }
-.photo-stack-inline .stack-count-badge { position: absolute; bottom: -5px; right: -5px; background: var(--text); color: white; font-size: 9px; padding: 1px 5px; border-radius: 8px; z-index: 5; }
-/* 聊天按钮突出 */
-.bottom-nav .nav-item.chat-btn .nav-icon-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--btn-primary); color: var(--btn-primary-text); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-top: -16px; box-shadow: 0 3px 12px rgba(0,0,0,0.15); } { background:var(--progress-fill); color:white; font-weight:600; }
+        .year-list .year-item.active { background:var(--progress-fill); color:white; font-weight:600; }
     </style>
 </head>
 <body>
@@ -314,17 +315,32 @@
         </div>
 
         <!-- 日历页 -->
-        <!-- 回忆页 -->
-<div class="page" id="pageMemory">
-    <div class="memory-page-wrapper" style="flex:1;display:flex;flex-direction:column;overflow-y:auto;">
-        <div class="memory-header">
-            <span class="memory-title">📖 我们的故事</span>
-            <button class="write-letter-btn" id="writeLetterBtn">💌 让他写信</button>
+        <div class="page" id="pageCalendar">
+            <div class="calendar-page" style="flex:1;display:flex;flex-direction:column;overflow-y:auto;">
+                <div class="cal-tabs" id="calendarTabs">
+                    <div class="tab active" data-filter="calendar">日历</div>
+                    <div class="tab" data-filter="diary">日记</div>
+                    <div class="tab" data-filter="search">搜索</div>
+                </div>
+                <div class="search-container" id="searchContainer" style="display:none;"><input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索聊天记录..."></div>
+                <div class="search-results" id="searchResults" style="display:none;"></div>
+                <div id="calendarContent"></div>
+                <div class="diary-card" id="diaryCard" style="display:none;"></div>
+                <div class="diary-empty" id="diaryEmpty">点击有圆点的日期查看日记</div>
+            </div>
         </div>
-        <div class="memory-tags-row" id="memoryTagsRow"></div>
-        <div class="memory-timeline" id="memoryTimeline"></div>
-    </div>
-</div>
+
+        <!-- 回忆页 -->
+        <div class="page" id="pageMemory">
+            <div class="memory-page-wrapper">
+                <div class="memory-header-row">
+                    <span class="memory-title">📖 我们的故事</span>
+                    <button class="write-letter-btn" id="writeLetterBtn">💌 让他写信</button>
+                </div>
+                <div class="memory-tags-row" id="memoryTagsRow"></div>
+                <div class="memory-timeline" id="memoryTimeline"></div>
+            </div>
+        </div>
 
         <!-- 抽屉等覆盖层 -->
         <div class="overlay-mask" id="overlayMask"></div>
@@ -409,12 +425,14 @@
         </div>
     </div>
 
-    <!-- 底部导航 -->
-    <div class="nav-item active" data-page="pageHome"><span class="nav-icon">🏠</span>主页</div>
-<div class="nav-item" data-page="pageMemory"><span class="nav-icon">📖</span>回忆</div>
-<div class="nav-item chat-btn" data-page="pageChat"><div class="nav-icon-circle">💬</div>聊天</div>
-<div class="nav-item" data-page="pageCalendar"><span class="nav-icon">📅</span>日历</div>
-<div class="nav-item" data-page="pageSettings"><span class="nav-icon">⚙️</span>设置</div>
+    <!-- 底部导航（五Tab） -->
+    <div class="bottom-nav" id="bottomNav">
+        <div class="nav-item active" data-page="pageHome"><span class="nav-icon">🏠</span>主页</div>
+        <div class="nav-item" data-page="pageMemory"><span class="nav-icon">📖</span>回忆</div>
+        <div class="nav-item chat-btn" data-page="pageChat"><div class="nav-icon-circle">💬</div>聊天</div>
+        <div class="nav-item" data-page="pageCalendar"><span class="nav-icon">📅</span>日历</div>
+        <div class="nav-item" data-page="pageSettings"><span class="nav-icon">⚙️</span>设置</div>
+    </div>
 
     <!-- 弹窗 -->
     <div class="modal-overlay hidden" id="editNameModal"><div class="modal-card"><h3>编辑名字</h3><input type="text" id="editNameInput" maxlength="20"><div class="btn-row"><button class="cancel-btn" id="cancelNameBtn">取消</button><button class="save-btn" id="saveNameBtn">保存</button></div></div></div>
@@ -487,73 +505,28 @@
         if(pageId === 'pageChat'){ scrollToBottom(); userInput.focus(); }
         if(pageId === 'pageCalendar'){ renderCalendarPanel(); }
         if(pageId === 'pageHome'){ refreshHomePage(); }
-        if(pageId === 'pageMemory'){ renderMemoryPage(); }closeLeft(); settingsDrawer.classList.remove('open'); usageBottomSheet.classList.remove('open');
+        if(pageId === 'pageMemory'){ renderMemoryTimeline(); }
+        closeLeft(); settingsDrawer.classList.remove('open'); usageBottomSheet.classList.remove('open');
     }
     $('bottomNav').addEventListener('click', (e)=>{
         const navItem = e.target.closest('.nav-item');
-        if(navItem){ switchPage(navItem.dataset.page); }if(navItem.dataset.page === 'pageSettings'){
-    settingsDrawer.classList.add('open'); refreshSettingsUI();
-}
-    });
-    $('homeChatBtn').addEventListenerconst writeLetterBtn = $('writeLetterBtn');
-if(writeLetterBtn) writeLetterBtn.addEventListener('click', async ()=>{
-    if(!getCurrentKey()||!SYSTEM_PROMPT){ showToast('请先设置API Key和互动指令'); return; }
-    showToast('正在写信...');
-    const letterPrompt = `你是${PARTNER_NAME}，请给用户写一封简短温暖的信（150-250字）。基于你们的记忆和最近的对话，表达你的感受和想法。要有称呼和落款，自然真诚。`;
-    try{
-        const endpoint = getAPIEndpoint();
-        const resp = await makeAPIRequest(endpoint, [{role:'user',content:letterPrompt}]);
-        if(!resp.ok) throw new Error('API错误');
-        const data = await resp.json();
-        const content = endpoint.type==='anthropic' ? data.content?.[0]?.text?.trim() : data.choices?.[0]?.message?.content?.trim();
-        if(content){
-            const today = new Date().toISOString().slice(0,10);
-            diary[today] = { content, isLetter: true, generatedAt: Date.now() };
-            saveDiary();
-            renderMemoryPage();
-            showToast('信已写好 💌');
+        if(!navItem) return;
+        if(navItem.dataset.page === 'pageSettings'){
+            settingsDrawer.classList.add('open'); refreshSettingsUI();
+            document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+            navItem.classList.add('active');
+            return;
         }
-    } catch(e) { showToast('写信失败，请重试'); }
-});('click', ()=> switchPage('pageChat'));
+        switchPage(navItem.dataset.page);
+    });
+    $('homeChatBtn').addEventListener('click', ()=> switchPage('pageChat'));
     $('topCalendarBtn').addEventListener('click', ()=> switchPage('pageCalendar'));
 
-    // ========== 回忆页渲染 ==========
-function renderMemoryPage(){
-    const tl = $('memoryTimeline'); if(!tl) return;
-    // 渲染记忆标签
-    const tagsRow = $('memoryTagsRow');
-    const allTags = [...(memoryBank.about_you||[]), ...(memoryBank.about_us||[])].filter(m => m.text).slice(0, 8);
-    if(tagsRow) tagsRow.innerHTML = allTags.map(t => `<span class="memory-tag">${escapeHtml(t.text)}</span>`).join('') || '<span style="font-size:11px;color:var(--text-secondary);">还没有记忆碎片</span>';
-    // 按月份分组日记+信件
-    const dates = Object.keys(diary).sort().reverse();
-    if(!dates.length){ tl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-secondary);">还没有日记，多和他说说话吧 ✨</div>'; return; }
-    const groups = {};
-    dates.forEach(d => { const m = d.substring(0,7); if(!groups[m]) groups[m] = []; groups[m].push(d); });
-    let html = '';
-    const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-    for(const [month, dayList] of Object.entries(groups)){
-        const [y,m] = month.split('-'); html += `<div class="month-divider">✦ ${y}年${monthNames[parseInt(m)-1]} ✦</div>`;
-        dayList.forEach(d => {
-            const entry = diary[d];
-            if(!entry) return;
-            const dateObj = new Date(d+'T00:00:00');
-            const weekday = ['周日','周一','周二','周三','周四','周五','周六'][dateObj.getDay()];
-            const isLetter = entry.isLetter;
-            if(isLetter){
-                html += `<div class="envelope-card" onclick="this.classList.toggle('opened')"><div class="seal">💌</div><div class="envelope-hint">✉️ ${d} 的信 · 点击拆开</div><div class="envelope-body">${escapeHtml(entry.content)}</div></div>`;
-            } else {
-                html += `<div class="note-card"><div class="hole top"></div><div class="hole bottom"></div><div class="card-date">📝 ${d} · ${weekday}</div><div class="card-text">${escapeHtml(entry.content)}</div></div>`;
-            }
-        });
-    }
-    tl.innerHTML = html;
-}
-function refreshHomePage(){
+    function refreshHomePage(){
         $('homeName').textContent = PARTNER_NAME;
         $('homeDays').textContent = '在一起 ' + (conversationHistory.length > 0 ? Math.floor((Date.now() - conversationHistory[0].timestamp) / 86400000) : 0) + ' 天';
         if(PARTNER_AVATAR){ $('homeAvatar').innerHTML = `<img src="${PARTNER_AVATAR}">`; }
         else { $('homeAvatar').innerHTML = '👤'; }
-        // 找最近一篇日记
         const dates = Object.keys(diary).sort().reverse();
         if(dates.length > 0){
             const latest = diary[dates[0]];
@@ -563,6 +536,58 @@ function refreshHomePage(){
             $('homeDiaryPreview').style.display = 'none';
         }
     }
+
+    // ========== 回忆页渲染 ==========
+    function renderMemoryTimeline(){
+        const tl = $('memoryTimeline'); if(!tl) return;
+        const tagsRow = $('memoryTagsRow');
+        const allTags = [...(memoryBank.about_you||[]), ...(memoryBank.about_us||[])].filter(m => m.text).slice(0, 8);
+        if(tagsRow) tagsRow.innerHTML = allTags.map(t => `<span class="memory-tag">${escapeHtml(t.text)}</span>`).join('') || '<span style="font-size:11px;color:var(--text-secondary);">还没有记忆碎片，多聊聊天吧 ✨</span>';
+        const dates = Object.keys(diary).sort().reverse();
+        if(!dates.length){ tl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-secondary);">还没有日记，多和他说说话吧 ✨</div>'; return; }
+        const groups = {};
+        dates.forEach(d => { const m = d.substring(0,7); if(!groups[m]) groups[m] = []; groups[m].push(d); });
+        let html = '';
+        const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+        for(const [month, dayList] of Object.entries(groups)){
+            const [y,m] = month.split('-'); html += `<div class="month-divider">✦ ${y}年${monthNames[parseInt(m)-1]} ✦</div>`;
+            dayList.forEach(d => {
+                const entry = diary[d];
+                if(!entry) return;
+                const dateObj = new Date(d+'T00:00:00');
+                const weekday = ['周日','周一','周二','周三','周四','周五','周六'][dateObj.getDay()];
+                const isLetter = entry.isLetter;
+                if(isLetter){
+                    html += `<div class="envelope-card" onclick="this.classList.toggle('opened')"><div class="seal">💌</div><div class="envelope-hint">✉️ ${d} 的信 · 点击拆开</div><div class="envelope-body">${escapeHtml(entry.content)}</div></div>`;
+                } else {
+                    html += `<div class="note-card"><div class="hole top"></div><div class="hole bottom"></div><div class="card-date">📝 ${d} · ${weekday}</div><div class="card-text">${escapeHtml(entry.content)}</div></div>`;
+                }
+            });
+        }
+        tl.innerHTML = html;
+    }
+
+    // ========== 写信按钮 ==========
+    const writeLetterBtn = $('writeLetterBtn');
+    if(writeLetterBtn) writeLetterBtn.addEventListener('click', async ()=>{
+        if(!getCurrentKey()||!SYSTEM_PROMPT){ showToast('请先设置API Key和互动指令'); return; }
+        showToast('正在写信...');
+        const letterPrompt = `你是${PARTNER_NAME}，请给用户写一封简短温暖的信（150-250字）。基于你们的记忆和最近的对话，表达你的感受和想法。要有称呼和落款，自然真诚，像真正的手写信。`;
+        try{
+            const endpoint = getAPIEndpoint();
+            const resp = await makeAPIRequest(endpoint, [{role:'user',content:letterPrompt}]);
+            if(!resp.ok) throw new Error('API错误');
+            const data = await resp.json();
+            const content = endpoint.type==='anthropic' ? data.content?.[0]?.text?.trim() : data.choices?.[0]?.message?.content?.trim();
+            if(content){
+                const today = new Date().toISOString().slice(0,10);
+                diary[today] = { content, isLetter: true, generatedAt: Date.now() };
+                saveDiary();
+                renderMemoryTimeline();
+                showToast('信已写好 💌');
+            }
+        } catch(e) { showToast('写信失败，请重试'); }
+    });
 
     // ========== 密码系统 ==========
     async function sha256(m){ const b = new TextEncoder().encode(m); const h = await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join(''); }
@@ -672,7 +697,6 @@ function refreshHomePage(){
         if(memoryBank.about_you&&memoryBank.about_you.length) pts.push('【关于你的记忆】\n'+memoryBank.about_you.map(m=>'- '+(m.text||m)).join('\n'));
         if(memoryBank.about_us&&memoryBank.about_us.length) pts.push('【我们之间的记忆】\n'+memoryBank.about_us.map(m=>'- '+(m.text||m)).join('\n'));
         if(pts.length) p+='\n\n'+pts.join('\n\n');
-        // 动态注入句数软限制
         p += `\n\n【对话规则】你在和人对话，不是在写小说。每次回复自然结束，${MAX_SENTENCES}句话以内。说完就停，等对方回应。不要预测对方的反应。`;
         return p;
     }
@@ -707,7 +731,6 @@ function refreshHomePage(){
     function trimHistoryAfter(timestamp){ const idx=conversationHistory.findIndex(m=>m.timestamp===timestamp); if(idx===-1)return; conversationHistory=conversationHistory.slice(0,idx); saveHistory(); rebuildChatFromHistory(); }
     async function sendMessageAfterEdit(newContent){ userInput.value=''; userInput.style.height='auto'; cancelEditMode(); const m={role:'user',versions:[newContent],currentVersion:0,timestamp:Date.now(),edited:true}; renderMessage('user',m); conversationHistory.push(m); saveHistory(); triggerAIResponse(); }
     function changeVersion(msg,delta,div){ const ni=msg.currentVersion+delta; if(ni<0||ni>=msg.versions.length)return; msg.currentVersion=ni; saveHistory(); const b=div.querySelector('.bubble'); if(b)b.innerHTML=parseMarkdown(msg.versions[ni]); const vi=div.querySelector('.ver-indicator'); if(vi)vi.textContent=`${ni+1}/${msg.versions.length}`; const pb=div.querySelector('.prev-ver-btn'),nb=div.querySelector('.next-ver-btn'); if(pb)pb.disabled=ni===0; if(nb)nb.disabled=ni===msg.versions.length-1; showToast(`切到第 ${ni+1} 个版本`); }
-    // 回溯：删除当前消息及之后所有
     async function regenerateResponse(msg){ if(!getCurrentKey()||!SYSTEM_PROMPT){showToast('请先设置 API Key 和互动指令');return;} const idx=conversationHistory.findIndex(m=>m.timestamp===msg.timestamp); if(idx===-1)return; conversationHistory=conversationHistory.slice(0,idx); saveHistory(); rebuildChatFromHistory(); triggerAIResponse(); }
     function extractStreamText(type,parsed){ if(type==='anthropic')return parsed.type==='content_block_delta'&&parsed.delta?.text?parsed.delta.text:''; return parsed.choices?.[0]?.delta?.content||''; }
     async function makeAPIRequest(endpoint,messages,signal){ const key=getCurrentKey(); if(endpoint.type==='anthropic')return fetch(endpoint.url,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:getCurrentModel(),max_tokens:MAX_TOKENS,temperature:TEMPERATURE,top_p:TOP_P,stream:true,messages}),signal}); return fetch(endpoint.url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${key}`},body:JSON.stringify({model:getCurrentModel(),max_tokens:MAX_TOKENS,temperature:TEMPERATURE,top_p:TOP_P,frequency_penalty:FREQ_PENALTY,presence_penalty:PRES_PENALTY,stream:true,messages}),signal}); }
