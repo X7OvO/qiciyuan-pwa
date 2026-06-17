@@ -210,11 +210,6 @@
         .reminder-banner { margin:4px 12px; padding:8px 12px; background:var(--banner-bg); border-radius:12px; border:1px solid #F0E8C0; font-size:12px; color:var(--banner-text); display:flex; align-items:center; gap:6px; cursor:default; flex-shrink:0; }
         .reminder-banner.hidden { display:none; }
         .reminder-banner .banner-close { margin-left:auto; background:none; border:none; color:var(--banner-text); cursor:pointer; font-size:14px; }
-        .memory-page { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--drawer-bg); z-index:51; transform:translateX(-100%); transition:transform 0.3s; display:flex; flex-direction:column; overflow-y:auto; }
-        .memory-page.open { transform:translateX(0); }
-        .memory-page .mem-header { padding:16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
-        .memory-page .mem-back { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
-        .memory-page .mem-title { font-size:16px; font-weight:500; color:var(--text); }
         .toggle-switch { position:relative; width:44px; height:26px; background:var(--toggle-off); border-radius:13px; cursor:pointer; transition:0.2s; flex-shrink:0; }
         .toggle-switch.on { background:var(--toggle-on); }
         .toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:20px; height:20px; background:white; border-radius:50%; transition:0.2s; }
@@ -273,7 +268,9 @@
                     <button class="send-btn" id="sendBtn">↑</button>
                 </div>
             </div>
-        </div><!-- 日历页 -->
+        </div>
+
+        <!-- 日历页 -->
         <div class="page" id="pageCalendar">
             <div class="calendar-page" style="flex:1;display:flex;flex-direction:column;overflow-y:auto;">
                 <div class="cal-tabs" id="calendarTabs">
@@ -340,7 +337,7 @@
 
     </div>
 
-    <!-- 底部导航（五Tab） -->
+    <!-- 底部导航 -->
     <div class="bottom-nav" id="bottomNav">
         <div class="nav-item active" data-page="pageHome"><span class="nav-icon">🏠</span>主页</div>
         <div class="nav-item" data-page="pageMemory"><span class="nav-icon">📖</span>回忆</div>
@@ -363,7 +360,9 @@
     <div class="modal-overlay hidden" id="paramSelectModal"><div class="modal-card"><h3 id="paramSelectTitle">选择</h3><div id="paramSelectOptions" style="max-height:50vh;overflow-y:auto;"></div><div class="btn-row"><button class="cancel-btn" id="cancelParamSelectBtn">取消</button></div></div></div>
     <div class="toast" id="toast"></div>
     <div class="context-menu" id="contextMenu"></div>
-</div><script>
+</div>
+
+<script>
 (function() {
     const $ = (id) => document.getElementById(id);
     const passwordScreen = $('passwordScreen'), passwordInput = $('passwordInput'), pwError = $('pwError'), pwSubmitBtn = $('pwSubmitBtn'), pwSub = $('pwSub'), pwSetupHint = $('pwSetupHint');
@@ -485,14 +484,23 @@
     makeDrawerClosable('usageDrawer');
     makeDrawerClosable('memoryDrawer');
 
-    // ========== 设置UI ==========
-    function refreshSettingsUI(){
+    // ========== 设置UI（修复版——不再嵌套refreshSettingsUI导致死循环） ==========
+    function renderSettingsInterfaceTab(){
         const currentModel = getCurrentModel();
         $('tab-interface').innerHTML = `
             <div class="settings-item"><span class="settings-label">API Key</span><span class="settings-value" id="apiKeyValue">${API_KEYS.length ? '已设置 '+API_KEYS.length+' 个' : '未设置'}</span></div>
             <div class="settings-item"><span class="settings-label">模型</span><select id="modelSelect"><option value="deepseek-chat" ${currentModel==='deepseek-chat'?'selected':''}>DeepSeek V3</option><option value="deepseek-reasoner" ${currentModel==='deepseek-reasoner'?'selected':''}>DeepSeek R1</option><option value="custom" ${currentModel!=='deepseek-chat'&&currentModel!=='deepseek-reasoner'?'selected':''}>自定义</option></select></div>
             <div class="settings-item" id="customModelItem" style="${currentModel!=='deepseek-chat'&&currentModel!=='deepseek-reasoner'?'display:flex':'display:none'}"><span class="settings-label">自定义模型</span><input type="text" id="customModelInput" value="${currentModel!=='deepseek-chat'&&currentModel!=='deepseek-reasoner'?currentModel:''}" placeholder="输入模型名"></div>
             <div class="settings-item"><span class="settings-label">费率设置</span><span class="settings-value" id="pricingValue">¥${INPUT_PRICE}/¥${OUTPUT_PRICE}</span></div>`;
+        $('apiKeyValue').onclick = ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
+        $('modelSelect').onchange = function(){
+            if(this.value==='custom'){ $('customModelItem').style.display='flex'; }
+            else { $('customModelItem').style.display='none'; API_MODELS=[this.value]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); }
+        };
+        $('customModelInput').onchange = function(){ const v=this.value.trim(); if(v){ API_MODELS=[v]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); } };
+        $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
+    }
+    function renderSettingsChatTab(){
         $('tab-chat').innerHTML = `
             <div class="settings-item" id="tempSettingItem"><span class="settings-label">温度</span><span class="settings-value" id="tempValueDisplay">${TEMPERATURE}</span></div>
             <div class="settings-item" id="topPSettingItem"><span class="settings-label">Top P</span><span class="settings-value" id="topPValueDisplay">${TOP_P}</span></div>
@@ -500,10 +508,24 @@
             <div class="settings-item" id="maxTokensSettingItem"><span class="settings-label">最大长度</span><span class="settings-value" id="maxTokensValueDisplay">${MAX_TOKENS}</span></div>
             <div class="settings-item" id="freqPenaltySettingItem"><span class="settings-label">频率惩罚</span><span class="settings-value" id="freqPenaltyValueDisplay">${FREQ_PENALTY}</span></div>
             <div class="settings-item" id="presPenaltySettingItem"><span class="settings-label">存在惩罚</span><span class="settings-value" id="presPenaltyValueDisplay">${PRES_PENALTY}</span></div>`;
+        $('tempSettingItem').onclick = ()=>openParamModal('温度', TEMP_PRESETS, TEMPERATURE, (v)=>{TEMPERATURE=v;saveParams();$('tempValueDisplay').textContent=v;});
+        $('topPSettingItem').onclick = ()=>openParamModal('Top P', TOPP_PRESETS, TOP_P, (v)=>{TOP_P=v;saveParams();$('topPValueDisplay').textContent=v;});
+        $('sentencesSettingItem').onclick = ()=>openParamModal('回复句数', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{MAX_SENTENCES=v;localStorage.setItem('claude_max_sentences',MAX_SENTENCES);$('sentencesValueDisplay').textContent=v+'句';});
+        $('maxTokensSettingItem').onclick = ()=>openParamModal('最大长度', TOKENS_PRESETS, MAX_TOKENS, (v)=>{MAX_TOKENS=v;saveParams();$('maxTokensValueDisplay').textContent=v;});
+        $('freqPenaltySettingItem').onclick = ()=>openParamModal('频率惩罚', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{FREQ_PENALTY=v;saveParams();$('freqPenaltyValueDisplay').textContent=v;});
+        $('presPenaltySettingItem').onclick = ()=>openParamModal('存在惩罚', PENALTY_PRESETS, PRES_PENALTY, (v)=>{PRES_PENALTY=v;saveParams();$('presPenaltyValueDisplay').textContent=v;});
+    }
+    function renderSettingsUITab(){
         $('tab-ui').innerHTML = `
             <div class="settings-item"><span class="settings-label">主题模式</span><select id="themeSelect"><option value="auto" ${THEME_MODE==='auto'?'selected':''}>跟随系统</option><option value="light" ${THEME_MODE==='light'?'selected':''}>白天模式</option><option value="dark" ${THEME_MODE==='dark'?'selected':''}>黑夜模式</option></select></div>
             <div class="settings-item"><span class="settings-label">图片发送</span><div class="toggle-switch ${IMAGE_ENABLED?'on':''}" id="imageToggleSettings"></div></div>
             <div class="settings-item"><span class="settings-label">一起听歌</span><span class="settings-value" id="musicEntrySettings">设置</span></div>`;
+        $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
+        const imgTgl = $('imageToggleSettings');
+        imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
+        $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
+    }
+    function renderSettingsDataTab(){
         $('tab-data').innerHTML = `
             <div class="settings-item"><span class="settings-label">互动指令</span><span class="settings-value" id="promptEntrySettings">编辑 ›</span></div>
             <div class="settings-item"><span class="settings-label">记忆库</span><span class="settings-value" id="memoryEntrySettings">查看 ›</span></div>
@@ -512,25 +534,6 @@
             <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntrySettings">查看 ›</span></div>
             <div class="settings-item"><span class="settings-label">修改密码</span><span class="settings-value" id="changePasswordSettings">修改</span></div>
             <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearChatSettings" style="color:#C06050;">⚠️</span></div>`;
-
-        // 绑定设置项事件
-        $('apiKeyValue').onclick = ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
-        $('modelSelect').onchange = function(){
-            if(this.value==='custom'){ $('customModelItem').style.display='flex'; }
-            else { $('customModelItem').style.display='none'; API_MODELS=[this.value]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); }
-        };
-        $('customModelInput').onchange = function(){ const v=this.value.trim(); if(v){ API_MODELS=[v]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); } };
-        $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
-        $('tempSettingItem').onclick = ()=>openParamModal('温度', TEMP_PRESETS, TEMPERATURE, (v)=>{TEMPERATURE=v;saveParams();});
-        $('topPSettingItem').onclick = ()=>openParamModal('Top P', TOPP_PRESETS, TOP_P, (v)=>{TOP_P=v;saveParams();});
-        $('sentencesSettingItem').onclick = ()=>openParamModal('回复句数', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{MAX_SENTENCES=v;localStorage.setItem('claude_max_sentences',MAX_SENTENCES);});
-        $('maxTokensSettingItem').onclick = ()=>openParamModal('最大长度', TOKENS_PRESETS, MAX_TOKENS, (v)=>{MAX_TOKENS=v;saveParams();});
-        $('freqPenaltySettingItem').onclick = ()=>openParamModal('频率惩罚', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{FREQ_PENALTY=v;saveParams();});
-        $('presPenaltySettingItem').onclick = ()=>openParamModal('存在惩罚', PENALTY_PRESETS, PRES_PENALTY, (v)=>{PRES_PENALTY=v;saveParams();});
-        $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
-        const imgTgl = $('imageToggleSettings');
-        imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
-        $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
         $('promptEntrySettings').onclick = ()=>{ $('editPromptInput').value=SYSTEM_PROMPT; $('editPromptModal').classList.remove('hidden'); };
         $('memoryEntrySettings').onclick = ()=>openMemoryDrawer();
         $('exportEntrySettings').onclick = ()=>{ const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,memory:memoryBank,usage:usageLog,inputPrice:INPUT_PRICE,outputPrice:OUTPUT_PRICE,temperature:TEMPERATURE,topP:TOP_P,maxTokens:MAX_TOKENS,freqPenalty:FREQ_PENALTY,presPenalty:PRES_PENALTY,theme:THEME_MODE}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`七次元_备份_${new Date().toISOString().slice(0,10)}.json`;a.click();showToast('导出成功'); };
@@ -538,6 +541,12 @@
         $('usageEntrySettings').onclick = ()=>{ openUsageDrawer(); };
         $('changePasswordSettings').onclick = ()=>{ $('oldPasswordInput').value='';$('newPasswordInput').value='';$('changePasswordModal').classList.remove('hidden'); };
         $('clearChatSettings').onclick = openClearChatModal;
+    }
+    function refreshSettingsUI(){
+        renderSettingsInterfaceTab();
+        renderSettingsChatTab();
+        renderSettingsUITab();
+        renderSettingsDataTab();
     }
 
     function openParamModal(title, presets, currentValue, onChange){
@@ -554,13 +563,14 @@
             row.addEventListener('click', ()=>{
                 onChange(p.value);
                 $('paramSelectModal').classList.add('hidden');
-                refreshSettingsUI();
             });
             opts.appendChild(row);
         });
         $('paramSelectModal').classList.remove('hidden');
     }
-    $('cancelParamSelectBtn').addEventListener('click', ()=>$('paramSelectModal').classList.add('hidden'));// ========== 密码系统 ==========
+    $('cancelParamSelectBtn').addEventListener('click', ()=>$('paramSelectModal').classList.add('hidden'));
+
+    // ========== 密码系统 ==========
     async function sha256(m){ const b = new TextEncoder().encode(m); const h = await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join(''); }
     function getStoredHash(){ return localStorage.getItem(PW_HASH_KEY); }
     function isPasswordSet(){ return !!getStoredHash(); }
@@ -570,7 +580,6 @@
     async function handlePasswordSubmit(){ const v = passwordInput.value.trim(); if(!v){ pwError.textContent='请输入密码'; return; } if(!isPasswordSet()){ await setPassword(v); passwordScreen.classList.add('hidden'); passwordInput.value=''; updatePasswordUI(); setTimeout(()=>{ if(currentPage==='pageChat')userInput.focus(); },100); showToast('密码已设置'); return; } if(await checkPassword(v)){ passwordScreen.classList.add('hidden'); passwordInput.value=''; setTimeout(()=>{ if(currentPage==='pageChat')userInput.focus(); },100); } else { pwError.textContent='密码错误'; passwordInput.value=''; passwordInput.focus(); } }
     async function handleChangePassword(){ const o=$('oldPasswordInput').value, n=$('newPasswordInput').value; if(!o||!n){showToast('请填写旧密码和新密码');return;} if(!await checkPassword(o)){showToast('旧密码错误');return;} await setPassword(n); $('changePasswordModal').classList.add('hidden'); $('oldPasswordInput').value=''; $('newPasswordInput').value=''; showToast('密码已修改'); }
     pwSubmitBtn.addEventListener('click',handlePasswordSubmit); passwordInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();handlePasswordSubmit();}});
-    $('changePasswordSettings').addEventListener('click',()=>{$('oldPasswordInput').value='';$('newPasswordInput').value='';$('changePasswordModal').classList.remove('hidden');});
     $('cancelChangePwBtn').addEventListener('click',()=>$('changePasswordModal').classList.add('hidden'));
     $('saveChangePwBtn').addEventListener('click',handleChangePassword);
 
@@ -615,7 +624,7 @@
         applyForgettingCurve();
     }
     function applyForgettingCurve(){ const n=Date.now(),D=86400000; const f=(a)=>a.filter(i=>{if(i.manual)return true;const t=i.ts||0;const age=(n-t)/D;if(age<=7)return true;if(age<=14)return Math.random()<0.5;if(age<=30)return Math.random()<0.25;return false;}); memoryBank.about_you=f(memoryBank.about_you); memoryBank.about_us=f(memoryBank.about_us); saveMemory(); }
-    function applyUI(){ topBarName.textContent=PARTNER_NAME; if(PARTNER_AVATAR){topAvatarBtn.innerHTML=`<img src="${PARTNER_AVATAR}">`;}else{topAvatarBtn.innerHTML='👤';} $('imageToggleSettings').classList.toggle('on',IMAGE_ENABLED); attachBtn.style.display=IMAGE_ENABLED?'flex':'none'; refreshHomePage(); }
+    function applyUI(){ topBarName.textContent=PARTNER_NAME; if(PARTNER_AVATAR){topAvatarBtn.innerHTML=`<img src="${PARTNER_AVATAR}">`;}else{topAvatarBtn.innerHTML='👤';} attachBtn.style.display=IMAGE_ENABLED?'flex':'none'; refreshHomePage(); }
     function rebuildChatFromHistory(){chatLog.innerHTML='';conversationHistory.forEach(m=>renderMessage(m.role,m));scrollToBottom();}
     function getCurrentContent(m){return m.versions?.[m.currentVersion]||'';}
 
@@ -625,7 +634,33 @@
     function deleteSingleMessage(timestamp){ const idx=conversationHistory.findIndex(m=>m.timestamp===timestamp); if(idx===-1)return; conversationHistory.splice(idx,1); saveHistory(); rebuildChatFromHistory(); showToast('已删除'); }
     function hideContextMenu(){ contextMenu.classList.remove('show'); contextMenu.style.display='none'; }
 
-    function renderMessage(role, msg){ const content=getCurrentContent(msg); const div=document.createElement('div'); div.className=`message ${role}`; div.dataset.ts=msg.timestamp; div.dataset.role=role; const timeStr=new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}); let inner=''; if(msg.image) inner+=`<img src="${msg.image}" alt="图片" onclick="event.stopPropagation();window.showImageOverlay('${msg.image}')">`; if(content) inner+=role==='assistant'?`<div class="bubble">${parseMarkdown(content)}</div>`:`<div class="bubble">${escapeHtml(content)}</div>`; inner+=`<div class="timestamp"><span>${timeStr}</span>`; if(msg.edited) inner+=`<span class="edited-tag">已编辑</span>`; inner+=`</div>`; if(role==='assistant'){ inner+=`<div class="rewind-row"><button class="prev-ver-btn" ${msg.versions.length<=1?'disabled':''}>◂</button><span class="ver-indicator">${msg.currentVersion+1}/${msg.versions.length}</span><button class="next-ver-btn" ${msg.versions.length<=1?'disabled':''}>▸</button><button class="regen-btn">↺ 重新生成</button></div>`; } div.innerHTML=inner; chatLog.appendChild(div); scrollToBottom(); const bubble=div.querySelector('.bubble'); if(bubble){ bubble.addEventListener('click',(e)=>{e.stopPropagation();handleBubbleClick(role,msg.timestamp,div);}); } let pressTimer; let isLongPress=false; div.addEventListener('touchstart',(e)=>{isLongPress=false;pressTimer=setTimeout(()=>{isLongPress=true;showMessageContextMenu(msg,e);},450);}); div.addEventListener('touchend',()=>{clearTimeout(pressTimer);}); div.addEventListener('touchmove',()=>{clearTimeout(pressTimer);isLongPress=false;}); if(role==='assistant'){ div.querySelector('.prev-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,-1,div);}); div.querySelector('.next-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,1,div);}); div.querySelector('.regen-btn')?.addEventListener('click',(e)=>{e.stopPropagation();regenerateResponse(msg);}); } if(role==='user'){ const et=bubble||div; et.addEventListener('dblclick',(e)=>{e.stopPropagation();startEditUserMsg(msg.timestamp);}); } }
+    function renderMessage(role, msg){
+        const content=getCurrentContent(msg);
+        const div=document.createElement('div'); div.className=`message ${role}`; div.dataset.ts=msg.timestamp; div.dataset.role=role;
+        const timeStr=new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+        let inner='';
+        if(msg.image) inner+=`<img src="${msg.image}" alt="图片" onclick="event.stopPropagation();window.showImageOverlay('${msg.image}')">`;
+        if(content) inner+=role==='assistant'?`<div class="bubble">${parseMarkdown(content)}</div>`:`<div class="bubble">${escapeHtml(content)}</div>`;
+        inner+=`<div class="timestamp"><span>${timeStr}</span>`;
+        if(msg.edited) inner+=`<span class="edited-tag">已编辑</span>`;
+        inner+=`</div>`;
+        if(role==='assistant'){
+            inner+=`<div class="rewind-row"><button class="prev-ver-btn" ${msg.versions.length<=1?'disabled':''}>◂</button><span class="ver-indicator">${msg.currentVersion+1}/${msg.versions.length}</span><button class="next-ver-btn" ${msg.versions.length<=1?'disabled':''}>▸</button><button class="regen-btn">↺ 重新生成</button></div>`;
+        }
+        div.innerHTML=inner; chatLog.appendChild(div); scrollToBottom();
+        const bubble=div.querySelector('.bubble');
+        if(bubble){ bubble.addEventListener('click',(e)=>{e.stopPropagation();handleBubbleClick(role,msg.timestamp,div);}); }
+        let pressTimer; let isLongPress=false;
+        div.addEventListener('touchstart',(e)=>{isLongPress=false;pressTimer=setTimeout(()=>{isLongPress=true;showMessageContextMenu(msg,e);},450);});
+        div.addEventListener('touchend',()=>{clearTimeout(pressTimer);});
+        div.addEventListener('touchmove',()=>{clearTimeout(pressTimer);isLongPress=false;});
+        if(role==='assistant'){
+            div.querySelector('.prev-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,-1,div);});
+            div.querySelector('.next-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,1,div);});
+            div.querySelector('.regen-btn')?.addEventListener('click',(e)=>{e.stopPropagation();regenerateResponse(msg);});
+        }
+        if(role==='user'){ const et=bubble||div; et.addEventListener('dblclick',(e)=>{e.stopPropagation();startEditUserMsg(msg.timestamp);}); }
+    }
 
     function startEditUserMsg(timestamp){ const old=document.getElementById('__copy_overlay'); if(old) old.remove(); window.getSelection().removeAllRanges(); const msg=conversationHistory.find(m=>m.timestamp===timestamp); if(!msg||msg.role!=='user') return; editingMsgTimestamp=timestamp; userInput.value=getCurrentContent(msg); userInput.focus(); userInput.setSelectionRange(userInput.value.length,userInput.value.length); userInput.style.height='auto'; userInput.style.height=Math.min(userInput.scrollHeight,100)+'px'; sendBtn.textContent='✏️'; sendBtn.classList.add('edit-mode'); editCancelBtn.classList.add('visible'); deselectAllMessages(); selectedMessageId=null; userInput.scrollIntoView({behavior:'smooth',block:'end'}); }
     function cancelEditMode(){ editingMsgTimestamp=null; userInput.value=''; userInput.style.height='auto'; sendBtn.textContent='↑'; sendBtn.classList.remove('edit-mode'); editCancelBtn.classList.remove('visible'); }
@@ -644,7 +679,74 @@
 
     function resetTypingTimer(){ if(userInputTimer) clearTimeout(userInputTimer); userInputTimer=setTimeout(()=>{userInputTimer=null;triggerAIResponse();},TYPING_DELAY); }
 
-    async function triggerAIResponse(){ if(!getCurrentKey()||!SYSTEM_PROMPT) return; if(currentAbortController){currentAbortController.abort();currentAbortController=null;} const oldTyping=document.querySelector('[data-typing="true"]'); if(oldTyping) oldTyping.remove(); const typingDiv=createTypingBubble(); currentAbortController=new AbortController(); const signal=currentAbortController.signal; let fullResponse=''; try{ const timeCtx=getTimeContext(); const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))]; msgs.splice(1,0,{role:'user',content:timeCtx}); const endpoint=getAPIEndpoint(); const resp=await makeAPIRequest(endpoint,msgs,signal); if(!resp.ok){if(resp.status===429||resp.status===402){if(switchToNextKey()){triggerAIResponse();return;}}throw new Error(`API 错误 ${resp.status}`);} const reader=resp.body.getReader(); const dec=new TextDecoder('utf-8'); let buf=''; let lastChunk=''; while(true){ const{done,value}=await reader.read(); if(done) break; buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||''; for(const l of lines){ if(l.startsWith('data: ')){ const d=l.slice(6); if(d==='[DONE]') continue; try{ const p=JSON.parse(d); const txt=extractStreamText(endpoint.type,p); if(txt){ fullResponse+=txt; } if(p.usage) lastChunk=d; }catch(e){} } } } if(lastChunk){try{const usage=JSON.parse(lastChunk).usage;if(usage)recordUsage(usage);}catch(e){}} const newMsg={role:'assistant',versions:[fullResponse],currentVersion:0,timestamp:Date.now()}; conversationHistory.push(newMsg); saveHistory(); replaceTypingBubble(typingDiv,fullResponse,newMsg); checkDiaryTriggers(); }catch(e){if(e.name==='AbortError'){}else{if(typingDiv.parentNode)typingDiv.remove();const errDiv=document.createElement('div');errDiv.className='message assistant';errDiv.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(errDiv);}} finally{currentAbortController=null;userInput.focus();} }window.showImageOverlay=function(src){const o=document.createElement('div');o.className='image-overlay';o.innerHTML=`<img src="${src}">`;o.addEventListener('click',()=>o.remove());document.body.appendChild(o);};
+    async function triggerAIResponse(){
+        if(!getCurrentKey()||!SYSTEM_PROMPT) return;
+        if(currentAbortController){currentAbortController.abort();currentAbortController=null;}
+        const oldTyping=document.querySelector('[data-typing="true"]'); if(oldTyping) oldTyping.remove();
+        const typingDiv=createTypingBubble();
+        currentAbortController=new AbortController(); const signal=currentAbortController.signal;
+        let fullResponse='';
+        try{
+            const timeCtx=getTimeContext();
+            const msgs=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>({role:m.role,content:getCurrentContent(m)}))];
+            msgs.splice(1,0,{role:'user',content:timeCtx});
+            const endpoint=getAPIEndpoint();
+            const resp=await makeAPIRequest(endpoint,msgs,signal);
+            if(!resp.ok){if(resp.status===429||resp.status===402){if(switchToNextKey()){triggerAIResponse();return;}}throw new Error(`API 错误 ${resp.status}`);}
+            const reader=resp.body.getReader(); const dec=new TextDecoder('utf-8'); let buf=''; let lastChunk='';
+            while(true){
+                const{done,value}=await reader.read(); if(done) break;
+                buf+=dec.decode(value,{stream:true}); const lines=buf.split('\n'); buf=lines.pop()||'';
+                for(const l of lines){
+                    if(l.startsWith('data: ')){ const d=l.slice(6); if(d==='[DONE]') continue;
+                        try{ const p=JSON.parse(d); const txt=extractStreamText(endpoint.type,p); if(txt){ fullResponse+=txt; } if(p.usage) lastChunk=d; }catch(e){}
+                    }
+                }
+            }
+            if(lastChunk){try{const usage=JSON.parse(lastChunk).usage;if(usage)recordUsage(usage);}catch(e){}}
+            const newMsg={role:'assistant',versions:[fullResponse],currentVersion:0,timestamp:Date.now()};
+            conversationHistory.push(newMsg); saveHistory();
+            replaceTypingBubble(typingDiv,fullResponse,newMsg);
+            checkDiaryTriggers();
+        }catch(e){if(e.name==='AbortError'){}else{if(typingDiv.parentNode)typingDiv.remove();const errDiv=document.createElement('div');errDiv.className='message assistant';errDiv.innerHTML='<div class="bubble">（连接断开了……）</div>';chatLog.appendChild(errDiv);}}
+        finally{currentAbortController=null;userInput.focus();}
+    }
+
+    // ========== 发送消息 ==========
+    function sendMessageInternal(text){
+        if(!text && !pendingImage) return;
+        if(pendingImage){
+            const now=Date.now(); const c=text||'';
+            const m={role:'user',versions:[c],currentVersion:0,timestamp:now,image:pendingImage};
+            renderMessage('user',m); conversationHistory.push(m); saveHistory();
+            pendingImage=null;imagePreviewRow.classList.add('hidden');
+            userInput.value='';userInput.style.height='auto';
+            sendImageMessage(m.image);
+        }else{
+            const m={role:'user',versions:[text],currentVersion:0,timestamp:Date.now()};
+            renderMessage('user',m); conversationHistory.push(m); saveHistory();
+            userInput.value='';userInput.style.height='auto';
+            if(userInputTimer) clearTimeout(userInputTimer);
+            userInputTimer=null;
+            resetTypingTimer();
+        }
+    }
+
+    sendBtn.addEventListener('click',()=>{
+        if(editingMsgTimestamp){
+            const nc=userInput.value.trim();
+            if(!nc){showToast('消息不能为空');return;}
+            trimHistoryAfter(editingMsgTimestamp);
+            sendMessageAfterEdit(nc);
+            return;
+        }
+        sendMessageInternal(userInput.value.trim());
+    });
+    userInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();}});
+    userInput.addEventListener('input',()=>{ userInput.style.height='auto';userInput.style.height=Math.min(userInput.scrollHeight,100)+'px'; if(!editingMsgTimestamp){ resetTypingTimer(); } });
+    chatLog.addEventListener('click',(e)=>{if(e.target===chatLog){deselectAllMessages();selectedMessageId=null;}});
+
+    window.showImageOverlay=function(src){const o=document.createElement('div');o.className='image-overlay';o.innerHTML=`<img src="${src}">`;o.addEventListener('click',()=>o.remove());document.body.appendChild(o);};
     function scrollToBottom(){chatLog.scrollTop=chatLog.scrollHeight;}
     function escapeHtml(t){if(!t)return'';return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
     function parseMarkdown(t){if(!t)return'';return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`([^`]+)`/g,'<code style="background:var(--hover-bg);padding:1px 5px;border-radius:4px;font-size:13px;font-family:monospace;">$1</code>').replace(/\n{2,}/g,'<br><br>').replace(/\n/g,'<br>');}
@@ -673,7 +775,6 @@
 
     // ========== 日历 ==========
     $('calendarTabs').addEventListener('click',(e)=>{if(e.target.classList.contains('tab')){document.querySelectorAll('#calendarTabs .tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');calendarFilter=e.target.dataset.filter;if(calendarFilter==='search'){$('searchContainer').style.display='block';$('calendarContent').style.display='none';$('diaryCard').style.display='none';$('diaryEmpty').style.display='none';}else{$('searchContainer').style.display='none';$('searchResults').style.display='none';$('calendarContent').style.display='block';renderCalendarPanel();}}});
-
     function isPeriodActive(d){const m=Object.entries(calendarMarks);let s=null;for(const[da,ma]of m){if(ma.type==='period-start')s=da;if(ma.type==='period-end'&&s&&da>=s){if(d>=s&&d<=da)return true;s=null;}}if(s&&d>=s){const st=new Date(s),ed=new Date(s);ed.setDate(ed.getDate()+5);if(new Date(d)>=st&&new Date(d)<=ed)return true;}return false;}
     function getTodayDateStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
     function getTimeContext(){const n=new Date();const ts=`现在是${n.getFullYear()}年${n.getMonth()+1}月${n.getDate()}日${n.getHours()}点${n.getMinutes()}分。`;const td=getTodayDateStr();const ma=[];const mk=calendarMarks[td];if(mk){if(mk.type==='period-start')ma.push(`今天是经期开始日（${mk.title||''}）`);else if(mk.type==='period-end')ma.push(`今天是经期结束日`);else if(mk.type==='anniversary')ma.push(`今天是${mk.title||'纪念日'}`);else if(mk.type==='custom')ma.push(`今天有日程：${mk.title||'事件'}`);}if(isPeriodActive(td)&&!mk)ma.push('今天在经期中');return`[系统时间上下文] ${ts} ${ma.length>0?'今天有：'+ma.join('；')+'。':'今天没有特殊标记。'}`;}
@@ -699,10 +800,10 @@
     $('cancelMarkBtn').addEventListener('click',()=>$('addMarkModal').classList.add('hidden'));
     $('saveMarkBtn').addEventListener('click',()=>{const ds=$('editMarkDate').value||activeMarkDate;if(!ds)return;const t=$('markTitleInput').value.trim();if(!t&&$('markTypeSelect').value!=='period-start'&&$('markTypeSelect').value!=='period-end'){showToast('请输入标题');return;}const ty=$('markTypeSelect').value,n=$('markNoteInput').value.trim(),r=$('markReminderSelect').value;calendarMarks[ds]={type:ty,title:t||(ty==='period-start'?'经期开始':ty==='period-end'?'经期结束':'日程'),note:n,reminder:r};saveMarks();$('addMarkModal').classList.add('hidden');renderCalendarPanel();showToast('已保存');});
     $('deleteMarkBtn').addEventListener('click',()=>{const ds=$('editMarkDate').value||activeMarkDate;if(ds&&calendarMarks[ds]){delete calendarMarks[ds];saveMarks();}$('addMarkModal').classList.add('hidden');renderCalendarPanel();showToast('已删除');});
-    function showDiary(d){const e=diary[d];if(e){$('diaryCard').style.display='block';$('diaryEmpty').style.display='none';$('diaryCard').innerHTML=`<div class="diary-date">${new Date(d).toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'})}</div><div>${escapeHtml(e.content)}</div>`;}else{$('diaryCard').style.display='none';$('diaryEmpty').style.display='block';}}// ========== 聊天搜索 ==========
+    function showDiary(d){const e=diary[d];if(e){$('diaryCard').style.display='block';$('diaryEmpty').style.display='none';$('diaryCard').innerHTML=`<div class="diary-date">${new Date(d).toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'})}</div><div>${escapeHtml(e.content)}</div>`;}else{$('diaryCard').style.display='none';$('diaryEmpty').style.display='block';}}
+
     $('searchInput').addEventListener('input',()=>{const q=$('searchInput').value.trim().toLowerCase();if(!q){$('searchResults').style.display='none';return;}const r=[];conversationHistory.forEach((m,i)=>{const c=getCurrentContent(m);if(c&&c.toLowerCase().includes(q))r.push({...m,idx:i,content:c});});if(!r.length){$('searchResults').style.display='block';$('searchResults').innerHTML='<div style="padding:12px;text-align:center;color:var(--text-secondary);">无结果</div>';return;}$('searchResults').style.display='block';$('searchResults').innerHTML=r.slice(-30).reverse().map(r=>{const d=new Date(r.timestamp);return`<div class="search-result-item" data-idx="${r.idx}"><div class="sr-date">${d.getMonth()+1}/${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}</div><div><span class="sr-role">${r.role==='user'?'我':PARTNER_NAME}:</span> ${escapeHtml(r.content.substring(0,60))}</div></div>`;}).join('');document.querySelectorAll('.search-result-item').forEach(i=>i.addEventListener('click',function(){const idx=parseInt(this.dataset.idx);const m=conversationHistory[idx];if(!m)return;switchPage('pageChat');setTimeout(()=>{const el=document.querySelector(`.message[data-ts="${m.timestamp}"]`);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),1600);}},400);}));});
 
-    // ========== 图片发送 ==========
     attachBtn.addEventListener('click',()=>{if(!IMAGE_ENABLED)return;imageInput.click();});
     imageInput.addEventListener('change',()=>{const f=imageInput.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{pendingImage=e.target.result;imagePreviewThumb.src=pendingImage;imagePreviewRow.classList.remove('hidden');};r.readAsDataURL(f);imageInput.value='';});
     imagePreviewRemove.addEventListener('click',()=>{pendingImage=null;imagePreviewRow.classList.add('hidden');});
@@ -716,12 +817,6 @@
     $('saveMusicBtn').addEventListener('click',()=>{const s=$('musicSongInput').value.trim(),a=$('musicArtistInput').value.trim();if(!s){showToast('请输入歌名');return;}const t=a?`${s} - ${a}`:s;currentMusic=t;musicBarText.textContent=`正在听：${t}`;musicBar.classList.remove('hidden');$('musicModal').classList.add('hidden');addSystemMessage(`我开始听《${t}》了`);const m={role:'user',versions:[`[正在听《${t}》]`],currentVersion:0,timestamp:Date.now()};conversationHistory.push(m);saveHistory();resetTypingTimer();});
     musicCloseBtn.addEventListener('click',()=>{currentMusic=null;musicBar.classList.add('hidden');addSystemMessage('音乐已停止');});
     bannerCloseBtn.addEventListener('click',()=>reminderBanner.classList.add('hidden'));
-
-    // ========== 发送消息 ==========
-    sendBtn.addEventListener('click',()=>{ if(editingMsgTimestamp){ const nc=userInput.value.trim();if(!nc){showToast('消息不能为空');return;} trimHistoryAfter(editingMsgTimestamp); sendMessageAfterEdit(nc); return; } const text=userInput.value.trim();const hasImage=!!pendingImage; if(!text&&!hasImage)return; if(hasImage){ const now=Date.now();const c=text||''; const m={role:'user',versions:[c],currentVersion:0,timestamp:now,image:pendingImage}; renderMessage('user',m);conversationHistory.push(m);saveHistory(); pendingImage=null;imagePreviewRow.classList.add('hidden'); userInput.value='';userInput.style.height='auto'; sendImageMessage(m.image); }else{ const m={role:'user',versions:[text],currentVersion:0,timestamp:Date.now()}; renderMessage('user',m);conversationHistory.push(m);saveHistory(); userInput.value='';userInput.style.height='auto'; if(userInputTimer) clearTimeout(userInputTimer); userInputTimer=null; resetTypingTimer(); } });
-    userInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();}});
-    userInput.addEventListener('input',()=>{ userInput.style.height='auto';userInput.style.height=Math.min(userInput.scrollHeight,100)+'px'; if(!editingMsgTimestamp){ resetTypingTimer(); } });
-    chatLog.addEventListener('click',(e)=>{if(e.target===chatLog){deselectAllMessages();selectedMessageId=null;}});
 
     // ========== 日记生成 ==========
     async function summarizeMessages(ms){if(!getCurrentKey())return null;const t=ms.map(m=>`${m.role}: ${getCurrentContent(m)}`).join('\n');const p=`请用一段简短的话总结以下对话的关键内容，保留重要的记忆、决定、情绪和事件：\n${t}`;try{const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,[{role:'user',content:p}]);if(!rp.ok)return null;const d=await rp.json();if(ep.type==='anthropic')return d.content?.[0]?.text?.trim()||null;return d.choices?.[0]?.message?.content?.trim()||null;}catch(e){return null;}}
@@ -754,8 +849,8 @@
 
     // ========== 回忆页 ==========
     function refreshMemoryMain(){
-        $('diaryCountSub').textContent = Object.keys(diary).filter(d => !diary[d].isLetter).length + ' 篇';
-        $('letterCountSub').textContent = Object.keys(diary).filter(d => diary[d].isLetter).length + ' 封';
+        $('diaryCountSub').textContent = Object.keys(diary).length + ' 篇';
+        $('letterCountSub').textContent = '0 封';
     }
 
     // ========== 记忆库 ==========
@@ -802,16 +897,15 @@
     }
 
     // ========== 弹窗事件 ==========
-    $('editNameItem')?.addEventListener('click',()=>{$('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden');});
     $('cancelNameBtn').addEventListener('click',()=>$('editNameModal').classList.add('hidden'));
     $('saveNameBtn').addEventListener('click',()=>{PARTNER_NAME=$('editNameInput').value.trim()||'七次元';localStorage.setItem('claude_partner_name',PARTNER_NAME);applyUI();$('editNameModal').classList.add('hidden');showToast('名字已更新');});
     $('cancelPromptBtn').addEventListener('click',()=>$('editPromptModal').classList.add('hidden'));
     $('savePromptBtn').addEventListener('click',()=>{SYSTEM_PROMPT=$('editPromptInput').value.trim();if(!SYSTEM_PROMPT){showToast('指令不能为空');return;}localStorage.setItem('claude_system_prompt',SYSTEM_PROMPT);$('editPromptModal').classList.add('hidden');showToast('互动指令已更新');});
     $('cancelApiKeyBtn').addEventListener('click',()=>$('editApiKeyModal').classList.add('hidden'));
-    $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);refreshSettingsUI();});
+    $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);});
     $('pricingPreset').addEventListener('change',function(){const p=PRICING_PRESETS[this.value];if(p){$('editInputPrice').value=p.input;$('editOutputPrice').value=p.output;}});
     $('cancelPricingBtn').addEventListener('click',()=>$('editPricingModal').classList.add('hidden'));
-    $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');refreshSettingsUI();});
+    $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');});
 
     topAvatarBtn.addEventListener('click', ()=>{ $('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden'); });
     topBarName.addEventListener('click', ()=>{ $('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden'); });
