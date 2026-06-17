@@ -4,87 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>七次元</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="七次元">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#FAF7F2">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><rect width='180' height='180' rx='36' fill='%23FAF7F2'/><text x='90' y='120' font-size='100' text-anchor='middle' fill='%232D2D2C'>七</text></svg>">
     <style>
         :root {
             --bg: #FAF7F2; --bg-secondary: #FFFFFF; --text: #2D2D2C; --text-secondary: #8B8A87;
             --border: #E8E2D6; --bubble-user: #2D2D2C; --bubble-user-text: #FFFFFF;
             --bubble-ai: #FFFFFF; --bubble-ai-text: #2D2D2C; --input-bg: #FFFFFF;
-            --drawer-bg: #FAF7F2; --card-bg: #FFFFFF; --hover-bg: #F0ECE4;
-            --toggle-off: #D9D3C7; --toggle-on: #4A6B4A; --toast-bg: #2D2D2C;
-            --toast-text: #FFFFFF; --banner-bg: #FFFDF5; --banner-text: #8B7A3A;
-            --progress-bg: #F0ECE4; --progress-fill: #D0C5B0; --btn-primary: #2D2D2C;
+            --card-bg: #FFFFFF; --hover-bg: #F0ECE4; --btn-primary: #2D2D2C;
             --btn-primary-text: #FFFFFF; --btn-secondary: #F0ECE4; --btn-secondary-text: #2D2D2C;
+            --toggle-off: #D9D3C7; --toggle-on: #4A6B4A;
+            --progress-bg: #F0ECE4; --progress-fill: #D0C5B0;
         }
         .dark-mode {
             --bg: #1A1A1A; --bg-secondary: #252525; --text: #E0E0E0; --text-secondary: #888;
             --border: #333; --bubble-user: #E0E0E0; --bubble-user-text: #1A1A1A;
             --bubble-ai: #252525; --bubble-ai-text: #E0E0E0; --input-bg: #252525;
-            --drawer-bg: #1A1A1A; --card-bg: #252525; --hover-bg: #2A2A2A;
-            --toggle-off: #444; --toggle-on: #6AAA6A; --toast-bg: #E0E0E0;
-            --toast-text: #1A1A1A; --banner-bg: #2A2A20; --banner-text: #B8A060;
-            --progress-bg: #2A2A2A; --progress-fill: #8B8A87; --btn-primary: #E0E0E0;
+            --card-bg: #252525; --hover-bg: #2A2A2A; --btn-primary: #E0E0E0;
             --btn-primary-text: #1A1A1A; --btn-secondary: #2A2A2A; --btn-secondary-text: #E0E0E0;
+            --toggle-off: #444; --toggle-on: #6AAA6A;
+            --progress-bg: #2A2A2A; --progress-fill: #8B8A87;
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; -webkit-user-select: none; }
-        .app-container { width:100%; max-width:500px; height:100vh; background:var(--bg); position:relative; overflow:hidden; box-shadow:0 0 30px rgba(0,0,0,0.03); display:flex; flex-direction:column; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: var(--bg); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none; -webkit-user-select: none; }
+        .app-container { width:100%; max-width:500px; height:100vh; background:var(--bg); position:relative; overflow:hidden; display:flex; flex-direction:column; }
 
         /* 密码屏 */
         .password-screen { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:300; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:0.4s; }
         .password-screen.hidden { opacity:0; visibility:hidden; pointer-events:none; }
-        .password-screen .pw-glow { position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); width:200px; height:200px; background:radial-gradient(circle,rgba(200,180,140,0.12) 0%,rgba(250,247,242,0) 70%); border-radius:50%; animation:breathe 4s ease-in-out infinite; }
-        @keyframes breathe { 0%,100%{opacity:0.3;transform:translate(-50%,-50%) scale(0.95);} 50%{opacity:0.7;transform:translate(-50%,-50%) scale(1.05);} }
-        .password-screen .pw-content { position:relative; z-index:2; text-align:center; padding:30px; }
         .password-screen .pw-title { font-size:28px; font-weight:400; color:var(--text); margin-bottom:8px; }
         .password-screen .pw-sub { font-size:14px; color:var(--text-secondary); margin-bottom:20px; }
-        .password-screen input { width:220px; padding:14px 18px; border:1px solid var(--border); border-radius:14px; font-size:16px; background:var(--input-bg); color:var(--text); outline:none; text-align:center; letter-spacing:4px; font-family:inherit; -webkit-text-security:disc; }
+        .password-screen input { width:220px; padding:14px; border:1px solid var(--border); border-radius:14px; font-size:16px; background:var(--input-bg); color:var(--text); outline:none; text-align:center; letter-spacing:4px; font-family:inherit; -webkit-text-security:disc; }
         .password-screen .pw-error { font-size:12px; color:#C06050; margin-top:10px; min-height:18px; }
         .password-screen .pw-btn { margin-top:16px; padding:12px 30px; background:var(--btn-primary); color:var(--btn-primary-text); border:none; border-radius:14px; font-size:15px; cursor:pointer; }
-        .password-screen .pw-setup-hint { font-size:11px; color:var(--text-secondary); margin-top:12px; }
 
-        /* 页面基础 */
+        /* 页面 */
         .main-content { flex:1; position:relative; overflow:hidden; }
         .page { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; opacity:0; transform:translateY(8px); transition:0.3s; pointer-events:none; overflow:hidden; }
         .page.active { opacity:1; transform:translateY(0); pointer-events:auto; }
         .bottom-nav { display:flex; border-top:1px solid var(--border); background:var(--bg); padding-bottom:env(safe-area-inset-bottom,0); z-index:20; align-items:flex-end; }
-        .bottom-nav .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:8px 0 6px; cursor:pointer; color:var(--text-secondary); font-size:10px; gap:2px; transition:0.2s; }
+        .bottom-nav .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:8px 0 6px; cursor:pointer; color:var(--text-secondary); font-size:10px; gap:2px; }
         .bottom-nav .nav-item.active { color:var(--text); }
         .bottom-nav .nav-item .nav-icon { font-size:22px; }
         .bottom-nav .nav-item.chat-btn .nav-icon-circle { width:48px; height:48px; border-radius:50%; background:var(--btn-primary); color:var(--btn-primary-text); display:flex; align-items:center; justify-content:center; font-size:22px; margin-top:-18px; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
 
         /* 主页 */
         .home-page { align-items:center; justify-content:center; gap:20px; padding:20px; }
-        .home-avatar { width:100px; height:100px; border-radius:50%; background:var(--hover-bg); display:flex; align-items:center; justify-content:center; font-size:50px; color:var(--text-secondary); overflow:hidden; animation:popIn 0.5s cubic-bezier(0.21,1.02,0.58,1) forwards; }
-        .home-avatar img { width:100%; height:100%; object-fit:cover; }
-        .home-name { font-size:24px; font-weight:500; color:var(--text); animation:fadeInUp 0.5s 0.1s ease forwards; opacity:0; }
-        .home-days { font-size:14px; color:var(--text-secondary); animation:fadeInUp 0.5s 0.2s ease forwards; opacity:0; }
-        .home-diary-preview { background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; width:85%; max-width:350px; animation:fadeInUp 0.5s 0.3s ease forwards; opacity:0; }
-        .home-diary-preview .diary-label { font-size:11px; color:var(--text-secondary); margin-bottom:6px; }
-        .home-diary-preview .diary-text { font-size:14px; color:var(--text); line-height:1.5; max-height:80px; overflow:hidden; }
-        .home-chat-btn { margin-top:8px; padding:14px 40px; background:var(--btn-primary); color:var(--btn-primary-text); border:none; border-radius:25px; font-size:16px; cursor:pointer; animation:fadeInUp 0.5s 0.4s ease forwards; opacity:0; }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
-        @keyframes popIn { 0%{opacity:0;transform:scale(0.85);} 60%{opacity:1;transform:scale(1.04);} 100%{opacity:1;transform:scale(1);} }
+        .home-avatar { width:100px; height:100px; border-radius:50%; background:var(--hover-bg); display:flex; align-items:center; justify-content:center; font-size:50px; overflow:hidden; }
+        .home-name { font-size:24px; font-weight:500; color:var(--text); }
+        .home-days { font-size:14px; color:var(--text-secondary); }
+        .home-chat-btn { margin-top:8px; padding:14px 40px; background:var(--btn-primary); color:var(--btn-primary-text); border:none; border-radius:25px; font-size:16px; cursor:pointer; }
 
         /* 聊天 */
         .chat-page { display:flex; flex-direction:column; }
-        .top-bar { padding:12px 16px; background:var(--bg); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; z-index:10; flex-shrink:0; }
-        .top-bar .avatar-btn { width:36px; height:36px; border-radius:50%; background:var(--hover-bg); display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--text-secondary); overflow:hidden; cursor:pointer; border:none; }
-        .top-bar .avatar-btn img { width:100%; height:100%; object-fit:cover; }
-        .top-bar .title { font-size:17px; font-weight:500; color:var(--text); margin-left:8px; cursor:pointer; flex:1; }
+        .top-bar { padding:12px 16px; background:var(--bg); border-bottom:1px solid var(--border); display:flex; align-items:center; flex-shrink:0; }
+        .top-bar .title { font-size:17px; font-weight:500; color:var(--text); flex:1; }
         .chat-log { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:12px; }
-        .message { display:flex; flex-direction:column; max-width:85%; position:relative; }
-        .message.user { align-self:flex-end; align-items:flex-end; }
-        .message.assistant { align-self:flex-start; align-items:flex-start; }
-        .bubble { padding:11px 14px; border-radius:18px; font-size:15px; line-height:1.5; word-break:break-word; cursor:pointer; animation:popIn 0.35s cubic-bezier(0.21,1.02,0.58,1) forwards; }
-        .message.user .bubble { background:var(--bubble-user); color:var(--bubble-user-text); border-bottom-right-radius:6px; }
-        .message.assistant .bubble { background:var(--bubble-ai); color:var(--bubble-ai-text); border-bottom-left-radius:6px; box-shadow:0 1px 6px rgba(0,0,0,0.06); }
-        .input-area { padding:8px 12px 16px; background:var(--bg); border-top:1px solid var(--border); display:flex; gap:6px; align-items:flex-end; z-index:10; flex-shrink:0; }
+        .message { display:flex; flex-direction:column; max-width:85%; }
+        .message.user { align-self:flex-end; }
+        .message.assistant { align-self:flex-start; }
+        .bubble { padding:11px 14px; border-radius:18px; font-size:15px; line-height:1.5; word-break:break-word; animation:popIn 0.35s cubic-bezier(0.21,1.02,0.58,1) forwards; }
+        .message.user .bubble { background:var(--bubble-user); color:var(--bubble-user-text); }
+        .message.assistant .bubble { background:var(--bubble-ai); color:var(--bubble-ai-text); box-shadow:0 1px 6px rgba(0,0,0,0.06); }
+        @keyframes popIn { 0%{opacity:0;transform:scale(0.85);} 60%{opacity:1;transform:scale(1.04);} 100%{opacity:1;transform:scale(1);} }
+        .input-area { padding:8px 12px 16px; background:var(--bg); border-top:1px solid var(--border); display:flex; gap:6px; align-items:flex-end; flex-shrink:0; }
         .input-area textarea { flex:1; padding:10px 14px; border:1px solid var(--border); border-radius:20px; font-size:15px; background:var(--input-bg); color:var(--text); outline:none; resize:none; max-height:100px; font-family:inherit; }
         .send-btn { width:38px; height:38px; border-radius:50%; background:var(--btn-primary); border:none; color:var(--btn-primary-text); font-size:18px; cursor:pointer; flex-shrink:0; }
 
@@ -92,28 +73,20 @@
         .calendar-page { overflow-y:auto; flex:1; }
         .calendar-page .cal-header-row { padding:12px 16px; display:flex; align-items:center; justify-content:center; gap:8px; border-bottom:1px solid var(--border); }
         .calendar-page .cal-header-row button { background:none; border:none; font-size:20px; color:var(--text-secondary); cursor:pointer; }
-        .calendar-page .cal-header-row .month-label { font-size:15px; font-weight:500; color:var(--text); }
-        .calendar-page .cal-header-row .year-label { font-size:15px; font-weight:500; color:var(--text-secondary); cursor:pointer; text-decoration:underline; }
         .calendar-page .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); text-align:center; gap:4px; padding:8px 12px; }
-        .calendar-page .cal-grid .day-name { font-size:11px; color:var(--text-secondary); padding:4px 0; }
-        .calendar-page .cal-grid .day-cell { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--text); border-radius:50%; cursor:pointer; border:2px solid transparent; }
+        .calendar-page .cal-grid .day-cell { aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--text); border-radius:50%; cursor:pointer; }
         .calendar-page .cal-grid .day-cell.today { font-weight:600; background:var(--hover-bg); }
-        .calendar-page .cal-grid .day-cell.mark-period { background:rgba(220,160,140,0.15); border-radius:40%; }
-        .calendar-page .cal-grid .day-cell.mark-anniversary::before { content:'★'; position:absolute; top:1px; right:3px; font-size:10px; color:#D4A853; }
         .calendar-page .cal-tabs { display:flex; padding:8px 12px; border-bottom:1px solid var(--border); }
         .calendar-page .cal-tabs .tab { flex:1; text-align:center; padding:8px 0; font-size:13px; color:var(--text-secondary); cursor:pointer; border-radius:8px; }
         .calendar-page .cal-tabs .tab.active { background:var(--hover-bg); color:var(--text); font-weight:500; }
 
         /* 回忆页 */
         .memory-main { display:flex; flex-direction:column; gap:20px; padding:20px 16px; flex:1; overflow-y:auto; align-items:center; }
-        .memory-tag { display:inline-block; background:#FFF9E6; border:1px solid #F0E8C0; border-radius:12px; padding:5px 10px; font-size:11px; color:#8B7A3A; margin:3px; }
-        .dark-mode .memory-tag { background:#3A3A20; border-color:#5A5A30; color:#C8C060; }
-        .memory-cards { display:flex; gap:16px; width:100%; max-width:360px; }
-        .memory-card { flex:1; aspect-ratio:3/4; border-radius:16px; border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:0.2s; }
-        .memory-card:active { transform:scale(0.96); }
-        .memory-card .card-emoji { font-size:48px; margin-bottom:8px; }
-        .memory-card .card-label { font-size:15px; font-weight:500; color:var(--text); }
-        .memory-card .card-sub { font-size:11px; color:var(--text-secondary); margin-top:4px; }
+        .memory-card { width:100%; max-width:320px; padding:32px 24px; border-radius:16px; border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; cursor:pointer; transition:0.2s; }
+        .memory-card:active { transform:scale(0.97); }
+        .memory-card .card-emoji { font-size:40px; margin-bottom:8px; }
+        .memory-card .card-label { font-size:17px; font-weight:500; color:var(--text); }
+        .memory-card .card-sub { font-size:12px; color:var(--text-secondary); margin-top:4px; }
 
         /* 设置全屏 */
         .settings-fullscreen { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:50; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; }
@@ -129,38 +102,23 @@
         .settings-item { padding:12px 0; border-bottom:1px solid rgba(128,128,128,0.08); display:flex; align-items:center; justify-content:space-between; }
         .settings-item .settings-label { font-size:14px; color:var(--text); }
         .settings-item .settings-value { font-size:14px; color:var(--text-secondary); cursor:pointer; }
-        .settings-item select, .settings-item input { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; }
-        .toggle-switch { position:relative; width:44px; height:26px; background:var(--toggle-off); border-radius:13px; cursor:pointer; flex-shrink:0; }
-        .toggle-switch.on { background:var(--toggle-on); }
-        .toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:20px; height:20px; background:white; border-radius:50%; transition:0.2s; }
-        .toggle-switch.on::after { left:21px; }
+
+        /* 抽屉基础 */
+        .bottom-drawer { position:absolute; bottom:0; left:0; width:100%; height:70%; background:var(--bg); z-index:55; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
+        .bottom-drawer.open { transform:translateY(0); }
+        .bottom-drawer .drawer-handle { width:40px; height:5px; background:var(--toggle-off); border-radius:3px; margin:10px auto 6px; flex-shrink:0; cursor:grab; }
+        .bottom-drawer .drawer-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); flex-shrink:0; }
+        .bottom-drawer .drawer-content { flex:1; overflow-y:auto; padding:12px 16px; }
 
         /* 用量抽屉 */
-        .usage-drawer { position:absolute; bottom:0; left:0; width:100%; height:66%; background:var(--drawer-bg); z-index:55; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
-        .usage-drawer.open { transform:translateY(0); }
-        .usage-drawer .sheet-handle { width:40px; height:5px; background:var(--toggle-off); border-radius:3px; margin:10px auto 6px; flex-shrink:0; }
-        .usage-drawer .sheet-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); }
-        .usage-drawer .sheet-content { flex:1; overflow-y:auto; padding:12px 16px; }
-        .usage-drawer .usage-section { padding:0 0 16px; border-bottom:1px solid var(--border); }
-        .usage-drawer .usage-section-title { font-size:11px; color:var(--text-secondary); font-weight:500; margin-bottom:12px; }
-        .usage-drawer .progress-bar-wrap { background:var(--progress-bg); border-radius:8px; height:12px; margin-bottom:6px; overflow:hidden; }
-        .usage-drawer .progress-bar-fill { background:var(--progress-fill); height:100%; border-radius:8px; transition:width 0.5s; }
-        .usage-drawer .progress-label { font-size:11px; color:var(--text-secondary); }
-        .usage-drawer .stat-card { background:var(--card-bg); border-radius:14px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; }
-        .usage-drawer .stat-card .stat-title { font-size:13px; color:var(--text-secondary); }
-        .usage-drawer .stat-card .stat-tokens { font-size:15px; font-weight:500; color:var(--text); }
-        .usage-drawer .stat-card .stat-cost { font-size:11px; color:#B8A88A; }
+        .stat-card { background:var(--card-bg); border-radius:14px; border:1px solid var(--border); padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; }
+        .progress-bar-wrap { background:var(--progress-bg); border-radius:8px; height:12px; margin-bottom:6px; overflow:hidden; }
+        .progress-bar-fill { background:var(--progress-fill); height:100%; border-radius:8px; transition:width 0.5s; }
 
-        /* 记忆库抽屉 */
-        .memory-drawer { position:absolute; bottom:0; left:0; width:100%; height:70%; background:var(--drawer-bg); z-index:55; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
-        .memory-drawer.open { transform:translateY(0); }
-        .memory-drawer .md-handle { width:40px; height:5px; background:var(--toggle-off); border-radius:3px; margin:10px auto 6px; flex-shrink:0; }
-        .memory-drawer .md-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); }
-        .memory-drawer .md-content { flex:1; overflow-y:auto; padding:12px 16px; }
-        .memory-drawer .md-section-title { font-size:12px; color:var(--text-secondary); font-weight:500; margin:12px 0 8px; }
-        .memory-drawer .mem-item-card { background:var(--card-bg); border-radius:12px; padding:12px; margin-bottom:8px; font-size:13px; color:var(--text); border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; animation:popIn 0.35s cubic-bezier(0.21,1.02,0.58,1) forwards; }
-        .memory-drawer .mem-delete-btn { background:none; border:none; color:#C06050; cursor:pointer; font-size:14px; }
-        .memory-drawer .md-add-btn { margin:12px 16px 20px; padding:12px; background:var(--btn-secondary); color:var(--btn-secondary-text); border:none; border-radius:14px; font-size:14px; cursor:pointer; text-align:center; }
+        /* 记忆库 */
+        .mem-item-card { background:var(--card-bg); border-radius:12px; padding:12px; margin-bottom:8px; font-size:13px; color:var(--text); border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; animation:popIn 0.35s cubic-bezier(0.21,1.02,0.58,1) forwards; }
+        .mem-delete-btn { background:none; border:none; color:#C06050; cursor:pointer; font-size:14px; padding:4px; }
+        .md-add-btn { margin:12px 16px 20px; padding:12px; background:var(--btn-secondary); color:var(--btn-secondary-text); border:none; border-radius:14px; font-size:14px; cursor:pointer; text-align:center; width:calc(100% - 32px); flex-shrink:0; }
 
         /* 弹窗 */
         .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); z-index:200; display:flex; align-items:center; justify-content:center; }
@@ -169,15 +127,11 @@
         .modal-card h3 { font-size:16px; font-weight:500; color:var(--text); text-align:center; }
         .modal-card input, .modal-card textarea, .modal-card select { width:100%; padding:11px 12px; border:1px solid var(--border); border-radius:12px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; }
         .modal-card .btn-row { display:flex; gap:8px; justify-content:flex-end; }
-        .modal-card button { padding:10px 16px; border-radius:12px; border:none; font-size:14px; font-weight:500; cursor:pointer; }
+        .modal-card button { padding:10px 16px; border-radius:12px; border:none; font-size:14px; cursor:pointer; }
         .save-btn { background:var(--btn-primary); color:var(--btn-primary-text); }
         .cancel-btn { background:var(--btn-secondary); color:var(--btn-secondary-text); }
-        .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--toast-bg); color:var(--toast-text); padding:10px 20px; border-radius:20px; font-size:13px; z-index:300; opacity:0; transition:0.3s; }
+        .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:#2D2D2C; color:#FFF; padding:10px 20px; border-radius:20px; font-size:13px; z-index:300; opacity:0; transition:0.3s; pointer-events:none; }
         .toast.show { opacity:1; }
-        .context-menu { position:fixed; background:var(--card-bg); border-radius:14px; box-shadow:0 4px 20px rgba(0,0,0,0.1); z-index:250; min-width:160px; display:none; }
-        .context-menu.show { display:block; }
-        .context-menu .menu-item { padding:10px 16px; font-size:14px; color:var(--text); cursor:pointer; }
-        .context-menu .menu-item.danger { color:#C06050; }
     </style>
 </head>
 <body>
@@ -185,13 +139,12 @@
 
     <!-- 密码屏 -->
     <div class="password-screen" id="passwordScreen">
-        <div class="pw-glow"></div><div class="pw-content">
-            <div class="pw-title">七次元</div><div class="pw-sub" id="pwSub">请输入密码</div>
-            <input type="password" id="passwordInput" placeholder="密码" maxlength="20" autofocus>
-            <div class="pw-error" id="pwError"></div>
-            <button class="pw-btn" id="pwSubmitBtn">进入</button>
-            <div class="pw-setup-hint" id="pwSetupHint" style="display:none;">第一次使用，输入的内容将设为密码</div>
-        </div>
+        <div class="pw-title">七次元</div>
+        <div class="pw-sub" id="pwSub">请输入密码</div>
+        <input type="password" id="passwordInput" placeholder="密码" maxlength="20" autofocus>
+        <div class="pw-error" id="pwError"></div>
+        <button class="pw-btn" id="pwSubmitBtn">进入</button>
+        <div class="pw-setup-hint" id="pwSetupHint" style="display:none;">第一次使用，输入的内容将设为密码</div>
     </div>
 
     <div class="main-content" id="mainContent">
@@ -202,10 +155,6 @@
                 <div class="home-avatar" id="homeAvatar">👤</div>
                 <div class="home-name" id="homeName">七次元</div>
                 <div class="home-days" id="homeDays">在一起 0 天</div>
-                <div class="home-diary-preview" id="homeDiaryPreview" style="display:none;">
-                    <div class="diary-label">📖 最近的日记</div>
-                    <div class="diary-text" id="homeDiaryText"></div>
-                </div>
                 <button class="home-chat-btn" id="homeChatBtn">💬 和他说说话</button>
             </div>
         </div>
@@ -213,10 +162,7 @@
         <!-- 聊天页 -->
         <div class="page" id="pageChat">
             <div class="chat-page" style="flex:1;display:flex;flex-direction:column;">
-                <div class="top-bar">
-                    <button class="avatar-btn" id="topAvatarBtn">👤</button>
-                    <span class="title" id="topBarName">七次元</span>
-                </div>
+                <div class="top-bar"><span class="title" id="topBarName">七次元</span></div>
                 <div class="chat-log" id="chatLog"></div>
                 <div class="input-area">
                     <textarea id="userInput" rows="1" placeholder="说点什么..."></textarea>
@@ -232,18 +178,22 @@
                     <div class="tab active" data-filter="calendar">日历</div>
                     <div class="tab" data-filter="search">搜索</div>
                 </div>
-                <div style="padding:8px 12px;display:none;" id="searchContainer"><input type="text" id="searchInput" placeholder="🔍 搜索聊天记录..." style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:20px;font-size:14px;background:var(--input-bg);color:var(--text);outline:none;"></div>
                 <div id="calendarContent"></div>
             </div>
         </div>
 
-        <!-- 回忆页 -->
+        <!-- 回忆页（纵向两个入口卡片） -->
         <div class="page" id="pageMemory">
             <div class="memory-main">
-                <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;" id="memoryTagsRow"></div>
-                <div class="memory-cards">
-                    <div class="memory-card" id="diaryCardBtn" style="background:#FFFDF7;"><span class="card-emoji">📝</span><span class="card-label">日记本</span><span class="card-sub" id="diaryCountSub">0 篇</span></div>
-                    <div class="memory-card" id="letterCardBtn" style="background:#F5EDD6;"><span class="card-emoji">💌</span><span class="card-label">信箱</span><span class="card-sub" id="letterCountSub">0 封</span></div>
+                <div class="memory-card" id="diaryCardBtn" style="background:#FFFDF7;">
+                    <span class="card-emoji">📝</span>
+                    <span class="card-label">日记本</span>
+                    <span class="card-sub" id="diaryCountSub">0 篇</span>
+                </div>
+                <div class="memory-card" id="letterCardBtn" style="background:#F5EDD6;">
+                    <span class="card-emoji">💌</span>
+                    <span class="card-label">信箱</span>
+                    <span class="card-sub" id="letterCountSub">0 封</span>
                 </div>
             </div>
         </div>
@@ -267,17 +217,17 @@
         </div>
 
         <!-- 用量抽屉 -->
-        <div class="usage-drawer" id="usageDrawer">
-            <div class="sheet-handle"></div>
-            <div class="sheet-header">用量统计</div>
-            <div class="sheet-content" id="usageContent"></div>
+        <div class="bottom-drawer" id="usageDrawer">
+            <div class="drawer-handle"></div>
+            <div class="drawer-header">用量统计</div>
+            <div class="drawer-content" id="usageContent"></div>
         </div>
 
         <!-- 记忆库抽屉 -->
-        <div class="memory-drawer" id="memoryDrawer">
-            <div class="md-handle"></div>
-            <div class="md-header">记忆库</div>
-            <div class="md-content" id="memoryDrawerContent"></div>
+        <div class="bottom-drawer" id="memoryDrawer">
+            <div class="drawer-handle"></div>
+            <div class="drawer-header">记忆库</div>
+            <div class="drawer-content" id="memoryDrawerContent"></div>
             <button class="md-add-btn" id="memoryDrawerAddBtn">+ 手动添加一条</button>
         </div>
 
@@ -293,10 +243,9 @@
     </div>
 
     <!-- 弹窗 -->
-    <div class="modal-overlay hidden" id="editPromptModal"><div class="modal-card"><h3>互动指令</h3><textarea id="editPromptInput" style="min-height:260px;"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelPromptBtn">取消</button><button class="save-btn" id="savePromptBtn">保存</button></div></div></div>
+    <div class="modal-overlay hidden" id="editPromptModal"><div class="modal-card"><h3>互动指令</h3><textarea id="editPromptInput" style="min-height:200px;"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelPromptBtn">取消</button><button class="save-btn" id="savePromptBtn">保存</button></div></div></div>
     <div class="modal-overlay hidden" id="editApiKeyModal"><div class="modal-card"><h3>API Keys</h3><textarea id="editApiKeyInput" placeholder="多个Key用英文逗号分隔"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelApiKeyBtn">取消</button><button class="save-btn" id="saveApiKeyBtn">保存</button></div></div></div>
     <div class="modal-overlay hidden" id="addMemoryModal"><div class="modal-card"><h3>添加记忆</h3><select id="memCategorySelect"><option value="about_you">关于你</option><option value="about_us">我们之间</option></select><textarea id="memContentInput" placeholder="写一条记忆..."></textarea><div class="btn-row"><button class="cancel-btn" id="cancelMemBtn">取消</button><button class="save-btn" id="saveMemBtn">保存</button></div></div></div>
-    <div class="context-menu" id="contextMenu"></div>
     <div class="toast" id="toast"></div>
 </div>
 
@@ -304,10 +253,9 @@
 (function() {
     const $ = id => document.getElementById(id);
 
-    // 状态变量
+    // 状态
     const PW_HASH_KEY = 'claude_pw_hash_v2';
     let PARTNER_NAME = localStorage.getItem('claude_partner_name') || '七次元';
-    let PARTNER_AVATAR = localStorage.getItem('claude_partner_avatar') || '';
     let API_KEYS = (localStorage.getItem('claude_api_keys') || '').split(',').filter(k => k.trim());
     let API_MODELS = (localStorage.getItem('claude_models') || 'deepseek-chat').split(',').filter(m => m.trim());
     let currentKeyIndex = parseInt(localStorage.getItem('claude_key_index') || '0');
@@ -321,41 +269,32 @@
     let THEME_MODE = localStorage.getItem('claude_theme') || 'auto';
     let INPUT_PRICE = parseFloat(localStorage.getItem('claude_input_price') || '1');
     let OUTPUT_PRICE = parseFloat(localStorage.getItem('claude_output_price') || '2');
-    let IMAGE_ENABLED = localStorage.getItem('claude_image_enabled') !== 'false';
-    let conversationHistory = [], diary = {}, calendarMarks = {}, memoryBank = { about_you: [], about_us: [] }, usageLog = [];
+    let conversationHistory = [], diary = {}, memoryBank = { about_you: [], about_us: [] }, usageLog = [];
     let currentPage = 'pageHome', previousPage = 'pageHome';
     let currentAbortController = null, userInputTimer = null;
     const TYPING_DELAY = 1500;
     let currentMonth = new Date().getMonth(), currentYear = new Date().getFullYear();
     let calendarFilter = 'calendar';
-    let selectedMessageId = null, editingMsgTimestamp = null;
 
-    // ========== 工具函数 ==========
+    // 工具
     function escapeHtml(t) { if(!t) return ''; return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function showToast(t) { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(window._tt); window._tt = setTimeout(() => el.classList.remove('show'), 2000); }
     function getCurrentKey() { return API_KEYS[currentKeyIndex] || ''; }
     function getCurrentModel() { return API_MODELS[currentKeyIndex] || API_MODELS[0] || 'deepseek-chat'; }
     function saveHistory() { localStorage.setItem('claude_chat_history_v2', JSON.stringify(conversationHistory)); }
-    function saveDiary() { localStorage.setItem('claude_diary', JSON.stringify(diary)); }
-    function saveMarks() { localStorage.setItem('claude_calendar_marks', JSON.stringify(calendarMarks)); }
     function saveMemory() { localStorage.setItem('claude_memory_bank', JSON.stringify(memoryBank)); }
-    function saveUsage() { localStorage.setItem('claude_usage_log', JSON.stringify(usageLog)); }
     function saveKeys() { localStorage.setItem('claude_api_keys', API_KEYS.join(',')); localStorage.setItem('claude_models', API_MODELS.join(',')); localStorage.setItem('claude_key_index', currentKeyIndex); }
     function saveParams() { localStorage.setItem('claude_temperature', TEMPERATURE); localStorage.setItem('claude_top_p', TOP_P); localStorage.setItem('claude_max_tokens', MAX_TOKENS); localStorage.setItem('claude_freq_penalty', FREQ_PENALTY); localStorage.setItem('claude_pres_penalty', PRES_PENALTY); }
-    function savePricing() { localStorage.setItem('claude_input_price', INPUT_PRICE); localStorage.setItem('claude_output_price', OUTPUT_PRICE); }
-    function saveTheme() { localStorage.setItem('claude_theme', THEME_MODE); }
-    function applyTheme() { const d = THEME_MODE === 'dark' || (THEME_MODE === 'auto' && window.matchMedia('(prefers-color-scheme:dark)').matches); document.body.classList.toggle('dark-mode', d); }
+    function applyTheme() { document.body.classList.toggle('dark-mode', THEME_MODE === 'dark' || (THEME_MODE === 'auto' && window.matchMedia('(prefers-color-scheme:dark)').matches)); }
     function getCurrentContent(m) { return m.versions?.[m.currentVersion] || ''; }
     function scrollToBottom() { const cl = $('chatLog'); if(cl) cl.scrollTop = cl.scrollHeight; }
     function parseMarkdown(t) { if(!t) return ''; return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>'); }
-    function getAPIEndpoint() { const m = getCurrentModel().toLowerCase(); if(m.includes('deepseek')) return { url:'https://api.deepseek.com/v1/chat/completions', type:'openai' }; return { url:'https://api.deepseek.com/v1/chat/completions', type:'openai' }; }
     function switchToNextKey() { if(currentKeyIndex < API_KEYS.length - 1) { currentKeyIndex++; saveKeys(); return true; } return false; }
 
-    async function makeAPIRequest(endpoint, messages, signal) {
-        const key = getCurrentKey();
-        return fetch(endpoint.url, {
+    async function makeAPIRequest(messages, signal) {
+        return fetch('https://api.deepseek.com/v1/chat/completions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getCurrentKey()}` },
             body: JSON.stringify({ model: getCurrentModel(), max_tokens: MAX_TOKENS, temperature: TEMPERATURE, top_p: TOP_P, frequency_penalty: FREQ_PENALTY, presence_penalty: PRES_PENALTY, stream: true, messages }),
             signal
         });
@@ -366,14 +305,12 @@
         if(currentPage === pageId) return;
         if(currentPage !== 'pageSettings') previousPage = currentPage;
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        const target = $(pageId);
-        if(target) { target.classList.add('active'); currentPage = pageId; }
+        const t = $(pageId); if(t) { t.classList.add('active'); currentPage = pageId; }
         document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === pageId));
         if(pageId === 'pageChat') { scrollToBottom(); $('userInput').focus(); }
-        if(pageId === 'pageCalendar') renderCalendarPanel();
-        if(pageId === 'pageHome') refreshHomePage();
+        if(pageId === 'pageCalendar') renderCalendar();
+        if(pageId === 'pageHome') refreshHome();
         if(pageId === 'pageMemory') refreshMemoryMain();
-        // 关闭所有覆盖层
         $('settingsFullscreen').classList.remove('open');
         $('usageDrawer').classList.remove('open');
         $('memoryDrawer').classList.remove('open');
@@ -385,24 +322,18 @@
         if(item.dataset.page === 'pageSettings') { previousPage = currentPage; openSettings(); return; }
         switchPage(item.dataset.page);
     });
+    $('homeChatBtn').addEventListener('click', () => switchPage('pageChat'));
 
     // ========== 设置全屏 ==========
-    function openSettings() {
-        $('settingsFullscreen').classList.add('open');
-        refreshSettingsUI();
-    }
-    function closeSettings() {
-        $('settingsFullscreen').classList.remove('open');
-        switchPage(previousPage || 'pageHome');
-    }
+    function openSettings() { $('settingsFullscreen').classList.add('open'); refreshSettingsUI(); }
+    function closeSettings() { $('settingsFullscreen').classList.remove('open'); switchPage(previousPage || 'pageHome'); }
     $('settingsFsBack').addEventListener('click', closeSettings);
     $('settingsFsTabs').addEventListener('click', e => {
         if(!e.target.classList.contains('tab')) return;
         document.querySelectorAll('#settingsFsTabs .tab').forEach(t => t.classList.remove('active'));
         e.target.classList.add('active');
-        const tabId = e.target.dataset.tab;
         document.querySelectorAll('.settings-tab-content').forEach(c => c.classList.remove('active'));
-        $(tabId).classList.add('active');
+        $(e.target.dataset.tab).classList.add('active');
     });
 
     function refreshSettingsUI() {
@@ -418,97 +349,96 @@
             <div class="settings-item"><span class="settings-label">频率惩罚</span><span class="settings-value" id="freqPenaltyVal">${FREQ_PENALTY}</span></div>
             <div class="settings-item"><span class="settings-label">存在惩罚</span><span class="settings-value" id="presPenaltyVal">${PRES_PENALTY}</span></div>`;
         $('tab-ui').innerHTML = `
-            <div class="settings-item"><span class="settings-label">主题</span><select id="themeSel"><option value="auto" ${THEME_MODE==='auto'?'selected':''}>跟随系统</option><option value="light" ${THEME_MODE==='light'?'selected':''}>白天</option><option value="dark" ${THEME_MODE==='dark'?'selected':''}>黑夜</option></select></div>
-            <div class="settings-item"><span class="settings-label">图片发送</span><div class="toggle-switch ${IMAGE_ENABLED?'on':''}" id="imgToggle"></div></div>`;
+            <div class="settings-item"><span class="settings-label">主题</span><select id="themeSel"><option value="auto" ${THEME_MODE==='auto'?'selected':''}>跟随系统</option><option value="light" ${THEME_MODE==='light'?'selected':''}>白天</option><option value="dark" ${THEME_MODE==='dark'?'selected':''}>黑夜</option></select></div>`;
         $('tab-data').innerHTML = `
             <div class="settings-item"><span class="settings-label">互动指令</span><span class="settings-value" id="promptEntry">编辑 ›</span></div>
             <div class="settings-item"><span class="settings-label">记忆库</span><span class="settings-value" id="memoryEntry">查看 ›</span></div>
             <div class="settings-item"><span class="settings-label">导出全部</span><span class="settings-value" id="exportEntry">导出 ›</span></div>
-            <div class="settings-item"><span class="settings-label">导入备份</span><span class="settings-value" id="importEntry">导入 ›</span></div>
             <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntry">查看 ›</span></div>
             <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearEntry" style="color:#C06050;">⚠️</span></div>`;
 
-        // 绑定事件
         $('apiKeyVal').onclick = () => { $('editApiKeyInput').value = API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
         $('modelSel').onchange = function() { API_MODELS = [this.value]; currentKeyIndex = 0; saveKeys(); showToast('模型已切换'); };
-        $('pricingVal').onclick = () => { INPUT_PRICE = INPUT_PRICE === 1 ? 4 : 1; OUTPUT_PRICE = OUTPUT_PRICE === 2 ? 16 : 2; savePricing(); refreshSettingsUI(); showToast('费率已切换'); };
+        $('pricingVal').onclick = () => { INPUT_PRICE = INPUT_PRICE === 1 ? 4 : 1; OUTPUT_PRICE = OUTPUT_PRICE === 2 ? 16 : 2; localStorage.setItem('claude_input_price', INPUT_PRICE); localStorage.setItem('claude_output_price', OUTPUT_PRICE); refreshSettingsUI(); };
         $('tempVal').onclick = () => { TEMPERATURE = TEMPERATURE === 0.9 ? 0.3 : TEMPERATURE === 0.3 ? 1.3 : 0.9; saveParams(); refreshSettingsUI(); };
         $('topPVal').onclick = () => { TOP_P = TOP_P === 1.0 ? 0.5 : 1.0; saveParams(); refreshSettingsUI(); };
         $('sentencesVal').onclick = () => { MAX_SENTENCES = MAX_SENTENCES >= 8 ? 1 : MAX_SENTENCES + 1; localStorage.setItem('claude_max_sentences', MAX_SENTENCES); refreshSettingsUI(); };
         $('maxTokensVal').onclick = () => { MAX_TOKENS = MAX_TOKENS >= 4096 ? 512 : MAX_TOKENS * 2; saveParams(); refreshSettingsUI(); };
-        $('freqPenaltyVal').onclick = () => { FREQ_PENALTY = FREQ_PENALTY >= 1 ? 0 : FREQ_PENALTY + 0.1; saveParams(); refreshSettingsUI(); };
-        $('presPenaltyVal').onclick = () => { PRES_PENALTY = PRES_PENALTY >= 1 ? 0 : PRES_PENALTY + 0.1; saveParams(); refreshSettingsUI(); };
-        $('themeSel').onchange = function() { THEME_MODE = this.value; saveTheme(); applyTheme(); };
-        $('imgToggle').onclick = function() { IMAGE_ENABLED = !IMAGE_ENABLED; this.classList.toggle('on', IMAGE_ENABLED); localStorage.setItem('claude_image_enabled', IMAGE_ENABLED); };
+        $('freqPenaltyVal').onclick = () => { FREQ_PENALTY = FREQ_PENALTY >= 1 ? 0 : +(FREQ_PENALTY + 0.1).toFixed(1); saveParams(); refreshSettingsUI(); };
+        $('presPenaltyVal').onclick = () => { PRES_PENALTY = PRES_PENALTY >= 1 ? 0 : +(PRES_PENALTY + 0.1).toFixed(1); saveParams(); refreshSettingsUI(); };
+        $('themeSel').onchange = function() { THEME_MODE = this.value; localStorage.setItem('claude_theme', THEME_MODE); applyTheme(); };
         $('promptEntry').onclick = () => { $('editPromptInput').value = SYSTEM_PROMPT; $('editPromptModal').classList.remove('hidden'); };
         $('memoryEntry').onclick = () => openMemoryDrawer();
-        $('exportEntry').onclick = () => { const d = { name: PARTNER_NAME, chat: conversationHistory, diary, marks: calendarMarks, memory: memoryBank, usage: usageLog }; const b = new Blob([JSON.stringify(d)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `七次元_${new Date().toISOString().slice(0,10)}.json`; a.click(); showToast('导出成功'); };
-        $('importEntry').onclick = () => { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json'; inp.onchange = e => { const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = ev => { try { const d = JSON.parse(ev.target.result); if(d.chat) { conversationHistory = d.chat; saveHistory(); } if(d.diary) { diary = d.diary; saveDiary(); } if(d.marks) { calendarMarks = d.marks; saveMarks(); } if(d.memory) { memoryBank = d.memory; saveMemory(); } showToast('导入成功'); } catch(err) { alert('文件格式错误'); } }; r.readAsText(f); }; inp.click(); };
+        $('exportEntry').onclick = () => { const d = { name: PARTNER_NAME, chat: conversationHistory, diary, memory: memoryBank }; const b = new Blob([JSON.stringify(d)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `七次元_${new Date().toISOString().slice(0,10)}.json`; a.click(); showToast('导出成功'); };
         $('usageEntry').onclick = () => openUsageDrawer();
         $('clearEntry').onclick = () => { if(confirm('确定清空所有对话？')) { conversationHistory = [{ role: 'assistant', versions: ['嗨，我在。'], currentVersion: 0, timestamp: Date.now() }]; saveHistory(); $('chatLog').innerHTML = ''; showToast('已清空'); } };
+    }
+
+    // ========== 抽屉通用手势 ==========
+    function makeDrawerClosable(drawerId) {
+        const drawer = $(drawerId);
+        let startY = 0, moved = false;
+        const handle = drawer.querySelector('.drawer-handle');
+        const onStart = e => { startY = e.touches[0].clientY; moved = false; drawer.style.transition = 'none'; };
+        const onMove = e => { const dy = e.touches[0].clientY - startY; if(dy > 0) { moved = true; drawer.style.transform = `translateY(${dy}px)`; } };
+        const onEnd = e => {
+            drawer.style.transition = 'transform 0.35s cubic-bezier(0.25,0.1,0.25,1)';
+            if(e.changedTouches[0].clientY - startY > 60 || (!moved && e.target === handle)) {
+                drawer.classList.remove('open');
+            }
+            drawer.style.transform = '';
+            document.removeEventListener('touchmove', onMove);
+            document.removeEventListener('touchend', onEnd);
+        };
+        handle.addEventListener('touchstart', e => {
+            if(!drawer.classList.contains('open')) return;
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('touchend', onEnd);
+            onStart(e);
+        });
     }
 
     // ========== 用量抽屉 ==========
     function openUsageDrawer() {
         $('usageDrawer').classList.add('open');
-        const stats = getUsageStats();
-        const mt = stats.month.input + stats.month.output;
-        const pct = Math.min(100, Math.round(mt / 10000));
+        const s = (() => {
+            const n = Date.now(), ds = new Date(); ds.setHours(0,0,0,0);
+            const ws = new Date(ds); ws.setDate(ws.getDate()-ws.getDay());
+            const ms = new Date(); ms.setDate(1); ms.setHours(0,0,0,0);
+            const sum = a => a.reduce((x,y)=>x+y,0);
+            const td = usageLog.filter(u=>u.ts>=ds.getTime()), wk = usageLog.filter(u=>u.ts>=ws.getTime()), mo = usageLog.filter(u=>u.ts>=ms.getTime());
+            return { today:{i:sum(td.map(u=>u.input)),o:sum(td.map(u=>u.output))}, week:{i:sum(wk.map(u=>u.input)),o:sum(wk.map(u=>u.output))}, month:{i:sum(mo.map(u=>u.input)),o:sum(mo.map(u=>u.output))} };
+        })();
+        const mt = s.month.i + s.month.o, pct = Math.min(100, Math.round(mt/10000));
         $('usageContent').innerHTML = `
-            <div class="usage-section"><div class="usage-section-title">本月概览</div>
+            <div style="padding-bottom:16px;"><div style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">本月概览</div>
                 <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                <div class="progress-label">本月已用 ${mt.toLocaleString()} token · ${pct}%</div></div>
-            <div class="usage-section"><div class="usage-section-title">详细统计</div>
-                ${['今日','本周','本月','总计'].map(t => `<div class="stat-card"><span class="stat-title">${t}</span><span class="stat-tokens">${stats[t==='今日'?'today':t==='本周'?'week':t==='本月'?'month':'total'].input + stats[t==='今日'?'today':t==='本周'?'week':t==='本月'?'month':'total'].output} token</span></div>`).join('')}</div>`;
-        // 下拉关闭
-        let startY = 0;
-        const onMove = e => { const dy = e.touches[0].clientY - startY; if(dy > 0) $('usageDrawer').style.transform = `translateY(${dy}px)`; };
-        const onEnd = e => { document.removeEventListener('touchmove', onMove); document.removeEventListener('touchend', onEnd); $('usageDrawer').style.transition = 'transform 0.35s cubic-bezier(0.25,0.1,0.25,1)'; if(e.changedTouches[0].clientY - startY > 80) $('usageDrawer').classList.remove('open'); $('usageDrawer').style.transform = ''; };
-        $('usageDrawer').addEventListener('touchstart', e => { if(e.target.closest('.sheet-handle')) { startY = e.touches[0].clientY; document.addEventListener('touchmove', onMove, { passive: false }); document.addEventListener('touchend', onEnd); } }, { once: true });
-    }
-
-    function getUsageStats() {
-        const now = Date.now();
-        const ds = new Date(); ds.setHours(0,0,0,0);
-        const ws = new Date(ds); ws.setDate(ws.getDate() - ws.getDay());
-        const ms = new Date(); ms.setDate(1); ms.setHours(0,0,0,0);
-        const sum = a => a.reduce((x,y) => x+y, 0);
-        const td = usageLog.filter(u => u.ts >= ds.getTime());
-        const wk = usageLog.filter(u => u.ts >= ws.getTime());
-        const mo = usageLog.filter(u => u.ts >= ms.getTime());
-        return { today: { input: sum(td.map(u => u.input)), output: sum(td.map(u => u.output)) }, week: { input: sum(wk.map(u => u.input)), output: sum(wk.map(u => u.output)) }, month: { input: sum(mo.map(u => u.input)), output: sum(mo.map(u => u.output)) }, total: { input: sum(usageLog.map(u => u.input)), output: sum(usageLog.map(u => u.output)) } };
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">本月已用 ${mt.toLocaleString()} token · ${pct}%</div></div>
+            <div>${['今日','本周','本月'].map(t => `<div class="stat-card"><span>${t}</span><span>${s[t==='今日'?'today':t==='本周'?'week':'month'].i + s[t==='今日'?'today':t==='本周'?'week':'month'].o} token</span></div>`).join('')}</div>`;
     }
 
     // ========== 记忆库抽屉 ==========
-    function openMemoryDrawer() {
-        $('memoryDrawer').classList.add('open');
-        renderMemoryDrawerContent();
-        let startY = 0;
-        const onMove = e => { const dy = e.touches[0].clientY - startY; if(dy > 0) $('memoryDrawer').style.transform = `translateY(${dy}px)`; };
-        const onEnd = e => { document.removeEventListener('touchmove', onMove); document.removeEventListener('touchend', onEnd); $('memoryDrawer').style.transition = 'transform 0.35s cubic-bezier(0.25,0.1,0.25,1)'; if(e.changedTouches[0].clientY - startY > 80) $('memoryDrawer').classList.remove('open'); $('memoryDrawer').style.transform = ''; };
-        $('memoryDrawer').addEventListener('touchstart', e => { if(e.target.closest('.md-handle')) { startY = e.touches[0].clientY; document.addEventListener('touchmove', onMove, { passive: false }); document.addEventListener('touchend', onEnd); } }, { once: true });
-    }
+    function openMemoryDrawer() { $('memoryDrawer').classList.add('open'); renderMemoryDrawerContent(); }
     function renderMemoryDrawerContent() {
         const cy = memoryBank.about_you, cu = memoryBank.about_us;
         $('memoryDrawerContent').innerHTML =
-            `<div class="md-section-title">关于你 · ${cy.length}条</div>` +
-            (cy.length ? cy.map((item, i) => `<div class="mem-item-card">${escapeHtml(item.text||item)} <button class="mem-delete-btn" data-cat="about_you" data-idx="${i}">✕</button></div>`).join('') : '<div style="color:var(--text-secondary);font-size:12px;">暂无</div>') +
-            `<div class="md-section-title">我们之间 · ${cu.length}条</div>` +
-            (cu.length ? cu.map((item, i) => `<div class="mem-item-card">${escapeHtml(item.text||item)} <button class="mem-delete-btn" data-cat="about_us" data-idx="${i}">✕</button></div>`).join('') : '<div style="color:var(--text-secondary);font-size:12px;">暂无</div>');
+            `<div style="font-size:12px;color:var(--text-secondary);margin:8px 0;">关于你 · ${cy.length}条</div>` +
+            (cy.length ? cy.map((item,i) => `<div class="mem-item-card">${escapeHtml(item.text||item)} <button class="mem-delete-btn" data-cat="about_you" data-idx="${i}">✕</button></div>`).join('') : '<div style="color:var(--text-secondary);font-size:12px;padding:8px 0;">暂无</div>') +
+            `<div style="font-size:12px;color:var(--text-secondary);margin:12px 0 8px;">我们之间 · ${cu.length}条</div>` +
+            (cu.length ? cu.map((item,i) => `<div class="mem-item-card">${escapeHtml(item.text||item)} <button class="mem-delete-btn" data-cat="about_us" data-idx="${i}">✕</button></div>`).join('') : '<div style="color:var(--text-secondary);font-size:12px;padding:8px 0;">暂无</div>');
         document.querySelectorAll('.mem-delete-btn').forEach(b => b.addEventListener('click', function(e) {
             e.stopPropagation();
-            const cat = this.dataset.cat, idx = parseInt(this.dataset.idx);
-            memoryBank[cat].splice(idx, 1);
+            memoryBank[this.dataset.cat].splice(parseInt(this.dataset.idx), 1);
             saveMemory();
             renderMemoryDrawerContent();
         }));
     }
     $('memoryDrawerAddBtn').addEventListener('click', () => $('addMemoryModal').classList.remove('hidden'));
+    makeDrawerClosable('memoryDrawer');
+    makeDrawerClosable('usageDrawer');
 
     // ========== 回忆页 ==========
     function refreshMemoryMain() {
-        const tags = [...(memoryBank.about_you||[]), ...(memoryBank.about_us||[])].filter(m => m.text).slice(0, 8);
-        $('memoryTagsRow').innerHTML = tags.length ? tags.map(t => `<span class="memory-tag">${escapeHtml(t.text)}</span>`).join('') : '<span style="font-size:11px;color:var(--text-secondary);">还没有记忆碎片 ✨</span>';
         $('diaryCountSub').textContent = Object.keys(diary).filter(d => !diary[d].isLetter).length + ' 篇';
         $('letterCountSub').textContent = Object.keys(diary).filter(d => diary[d].isLetter).length + ' 封';
     }
@@ -537,51 +467,42 @@
     $('cancelApiKeyBtn').addEventListener('click', () => $('editApiKeyModal').classList.add('hidden'));
     $('saveApiKeyBtn').addEventListener('click', () => { API_KEYS = $('editApiKeyInput').value.split(',').filter(k => k.trim()); currentKeyIndex = 0; saveKeys(); $('editApiKeyModal').classList.add('hidden'); showToast(`已保存 ${API_KEYS.length} 个 Key`); refreshSettingsUI(); });
     $('cancelMemBtn').addEventListener('click', () => $('addMemoryModal').classList.add('hidden'));
-    $('saveMemBtn').addEventListener('click', () => { const c = $('memCategorySelect').value, v = $('memContentInput').value.trim(); if(!v) return; memoryBank[c].push({ text: v, ts: Date.now(), manual: true }); saveMemory(); renderMemoryDrawerContent(); refreshMemoryMain(); $('addMemoryModal').classList.add('hidden'); $('memContentInput').value = ''; });
+    $('saveMemBtn').addEventListener('click', () => { const c = $('memCategorySelect').value, v = $('memContentInput').value.trim(); if(!v) return; memoryBank[c].push({ text: v, ts: Date.now(), manual: true }); saveMemory(); renderMemoryDrawerContent(); $('addMemoryModal').classList.add('hidden'); $('memContentInput').value = ''; });
 
     // ========== 日历 ==========
-    function renderCalendarPanel() {
+    function renderCalendar() {
         if(calendarFilter === 'search') return;
         const td = new Date(), fd = new Date(currentYear, currentMonth, 1).getDay(), dm = new Date(currentYear, currentMonth + 1, 0).getDate();
         const mn = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-        let h = `<div class="cal-header-row"><button id="prevMonthBtn">‹</button><span class="month-label">${mn[currentMonth]}</span><span class="year-label" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button></div><div class="cal-grid"><div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>`;
-        for(let i = 0; i < fd; i++) h += '<div class="day-cell other-month"></div>';
+        let h = `<div class="cal-header-row"><button id="prevMonthBtn">‹</button><span style="font-size:15px;font-weight:500;color:var(--text);">${mn[currentMonth]}</span><span style="font-size:15px;color:var(--text-secondary);text-decoration:underline;cursor:pointer;" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button></div><div class="cal-grid"><div style="font-size:11px;color:var(--text-secondary);text-align:center;">日</div><div style="font-size:11px;color:var(--text-secondary);text-align:center;">一</div><div style="font-size:11px;color:var(--text-secondary);text-align:center;">二</div><div style="font-size:11px;color:var(--text-secondary);text-align:center;">三</div><div style="font-size:11px;color:var(--text-secondary);text-align:center;">四</div><div style="font-size:11px;color:var(--text-secondary);text-align:center;">五</div><div style="font-size:11px;color:var(--text-secondary);text-align:center;">六</div>`;
+        for(let i = 0; i < fd; i++) h += '<div class="day-cell" style="color:var(--toggle-off);"></div>';
         for(let d = 1; d <= dm; d++) {
-            const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const isToday = d === td.getDate() && currentMonth === td.getMonth() && currentYear === td.getFullYear();
-            const mk = calendarMarks[ds];
-            let cl = 'day-cell';
-            if(isToday) cl += ' today';
-            if(mk) { if(mk.type === 'anniversary') cl += ' mark-anniversary'; if(mk.type === 'period-start') cl += ' mark-period'; }
-            h += `<div class="${cl}" data-date="${ds}">${d}</div>`;
+            h += `<div class="day-cell${isToday?' today':''}">${d}</div>`;
         }
         h += '</div>';
         $('calendarContent').innerHTML = h;
-        $('prevMonthBtn').addEventListener('click', () => { if(currentMonth === 0) { currentMonth = 11; currentYear--; } else currentMonth--; renderCalendarPanel(); });
-        $('nextMonthBtn').addEventListener('click', () => { if(currentMonth === 11) { currentMonth = 0; currentYear++; } else currentMonth++; renderCalendarPanel(); });
+        $('prevMonthBtn').addEventListener('click', () => { if(currentMonth === 0) { currentMonth = 11; currentYear--; } else currentMonth--; renderCalendar(); });
+        $('nextMonthBtn').addEventListener('click', () => { if(currentMonth === 11) { currentMonth = 0; currentYear++; } else currentMonth++; renderCalendar(); });
     }
     $('calendarTabs').addEventListener('click', e => {
         if(!e.target.classList.contains('tab')) return;
         document.querySelectorAll('#calendarTabs .tab').forEach(t => t.classList.remove('active'));
         e.target.classList.add('active');
         calendarFilter = e.target.dataset.filter;
-        $('searchContainer').style.display = calendarFilter === 'search' ? 'block' : 'none';
-        $('calendarContent').style.display = calendarFilter === 'search' ? 'none' : 'block';
-        if(calendarFilter === 'calendar') renderCalendarPanel();
+        if(calendarFilter === 'calendar') renderCalendar();
     });
 
     // ========== 聊天 ==========
-    function renderMessage(role, msg) {
+    function renderMessage(role, msg, replaceDiv) {
         const content = getCurrentContent(msg);
-        const div = document.createElement('div');
-        div.className = `message ${role}`;
         const timeStr = new Date(msg.timestamp).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-        div.innerHTML = role === 'assistant' ? `<div class="bubble">${parseMarkdown(content)}</div><div style="font-size:10px;color:var(--text-secondary);padding:0 6px;">${timeStr}</div>` : `<div class="bubble">${escapeHtml(content)}</div><div style="font-size:10px;color:var(--text-secondary);padding:0 6px;text-align:right;">${timeStr}</div>`;
-        $('chatLog').appendChild(div);
+        const html = `<div class="message ${role}"><div class="bubble">${role === 'assistant' ? parseMarkdown(content) : escapeHtml(content)}</div><div style="font-size:10px;color:var(--text-secondary);padding:0 6px;margin-top:2px;">${timeStr}</div></div>`;
+        if(replaceDiv) { replaceDiv.outerHTML = html; } else { $('chatLog').insertAdjacentHTML('beforeend', html); }
         scrollToBottom();
     }
 
-    function rebuildChatFromHistory() { $('chatLog').innerHTML = ''; conversationHistory.forEach(m => renderMessage(m.role, m)); }
+    function rebuildChatFromHistory() { $('chatLog').innerHTML = ''; conversationHistory.forEach(m => renderMessage(m.role, m)); scrollToBottom(); }
 
     async function triggerAIResponse() {
         if(!getCurrentKey() || !SYSTEM_PROMPT) return;
@@ -596,8 +517,7 @@
         let fullResponse = '';
         try {
             const messages = [{ role: 'system', content: SYSTEM_PROMPT }, ...conversationHistory.map(m => ({ role: m.role, content: getCurrentContent(m) }))];
-            const endpoint = getAPIEndpoint();
-            const resp = await makeAPIRequest(endpoint, messages, signal);
+            const resp = await makeAPIRequest(messages, signal);
             if(!resp.ok) { if(resp.status === 429 && switchToNextKey()) { triggerAIResponse(); return; } throw new Error(`API ${resp.status}`); }
             const reader = resp.body.getReader();
             const dec = new TextDecoder();
@@ -610,22 +530,16 @@
                 buf = lines.pop() || '';
                 for(const l of lines) {
                     if(l.startsWith('data: ')) {
-                        const d = l.slice(6);
-                        if(d === '[DONE]') continue;
-                        try {
-                            const p = JSON.parse(d);
-                            const txt = p.choices?.[0]?.delta?.content || '';
-                            if(txt) fullResponse += txt;
-                            if(p.usage) lastChunk = d;
-                        } catch(e) {}
+                        const d = l.slice(6); if(d === '[DONE]') continue;
+                        try { const p = JSON.parse(d); const txt = p.choices?.[0]?.delta?.content || ''; if(txt) fullResponse += txt; if(p.usage) lastChunk = d; } catch(e) {}
                     }
                 }
             }
-            if(lastChunk) { try { const u = JSON.parse(lastChunk).usage; if(u) { usageLog.push({ ts: Date.now(), input: u.prompt_tokens || 0, output: u.completion_tokens || 0 }); saveUsage(); } } catch(e) {} }
+            if(lastChunk) { try { const u = JSON.parse(lastChunk).usage; if(u) { usageLog.push({ ts: Date.now(), input: u.prompt_tokens || 0, output: u.completion_tokens || 0 }); } } catch(e) {} }
             const newMsg = { role: 'assistant', versions: [fullResponse], currentVersion: 0, timestamp: Date.now() };
             conversationHistory.push(newMsg);
             saveHistory();
-            typingDiv.innerHTML = `<div class="bubble">${parseMarkdown(fullResponse)}</div><div style="font-size:10px;color:var(--text-secondary);padding:0 6px;">${new Date(newMsg.timestamp).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}</div>`;
+            renderMessage('assistant', newMsg, typingDiv);
         } catch(e) {
             if(e.name !== 'AbortError') typingDiv.innerHTML = '<div class="bubble">（连接断开了……）</div>';
         } finally { currentAbortController = null; scrollToBottom(); }
@@ -637,33 +551,22 @@
     }
 
     $('sendBtn').addEventListener('click', () => {
-        const text = $('userInput').value.trim();
-        if(!text) return;
+        const text = $('userInput').value.trim(); if(!text) return;
         const msg = { role: 'user', versions: [text], currentVersion: 0, timestamp: Date.now() };
         renderMessage('user', msg);
-        conversationHistory.push(msg);
-        saveHistory();
-        $('userInput').value = '';
-        $('userInput').style.height = 'auto';
+        conversationHistory.push(msg); saveHistory();
+        $('userInput').value = ''; $('userInput').style.height = 'auto';
         if(userInputTimer) clearTimeout(userInputTimer);
-        userInputTimer = null;
-        resetTypingTimer();
+        userInputTimer = null; resetTypingTimer();
     });
     $('userInput').addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('sendBtn').click(); } });
     $('userInput').addEventListener('input', () => { $('userInput').style.height = 'auto'; $('userInput').style.height = Math.min($('userInput').scrollHeight, 100) + 'px'; resetTypingTimer(); });
 
     // ========== 主页 ==========
-    function refreshHomePage() {
+    function refreshHome() {
         $('homeName').textContent = PARTNER_NAME;
         $('homeDays').textContent = '在一起 ' + (conversationHistory.length > 0 ? Math.floor((Date.now() - conversationHistory[0].timestamp) / 86400000) : 0) + ' 天';
-        if(PARTNER_AVATAR) $('homeAvatar').innerHTML = `<img src="${PARTNER_AVATAR}">`;
-        const dates = Object.keys(diary).sort().reverse();
-        if(dates.length > 0) {
-            $('homeDiaryPreview').style.display = 'block';
-            $('homeDiaryText').textContent = diary[dates[0]].content.substring(0, 120);
-        } else $('homeDiaryPreview').style.display = 'none';
     }
-    $('homeChatBtn').addEventListener('click', () => switchPage('pageChat'));
 
     // ========== 初始化 ==========
     function loadData() {
@@ -671,19 +574,12 @@
         if(sc) { try { conversationHistory = JSON.parse(sc).map(m => { if(!m.versions) m.versions = [m.content||'']; if(m.currentVersion === undefined) m.currentVersion = 0; return m; }); rebuildChatFromHistory(); } catch(e) { conversationHistory = []; } }
         if(!conversationHistory.length) { const n = Date.now(); conversationHistory = [{ role: 'assistant', versions: ['嗨，我在。'], currentVersion: 0, timestamp: n }]; saveHistory(); renderMessage('assistant', conversationHistory[0]); }
         const sd = localStorage.getItem('claude_diary'); if(sd) { try { diary = JSON.parse(sd); } catch(e) { diary = {}; } }
-        const sm = localStorage.getItem('claude_calendar_marks'); if(sm) { try { calendarMarks = JSON.parse(sm); } catch(e) { calendarMarks = {}; } }
         const smb = localStorage.getItem('claude_memory_bank'); if(smb) { try { memoryBank = JSON.parse(smb); } catch(e) { memoryBank = { about_you: [], about_us: [] }; } }
         const su = localStorage.getItem('claude_usage_log'); if(su) { try { usageLog = JSON.parse(su); } catch(e) { usageLog = []; } }
     }
 
-    updatePasswordUI();
-    if(!isPasswordSet()) $('passwordInput').focus();
-    loadData();
-    applyTheme();
-    refreshHomePage();
-    renderCalendarPanel();
-    refreshMemoryMain();
-
+    updatePasswordUI(); if(!isPasswordSet()) $('passwordInput').focus();
+    loadData(); applyTheme(); refreshHome(); renderCalendar(); refreshMemoryMain();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if(THEME_MODE === 'auto') applyTheme(); });
 })();
 </script>
