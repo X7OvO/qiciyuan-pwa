@@ -133,9 +133,6 @@
         .calendar-page .cal-grid .day-cell.mark-custom::before { content:'•'; position:absolute; top:1px; right:3px; font-size:10px; color:var(--text-secondary); }
         .calendar-page .cal-grid .day-cell.selected { background:var(--progress-fill); color:white; }
         .calendar-page .cal-grid .day-cell.other-month { color:var(--toggle-off); }
-        .calendar-page .diary-card { margin:6px 12px 16px; padding:14px 16px; background:var(--card-bg); border-radius:14px; border:1px solid var(--border); font-size:14px; line-height:1.6; color:var(--text); white-space:pre-wrap; word-break:break-word; }
-        .calendar-page .diary-card .diary-date { font-size:12px; color:var(--text-secondary); margin-bottom:6px; }
-        .calendar-page .diary-empty { text-align:center; color:var(--text-secondary); padding:24px; font-size:13px; }
         .calendar-page .search-container { padding:8px 12px; }
         .calendar-page .search-input { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:20px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; }
         .calendar-page .search-results { margin:4px 12px 8px; max-height:calc(100vh - 200px); overflow-y:auto; }
@@ -143,7 +140,9 @@
         .calendar-page .search-result-item .sr-date { font-size:10px; color:var(--text-secondary); }
         .calendar-page .search-result-item .sr-role { font-weight:500; font-size:11px; color:var(--text-secondary); }
 
-        .memory-main { display:flex; flex-direction:column; gap:20px; padding:20px 16px; flex:1; overflow-y:auto; align-items:center; }
+        .memory-main { display:flex; flex-direction:column; gap:16px; padding:20px 16px; flex:1; overflow-y:auto; align-items:center; }
+        .memory-tag { display:inline-block; background:#FFF9E6; border:1px solid #F0E8C0; border-radius:12px; padding:5px 10px; font-size:11px; color:#8B7A3A; margin:3px; }
+        .dark-mode .memory-tag { background:#3A3A20; border-color:#5A5A30; color:#C8C060; }
         .memory-card { width:100%; max-width:320px; padding:32px 24px; border-radius:16px; border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; cursor:pointer; transition:0.2s; }
         .memory-card:active { transform:scale(0.97); }
         .memory-card .card-emoji { font-size:40px; margin-bottom:8px; }
@@ -169,8 +168,7 @@
         .bottom-drawer { position:absolute; bottom:0; left:0; width:100%; height:70%; background:var(--bg); z-index:55; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
         .bottom-drawer.open { transform:translateY(0); }
         .bottom-drawer .drawer-handle { width:40px; height:5px; background:var(--toggle-off); border-radius:3px; margin:10px auto 6px; flex-shrink:0; cursor:grab; }
-        .bottom-drawer .drawer-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); flex-shrink:0; position:relative; }
-        .bottom-drawer .drawer-close-btn { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; font-size:20px; cursor:pointer; color:var(--text-secondary); padding:4px; }
+        .bottom-drawer .drawer-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); flex-shrink:0; }
         .bottom-drawer .drawer-content { flex:1; overflow-y:auto; padding:12px 16px; }
         .bottom-drawer .drawer-bottom-btn { margin:12px 16px 20px; padding:12px; background:var(--btn-secondary); color:var(--btn-secondary-text); border:none; border-radius:14px; font-size:14px; cursor:pointer; text-align:center; width:calc(100% - 32px); flex-shrink:0; }
         .usage-section { padding:0 0 16px; border-bottom:1px solid var(--border); }
@@ -271,25 +269,23 @@
             </div>
         </div>
 
-        <!-- 日历页 -->
+        <!-- 日历页（纯日历+搜索，无日记Tab） -->
         <div class="page" id="pageCalendar">
             <div class="calendar-page" style="flex:1;display:flex;flex-direction:column;overflow-y:auto;">
                 <div class="cal-tabs" id="calendarTabs">
                     <div class="tab active" data-filter="calendar">日历</div>
-                    <div class="tab" data-filter="diary">日记</div>
                     <div class="tab" data-filter="search">搜索</div>
                 </div>
                 <div class="search-container" id="searchContainer" style="display:none;"><input type="text" class="search-input" id="searchInput" placeholder="🔍 搜索聊天记录..."></div>
                 <div class="search-results" id="searchResults" style="display:none;"></div>
                 <div id="calendarContent"></div>
-                <div class="diary-card" id="diaryCard" style="display:none;"></div>
-                <div class="diary-empty" id="diaryEmpty">点击有圆点的日期查看日记</div>
             </div>
         </div>
 
-        <!-- 回忆页 -->
+        <!-- 回忆页（记忆碎片标签 + 两个入口卡片） -->
         <div class="page" id="pageMemory">
             <div class="memory-main">
+                <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;" id="memoryTagsRow"></div>
                 <div class="memory-card" id="diaryCardBtn" style="background:#FFFDF7;">
                     <span class="card-emoji">📝</span>
                     <span class="card-label">日记本</span>
@@ -324,14 +320,14 @@
         <!-- 用量抽屉 -->
         <div class="bottom-drawer" id="usageDrawer">
             <div class="drawer-handle"></div>
-            <div class="drawer-header">用量统计<button class="drawer-close-btn" id="usageDrawerClose">✕</button></div>
+            <div class="drawer-header">用量统计</div>
             <div class="drawer-content" id="usageContent"></div>
         </div>
 
-        <!-- 记忆库抽屉 -->
+        <!-- 记忆库抽屉（无✕按钮，纯下拉关闭） -->
         <div class="bottom-drawer" id="memoryDrawer">
             <div class="drawer-handle"></div>
-            <div class="drawer-header">记忆库<button class="drawer-close-btn" id="memoryDrawerClose">✕</button></div>
+            <div class="drawer-header">记忆库</div>
             <div class="drawer-content" id="memoryDrawerContent"></div>
             <button class="drawer-bottom-btn" id="memoryDrawerAddBtn">+ 手动添加一条</button>
         </div>
@@ -438,9 +434,32 @@
     $('homeChatBtn').addEventListener('click', ()=> switchPage('pageChat'));
     $('topCalendarBtn').addEventListener('click', ()=> switchPage('pageCalendar'));
 
-    // ========== 抽屉关闭按钮绑定 ==========
-    $('usageDrawerClose').addEventListener('click', ()=>{ usageDrawer.classList.remove('open'); });
-    $('memoryDrawerClose').addEventListener('click', ()=>{ memoryDrawer.classList.remove('open'); });
+    // ========== 抽屉下拉关闭 ==========
+    function makeDrawerClosable(drawerId){
+        const drawer = $(drawerId);
+        let startY = 0;
+        const handle = drawer.querySelector('.drawer-handle');
+        handle.addEventListener('touchstart', (e)=>{
+            if(!drawer.classList.contains('open')) return;
+            startY = e.touches[0].clientY;
+            drawer.style.transition = 'none';
+            const onMove = (ev)=>{
+                const dy = ev.touches[0].clientY - startY;
+                if(dy > 0) drawer.style.transform = `translateY(${dy}px)`;
+            };
+            const onEnd = (ev)=>{
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+                drawer.style.transition = 'transform 0.35s cubic-bezier(0.25,0.1,0.25,1)';
+                if(ev.changedTouches[0].clientY - startY > 80) drawer.classList.remove('open');
+                drawer.style.transform = '';
+            };
+            document.addEventListener('touchmove', onMove, {passive: false});
+            document.addEventListener('touchend', onEnd);
+        });
+    }
+    makeDrawerClosable('usageDrawer');
+    makeDrawerClosable('memoryDrawer');
 
     // ========== 设置全屏 ==========
     function openSettings(){
@@ -463,22 +482,13 @@
     });
 
     // ========== 设置UI ==========
-    function renderSettingsInterfaceTab(){
+    function refreshSettingsUI(){
         const currentModel = getCurrentModel();
         $('tab-interface').innerHTML = `
             <div class="settings-item"><span class="settings-label">API Key</span><span class="settings-value" id="apiKeyValue">${API_KEYS.length ? '已设置 '+API_KEYS.length+' 个' : '未设置'}</span></div>
             <div class="settings-item"><span class="settings-label">模型</span><select id="modelSelect"><option value="deepseek-chat" ${currentModel==='deepseek-chat'?'selected':''}>DeepSeek V3</option><option value="deepseek-reasoner" ${currentModel==='deepseek-reasoner'?'selected':''}>DeepSeek R1</option><option value="custom" ${currentModel!=='deepseek-chat'&&currentModel!=='deepseek-reasoner'?'selected':''}>自定义</option></select></div>
             <div class="settings-item" id="customModelItem" style="${currentModel!=='deepseek-chat'&&currentModel!=='deepseek-reasoner'?'display:flex':'display:none'}"><span class="settings-label">自定义模型</span><input type="text" id="customModelInput" value="${currentModel!=='deepseek-chat'&&currentModel!=='deepseek-reasoner'?currentModel:''}" placeholder="输入模型名"></div>
             <div class="settings-item"><span class="settings-label">费率设置</span><span class="settings-value" id="pricingValue">¥${INPUT_PRICE}/¥${OUTPUT_PRICE}</span></div>`;
-        $('apiKeyValue').onclick = ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
-        $('modelSelect').onchange = function(){
-            if(this.value==='custom'){ $('customModelItem').style.display='flex'; }
-            else { $('customModelItem').style.display='none'; API_MODELS=[this.value]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); }
-        };
-        $('customModelInput').onchange = function(){ const v=this.value.trim(); if(v){ API_MODELS=[v]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); } };
-        $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
-    }
-    function renderSettingsChatTab(){
         $('tab-chat').innerHTML = `
             <div class="settings-item" id="tempSettingItem"><span class="settings-label">温度</span><span class="settings-value" id="tempValueDisplay">${TEMPERATURE}</span></div>
             <div class="settings-item" id="topPSettingItem"><span class="settings-label">Top P</span><span class="settings-value" id="topPValueDisplay">${TOP_P}</span></div>
@@ -486,24 +496,10 @@
             <div class="settings-item" id="maxTokensSettingItem"><span class="settings-label">最大长度</span><span class="settings-value" id="maxTokensValueDisplay">${MAX_TOKENS}</span></div>
             <div class="settings-item" id="freqPenaltySettingItem"><span class="settings-label">频率惩罚</span><span class="settings-value" id="freqPenaltyValueDisplay">${FREQ_PENALTY}</span></div>
             <div class="settings-item" id="presPenaltySettingItem"><span class="settings-label">存在惩罚</span><span class="settings-value" id="presPenaltyValueDisplay">${PRES_PENALTY}</span></div>`;
-        $('tempSettingItem').onclick = ()=>openParamModal('温度', TEMP_PRESETS, TEMPERATURE, (v)=>{TEMPERATURE=v;saveParams();$('tempValueDisplay').textContent=v;});
-        $('topPSettingItem').onclick = ()=>openParamModal('Top P', TOPP_PRESETS, TOP_P, (v)=>{TOP_P=v;saveParams();$('topPValueDisplay').textContent=v;});
-        $('sentencesSettingItem').onclick = ()=>openParamModal('回复句数', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{MAX_SENTENCES=v;localStorage.setItem('claude_max_sentences',MAX_SENTENCES);$('sentencesValueDisplay').textContent=v+'句';});
-        $('maxTokensSettingItem').onclick = ()=>openParamModal('最大长度', TOKENS_PRESETS, MAX_TOKENS, (v)=>{MAX_TOKENS=v;saveParams();$('maxTokensValueDisplay').textContent=v;});
-        $('freqPenaltySettingItem').onclick = ()=>openParamModal('频率惩罚', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{FREQ_PENALTY=v;saveParams();$('freqPenaltyValueDisplay').textContent=v;});
-        $('presPenaltySettingItem').onclick = ()=>openParamModal('存在惩罚', PENALTY_PRESETS, PRES_PENALTY, (v)=>{PRES_PENALTY=v;saveParams();$('presPenaltyValueDisplay').textContent=v;});
-    }
-    function renderSettingsUITab(){
         $('tab-ui').innerHTML = `
             <div class="settings-item"><span class="settings-label">主题模式</span><select id="themeSelect"><option value="auto" ${THEME_MODE==='auto'?'selected':''}>跟随系统</option><option value="light" ${THEME_MODE==='light'?'selected':''}>白天模式</option><option value="dark" ${THEME_MODE==='dark'?'selected':''}>黑夜模式</option></select></div>
             <div class="settings-item"><span class="settings-label">图片发送</span><div class="toggle-switch ${IMAGE_ENABLED?'on':''}" id="imageToggleSettings"></div></div>
             <div class="settings-item"><span class="settings-label">一起听歌</span><span class="settings-value" id="musicEntrySettings">设置</span></div>`;
-        $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
-        const imgTgl = $('imageToggleSettings');
-        imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
-        $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
-    }
-    function renderSettingsDataTab(){
         $('tab-data').innerHTML = `
             <div class="settings-item"><span class="settings-label">互动指令</span><span class="settings-value" id="promptEntrySettings">编辑 ›</span></div>
             <div class="settings-item"><span class="settings-label">记忆库</span><span class="settings-value" id="memoryEntrySettings">查看 ›</span></div>
@@ -512,6 +508,24 @@
             <div class="settings-item"><span class="settings-label">用量统计</span><span class="settings-value" id="usageEntrySettings">查看 ›</span></div>
             <div class="settings-item"><span class="settings-label">修改密码</span><span class="settings-value" id="changePasswordSettings">修改</span></div>
             <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearChatSettings" style="color:#C06050;">⚠️</span></div>`;
+
+        $('apiKeyValue').onclick = ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
+        $('modelSelect').onchange = function(){
+            if(this.value==='custom'){ $('customModelItem').style.display='flex'; }
+            else { $('customModelItem').style.display='none'; API_MODELS=[this.value]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); }
+        };
+        $('customModelInput').onchange = function(){ const v=this.value.trim(); if(v){ API_MODELS=[v]; currentKeyIndex=0; saveKeys(); showToast('模型已切换'); } };
+        $('pricingValue').onclick = ()=>{ $('editInputPrice').value=INPUT_PRICE; $('editOutputPrice').value=OUTPUT_PRICE; $('pricingPreset').value='custom'; for(const[k,v] of Object.entries(PRICING_PRESETS)){ if(v.input===INPUT_PRICE&&v.output===OUTPUT_PRICE){ $('pricingPreset').value=k; break; } } $('editPricingModal').classList.remove('hidden'); };
+        $('tempSettingItem').onclick = ()=>openParamModal('温度', TEMP_PRESETS, TEMPERATURE, (v)=>{TEMPERATURE=v;saveParams();refreshSettingsUI();});
+        $('topPSettingItem').onclick = ()=>openParamModal('Top P', TOPP_PRESETS, TOP_P, (v)=>{TOP_P=v;saveParams();refreshSettingsUI();});
+        $('sentencesSettingItem').onclick = ()=>openParamModal('回复句数', SENTENCE_PRESETS, MAX_SENTENCES, (v)=>{MAX_SENTENCES=v;localStorage.setItem('claude_max_sentences',MAX_SENTENCES);refreshSettingsUI();});
+        $('maxTokensSettingItem').onclick = ()=>openParamModal('最大长度', TOKENS_PRESETS, MAX_TOKENS, (v)=>{MAX_TOKENS=v;saveParams();refreshSettingsUI();});
+        $('freqPenaltySettingItem').onclick = ()=>openParamModal('频率惩罚', PENALTY_PRESETS, FREQ_PENALTY, (v)=>{FREQ_PENALTY=v;saveParams();refreshSettingsUI();});
+        $('presPenaltySettingItem').onclick = ()=>openParamModal('存在惩罚', PENALTY_PRESETS, PRES_PENALTY, (v)=>{PRES_PENALTY=v;saveParams();refreshSettingsUI();});
+        $('themeSelect').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); showToast('主题已切换'); };
+        const imgTgl = $('imageToggleSettings');
+        imgTgl.onclick = ()=>{ IMAGE_ENABLED=!IMAGE_ENABLED; localStorage.setItem('claude_image_enabled',IMAGE_ENABLED); imgTgl.classList.toggle('on', IMAGE_ENABLED); applyUI(); showToast(IMAGE_ENABLED?'图片发送已开启':'图片发送已关闭'); };
+        $('musicEntrySettings').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
         $('promptEntrySettings').onclick = ()=>{ $('editPromptInput').value=SYSTEM_PROMPT; $('editPromptModal').classList.remove('hidden'); };
         $('memoryEntrySettings').onclick = ()=>openMemoryDrawer();
         $('exportEntrySettings').onclick = ()=>{ const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,memory:memoryBank,usage:usageLog,inputPrice:INPUT_PRICE,outputPrice:OUTPUT_PRICE,temperature:TEMPERATURE,topP:TOP_P,maxTokens:MAX_TOKENS,freqPenalty:FREQ_PENALTY,presPenalty:PRES_PENALTY,theme:THEME_MODE}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`七次元_备份_${new Date().toISOString().slice(0,10)}.json`;a.click();showToast('导出成功'); };
@@ -519,12 +533,6 @@
         $('usageEntrySettings').onclick = ()=>{ openUsageDrawer(); };
         $('changePasswordSettings').onclick = ()=>{ $('oldPasswordInput').value='';$('newPasswordInput').value='';$('changePasswordModal').classList.remove('hidden'); };
         $('clearChatSettings').onclick = openClearChatModal;
-    }
-    function refreshSettingsUI(){
-        renderSettingsInterfaceTab();
-        renderSettingsChatTab();
-        renderSettingsUITab();
-        renderSettingsDataTab();
     }
 
     function openParamModal(title, presets, currentValue, onChange){
@@ -691,25 +699,6 @@
     }
 
     // ========== 发送消息 ==========
-    function sendMessageInternal(text){
-        if(!text && !pendingImage) return;
-        if(pendingImage){
-            const now=Date.now(); const c=text||'';
-            const m={role:'user',versions:[c],currentVersion:0,timestamp:now,image:pendingImage};
-            renderMessage('user',m); conversationHistory.push(m); saveHistory();
-            pendingImage=null;imagePreviewRow.classList.add('hidden');
-            userInput.value='';userInput.style.height='auto';
-            sendImageMessage(m.image);
-        }else{
-            const m={role:'user',versions:[text],currentVersion:0,timestamp:Date.now()};
-            renderMessage('user',m); conversationHistory.push(m); saveHistory();
-            userInput.value='';userInput.style.height='auto';
-            if(userInputTimer) clearTimeout(userInputTimer);
-            userInputTimer=null;
-            resetTypingTimer();
-        }
-    }
-
     sendBtn.addEventListener('click',()=>{
         if(editingMsgTimestamp){
             const nc=userInput.value.trim();
@@ -718,7 +707,23 @@
             sendMessageAfterEdit(nc);
             return;
         }
-        sendMessageInternal(userInput.value.trim());
+        const text=userInput.value.trim();const hasImage=!!pendingImage;
+        if(!text&&!hasImage)return;
+        if(hasImage){
+            const now=Date.now();const c=text||'';
+            const m={role:'user',versions:[c],currentVersion:0,timestamp:now,image:pendingImage};
+            renderMessage('user',m);conversationHistory.push(m);saveHistory();
+            pendingImage=null;imagePreviewRow.classList.add('hidden');
+            userInput.value='';userInput.style.height='auto';
+            sendImageMessage(m.image);
+        }else{
+            const m={role:'user',versions:[text],currentVersion:0,timestamp:Date.now()};
+            renderMessage('user',m);conversationHistory.push(m);saveHistory();
+            userInput.value='';userInput.style.height='auto';
+            if(userInputTimer) clearTimeout(userInputTimer);
+            userInputTimer=null;
+            resetTypingTimer();
+        }
     });
     userInput.addEventListener('keydown',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendBtn.click();}});
     userInput.addEventListener('input',()=>{ userInput.style.height='auto';userInput.style.height=Math.min(userInput.scrollHeight,100)+'px'; if(!editingMsgTimestamp){ resetTypingTimer(); } });
@@ -752,7 +757,7 @@
     }
 
     // ========== 日历 ==========
-    $('calendarTabs').addEventListener('click',(e)=>{if(e.target.classList.contains('tab')){document.querySelectorAll('#calendarTabs .tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');calendarFilter=e.target.dataset.filter;if(calendarFilter==='search'){$('searchContainer').style.display='block';$('calendarContent').style.display='none';$('diaryCard').style.display='none';$('diaryEmpty').style.display='none';}else{$('searchContainer').style.display='none';$('searchResults').style.display='none';$('calendarContent').style.display='block';renderCalendarPanel();}}});
+    $('calendarTabs').addEventListener('click',(e)=>{if(e.target.classList.contains('tab')){document.querySelectorAll('#calendarTabs .tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');calendarFilter=e.target.dataset.filter;if(calendarFilter==='search'){$('searchContainer').style.display='block';$('calendarContent').style.display='none';}else{$('searchContainer').style.display='none';$('searchResults').style.display='none';$('calendarContent').style.display='block';renderCalendarPanel();}}});
     function isPeriodActive(d){const m=Object.entries(calendarMarks);let s=null;for(const[da,ma]of m){if(ma.type==='period-start')s=da;if(ma.type==='period-end'&&s&&da>=s){if(d>=s&&d<=da)return true;s=null;}}if(s&&d>=s){const st=new Date(s),ed=new Date(s);ed.setDate(ed.getDate()+5);if(new Date(d)>=st&&new Date(d)<=ed)return true;}return false;}
     function getTodayDateStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
     function getTimeContext(){const n=new Date();const ts=`现在是${n.getFullYear()}年${n.getMonth()+1}月${n.getDate()}日${n.getHours()}点${n.getMinutes()}分。`;const td=getTodayDateStr();const ma=[];const mk=calendarMarks[td];if(mk){if(mk.type==='period-start')ma.push(`今天是经期开始日（${mk.title||''}）`);else if(mk.type==='period-end')ma.push(`今天是经期结束日`);else if(mk.type==='anniversary')ma.push(`今天是${mk.title||'纪念日'}`);else if(mk.type==='custom')ma.push(`今天有日程：${mk.title||'事件'}`);}if(isPeriodActive(td)&&!mk)ma.push('今天在经期中');return`[系统时间上下文] ${ts} ${ma.length>0?'今天有：'+ma.join('；')+'。':'今天没有特殊标记。'}`;}
@@ -764,13 +769,13 @@
         const td=new Date();const fd=new Date(currentYear,currentMonth,1).getDay();const dm=new Date(currentYear,currentMonth+1,0).getDate();const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
         let h=`<div class="cal-header-row"><button id="prevMonthBtn">‹</button><span class="month-label">${mn[currentMonth]}</span><span class="year-label" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button></div><div class="cal-grid"><div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>`;
         for(let i=0;i<fd;i++)h+=`<div class="day-cell other-month"></div>`;
-        for(let d=1;d<=dm;d++){const ds=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const it=d===td.getDate()&&currentMonth===td.getMonth()&&currentYear===td.getFullYear();const hd=!!diary[ds];const mk=calendarMarks[ds];const pa=isPeriodActive(ds);let cl='day-cell';if(it)cl+=' today';if(hd&&(calendarFilter==='calendar'||calendarFilter==='diary'))cl+=' has-diary';if(pa)cl+=' mark-period';if(mk){if(mk.type==='anniversary')cl+=' mark-anniversary';if(mk.type==='custom')cl+=' mark-custom';}if(selectedDate===ds)cl+=' selected';h+=`<div class="${cl}" data-date="${ds}">${d}</div>`;}h+=`</div>`;
+        for(let d=1;d<=dm;d++){const ds=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const it=d===td.getDate()&&currentMonth===td.getMonth()&&currentYear===td.getFullYear();const hd=!!diary[ds];const mk=calendarMarks[ds];const pa=isPeriodActive(ds);let cl='day-cell';if(it)cl+=' today';if(hd)cl+=' has-diary';if(pa)cl+=' mark-period';if(mk){if(mk.type==='anniversary')cl+=' mark-anniversary';if(mk.type==='custom')cl+=' mark-custom';}if(selectedDate===ds)cl+=' selected';h+=`<div class="${cl}" data-date="${ds}">${d}</div>`;}h+=`</div>`;
         $('calendarContent').innerHTML=h;
         $('prevMonthBtn').addEventListener('click',()=>{if(currentMonth===0){currentMonth=11;currentYear--;}else currentMonth--;renderCalendarPanel();});
         $('nextMonthBtn').addEventListener('click',()=>{if(currentMonth===11){currentMonth=0;currentYear++;}else currentMonth++;renderCalendarPanel();});
         $('yearLabel').addEventListener('click',()=>{const ty=new Date().getFullYear();$('yearList').innerHTML=Array.from({length:21},(_,i)=>{const y=ty+10-i;return`<div class="year-item${y===currentYear?' active':''}" data-year="${y}">${y}年</div>`;}).join('');$('yearPickerModal').classList.remove('hidden');document.querySelector('.year-item.active')?.scrollIntoView({block:'center'});document.querySelectorAll('.year-item').forEach(i=>i.addEventListener('click',function(){currentYear=parseInt(this.dataset.year);$('yearPickerModal').classList.add('hidden');renderCalendarPanel();}));});
         $('cancelYearBtn').addEventListener('click',()=>$('yearPickerModal').classList.add('hidden'));
-        document.querySelectorAll('.day-cell:not(.other-month)').forEach(c=>{c.addEventListener('click',function(){selectedDate=this.dataset.date;renderCalendarPanel();if(calendarFilter==='diary')showDiary(selectedDate);});let pt;c.addEventListener('touchstart',(e)=>{pt=setTimeout(()=>showDateContextMenu(c.dataset.date,e),500);});c.addEventListener('touchend',()=>clearTimeout(pt));c.addEventListener('touchmove',()=>clearTimeout(pt));c.addEventListener('contextmenu',(e)=>{e.preventDefault();showDateContextMenu(c.dataset.date,e);});});
+        document.querySelectorAll('.day-cell:not(.other-month)').forEach(c=>{c.addEventListener('click',function(){selectedDate=this.dataset.date;renderCalendarPanel();});let pt;c.addEventListener('touchstart',(e)=>{pt=setTimeout(()=>showDateContextMenu(c.dataset.date,e),500);});c.addEventListener('touchend',()=>clearTimeout(pt));c.addEventListener('touchmove',()=>clearTimeout(pt));c.addEventListener('contextmenu',(e)=>{e.preventDefault();showDateContextMenu(c.dataset.date,e);});});
     }
     function showDateContextMenu(d,e){activeMarkDate=d;const mk=calendarMarks[d];const df=new Date(d).toLocaleDateString('zh-CN',{month:'long',day:'numeric'});let h=`<div class="menu-title">${df}</div><div class="menu-item" data-action="add-anniversary">+ 添加纪念日</div><div class="menu-item" data-action="add-custom">+ 添加日程</div><div class="menu-item" data-action="add-period-start">+ 经期开始</div><div class="menu-item" data-action="add-period-end">+ 经期结束</div>`;if(mk){h+=`<div class="menu-item" data-action="edit">✏️ 编辑</div><div class="menu-item danger" data-action="delete">🗑 删除</div>`;}contextMenu.innerHTML=h;contextMenu.style.display='block';contextMenu.style.left=Math.min(e.touches?.[0]?.clientX||e.clientX,window.innerWidth-180)+'px';contextMenu.style.top=Math.min(e.touches?.[0]?.clientY||e.clientY,window.innerHeight-260)+'px';contextMenu.classList.add('show');contextMenu.querySelectorAll('.menu-item').forEach(i=>{i.addEventListener('click',function(){const a=this.dataset.action;hideContextMenu();if(a==='add-anniversary')openMarkModal('anniversary');if(a==='add-custom')openMarkModal('custom');if(a==='add-period-start')openMarkModal('period-start');if(a==='add-period-end')openMarkModal('period-end');if(a==='edit')openMarkModal(mk.type,mk);if(a==='delete'){delete calendarMarks[activeMarkDate];saveMarks();renderCalendarPanel();showToast('已删除');}});});}
     document.addEventListener('click',(e)=>{if(!contextMenu.contains(e.target))hideContextMenu();});
@@ -778,7 +783,6 @@
     $('cancelMarkBtn').addEventListener('click',()=>$('addMarkModal').classList.add('hidden'));
     $('saveMarkBtn').addEventListener('click',()=>{const ds=$('editMarkDate').value||activeMarkDate;if(!ds)return;const t=$('markTitleInput').value.trim();if(!t&&$('markTypeSelect').value!=='period-start'&&$('markTypeSelect').value!=='period-end'){showToast('请输入标题');return;}const ty=$('markTypeSelect').value,n=$('markNoteInput').value.trim(),r=$('markReminderSelect').value;calendarMarks[ds]={type:ty,title:t||(ty==='period-start'?'经期开始':ty==='period-end'?'经期结束':'日程'),note:n,reminder:r};saveMarks();$('addMarkModal').classList.add('hidden');renderCalendarPanel();showToast('已保存');});
     $('deleteMarkBtn').addEventListener('click',()=>{const ds=$('editMarkDate').value||activeMarkDate;if(ds&&calendarMarks[ds]){delete calendarMarks[ds];saveMarks();}$('addMarkModal').classList.add('hidden');renderCalendarPanel();showToast('已删除');});
-    function showDiary(d){const e=diary[d];if(e){$('diaryCard').style.display='block';$('diaryEmpty').style.display='none';$('diaryCard').innerHTML=`<div class="diary-date">${new Date(d).toLocaleDateString('zh-CN',{month:'long',day:'numeric',weekday:'short'})}</div><div>${escapeHtml(e.content)}</div>`;}else{$('diaryCard').style.display='none';$('diaryEmpty').style.display='block';}}
 
     $('searchInput').addEventListener('input',()=>{const q=$('searchInput').value.trim().toLowerCase();if(!q){$('searchResults').style.display='none';return;}const r=[];conversationHistory.forEach((m,i)=>{const c=getCurrentContent(m);if(c&&c.toLowerCase().includes(q))r.push({...m,idx:i,content:c});});if(!r.length){$('searchResults').style.display='block';$('searchResults').innerHTML='<div style="padding:12px;text-align:center;color:var(--text-secondary);">无结果</div>';return;}$('searchResults').style.display='block';$('searchResults').innerHTML=r.slice(-30).reverse().map(r=>{const d=new Date(r.timestamp);return`<div class="search-result-item" data-idx="${r.idx}"><div class="sr-date">${d.getMonth()+1}/${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}</div><div><span class="sr-role">${r.role==='user'?'我':PARTNER_NAME}:</span> ${escapeHtml(r.content.substring(0,60))}</div></div>`;}).join('');document.querySelectorAll('.search-result-item').forEach(i=>i.addEventListener('click',function(){const idx=parseInt(this.dataset.idx);const m=conversationHistory[idx];if(!m)return;switchPage('pageChat');setTimeout(()=>{const el=document.querySelector(`.message[data-ts="${m.timestamp}"]`);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('highlight');setTimeout(()=>el.classList.remove('highlight'),1600);}},400);}));});
 
@@ -827,8 +831,10 @@
 
     // ========== 回忆页 ==========
     function refreshMemoryMain(){
-        $('diaryCountSub').textContent = Object.keys(diary).length + ' 篇';
-        $('letterCountSub').textContent = '0 封';
+        const allTags = [...(memoryBank.about_you||[]), ...(memoryBank.about_us||[])].filter(m => m.text).slice(0, 8);
+        $('memoryTagsRow').innerHTML = allTags.map(t => `<span class="memory-tag">${escapeHtml(t.text)}</span>`).join('') || '<span style="font-size:11px;color:var(--text-secondary);">还没有记忆碎片，多聊聊天吧 ✨</span>';
+        $('diaryCountSub').textContent = Object.keys(diary).filter(d => !diary[d].isLetter).length + ' 篇';
+        $('letterCountSub').textContent = Object.keys(diary).filter(d => diary[d].isLetter).length + ' 封';
     }
 
     // ========== 记忆库 ==========
@@ -846,6 +852,8 @@
         document.querySelectorAll('.mem-delete-btn').forEach(b=>{ b.addEventListener('click',function(e){ e.stopPropagation(); const c=this.dataset.cat,i=parseInt(this.dataset.idx); memoryBank[c].splice(i,1); saveMemory(); renderMemoryDrawerContent(); refreshMemoryMain(); }); });
     }
     $('memoryDrawerAddBtn').addEventListener('click', ()=>{ $('addMemoryModal').classList.remove('hidden'); });
+
+    // ========== 弹窗事件集中绑定 ==========
     $('cancelMemBtn').addEventListener('click', ()=>{ $('addMemoryModal').classList.add('hidden'); });
     $('saveMemBtn').addEventListener('click', ()=>{
         const c=$('memCategorySelect').value, v=$('memContentInput').value.trim();
@@ -857,6 +865,18 @@
         $('addMemoryModal').classList.add('hidden');
         $('memContentInput').value='';
     });
+    $('cancelNameBtn').addEventListener('click',()=>$('editNameModal').classList.add('hidden'));
+    $('saveNameBtn').addEventListener('click',()=>{PARTNER_NAME=$('editNameInput').value.trim()||'七次元';localStorage.setItem('claude_partner_name',PARTNER_NAME);applyUI();$('editNameModal').classList.add('hidden');showToast('名字已更新');});
+    $('cancelPromptBtn').addEventListener('click',()=>$('editPromptModal').classList.add('hidden'));
+    $('savePromptBtn').addEventListener('click',()=>{SYSTEM_PROMPT=$('editPromptInput').value.trim();if(!SYSTEM_PROMPT){showToast('指令不能为空');return;}localStorage.setItem('claude_system_prompt',SYSTEM_PROMPT);$('editPromptModal').classList.add('hidden');showToast('互动指令已更新');});
+    $('cancelApiKeyBtn').addEventListener('click',()=>$('editApiKeyModal').classList.add('hidden'));
+    $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);refreshSettingsUI();});
+    $('pricingPreset').addEventListener('change',function(){const p=PRICING_PRESETS[this.value];if(p){$('editInputPrice').value=p.input;$('editOutputPrice').value=p.output;}});
+    $('cancelPricingBtn').addEventListener('click',()=>$('editPricingModal').classList.add('hidden'));
+    $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');refreshSettingsUI();});
+
+    topAvatarBtn.addEventListener('click', ()=>{ $('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden'); });
+    topBarName.addEventListener('click', ()=>{ $('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden'); });
 
     // ========== 主页 ==========
     function refreshHomePage(){
@@ -873,20 +893,6 @@
             $('homeDiaryPreview').style.display = 'none';
         }
     }
-
-    // ========== 弹窗事件 ==========
-    $('cancelNameBtn').addEventListener('click',()=>$('editNameModal').classList.add('hidden'));
-    $('saveNameBtn').addEventListener('click',()=>{PARTNER_NAME=$('editNameInput').value.trim()||'七次元';localStorage.setItem('claude_partner_name',PARTNER_NAME);applyUI();$('editNameModal').classList.add('hidden');showToast('名字已更新');});
-    $('cancelPromptBtn').addEventListener('click',()=>$('editPromptModal').classList.add('hidden'));
-    $('savePromptBtn').addEventListener('click',()=>{SYSTEM_PROMPT=$('editPromptInput').value.trim();if(!SYSTEM_PROMPT){showToast('指令不能为空');return;}localStorage.setItem('claude_system_prompt',SYSTEM_PROMPT);$('editPromptModal').classList.add('hidden');showToast('互动指令已更新');});
-    $('cancelApiKeyBtn').addEventListener('click',()=>$('editApiKeyModal').classList.add('hidden'));
-    $('saveApiKeyBtn').addEventListener('click',()=>{API_KEYS=$('editApiKeyInput').value.split(',').filter(k=>k.trim());currentKeyIndex=0;saveKeys();$('editApiKeyModal').classList.add('hidden');showToast(`已保存 ${API_KEYS.length} 个 Key`);});
-    $('pricingPreset').addEventListener('change',function(){const p=PRICING_PRESETS[this.value];if(p){$('editInputPrice').value=p.input;$('editOutputPrice').value=p.output;}});
-    $('cancelPricingBtn').addEventListener('click',()=>$('editPricingModal').classList.add('hidden'));
-    $('savePricingBtn').addEventListener('click',()=>{INPUT_PRICE=parseFloat($('editInputPrice').value)||1;OUTPUT_PRICE=parseFloat($('editOutputPrice').value)||2;savePricing();$('editPricingModal').classList.add('hidden');showToast('费率已更新');});
-
-    topAvatarBtn.addEventListener('click', ()=>{ $('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden'); });
-    topBarName.addEventListener('click', ()=>{ $('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden'); });
 
     // ========== 初始化 ==========
     const hour=new Date().getHours();let g='晚上好';if(hour<12)g='早上好';else if(hour<18)g='下午好';
