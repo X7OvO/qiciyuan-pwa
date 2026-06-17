@@ -16,11 +16,10 @@
             --bg: #FAF7F2; --bg-secondary: #FFFFFF; --text: #2D2D2C; --text-secondary: #8B8A87;
             --border: #E8E2D6; --bubble-user: #2D2D2C; --bubble-user-text: #FFFFFF;
             --bubble-ai: #FFFFFF; --bubble-ai-text: #2D2D2C; --input-bg: #FFFFFF;
-            --drawer-bg: #FAF7F2; --card-bg: #FFFFFF; --hover-bg: #F0ECE4;
-            --toggle-off: #D9D3C7; --toggle-on: #4A6B4A; --toast-bg: #2D2D2C;
-            --toast-text: #FFFFFF; --banner-bg: #FFFDF5; --banner-text: #8B7A3A;
-            --progress-bg: #F0ECE4; --progress-fill: #D0C5B0; --btn-primary: #2D2D2C;
+            --card-bg: #FFFFFF; --hover-bg: #F0ECE4; --btn-primary: #2D2D2C;
             --btn-primary-text: #FFFFFF; --btn-secondary: #F0ECE4; --btn-secondary-text: #2D2D2C;
+            --toggle-off: #D9D3C7; --toggle-on: #4A6B4A;
+            --progress-bg: #F0ECE4; --progress-fill: #D0C5B0;
             --paper: #FFFDF7; --envelope-bg: #F5EDD6; --seal: #C0504A; --tag-bg: #FFF9E6;
             --hole-color: #D9D3C7;
         }
@@ -28,11 +27,10 @@
             --bg: #1A1A1A; --bg-secondary: #252525; --text: #E0E0E0; --text-secondary: #888;
             --border: #333; --bubble-user: #E0E0E0; --bubble-user-text: #1A1A1A;
             --bubble-ai: #252525; --bubble-ai-text: #E0E0E0; --input-bg: #252525;
-            --drawer-bg: #1A1A1A; --card-bg: #252525; --hover-bg: #2A2A2A;
-            --toggle-off: #444; --toggle-on: #6AAA6A; --toast-bg: #E0E0E0;
-            --toast-text: #1A1A1A; --banner-bg: #2A2A20; --banner-text: #B8A060;
-            --progress-bg: #2A2A2A; --progress-fill: #8B8A87; --btn-primary: #E0E0E0;
+            --card-bg: #252525; --hover-bg: #2A2A2A; --btn-primary: #E0E0E0;
             --btn-primary-text: #1A1A1A; --btn-secondary: #2A2A2A; --btn-secondary-text: #E0E0E0;
+            --toggle-off: #444; --toggle-on: #6AAA6A;
+            --progress-bg: #2A2A2A; --progress-fill: #8B8A87;
             --paper: #2A2A22; --envelope-bg: #3A3A25; --tag-bg: #3A3A20;
         }
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -61,8 +59,7 @@
         .bottom-nav .nav-item.chat-btn span { margin-top:2px; }
 
         .home-page { align-items:center; justify-content:center; gap:20px; padding:20px; }
-        .home-avatar { width:100px; height:100px; border-radius:50%; background:var(--hover-bg); display:flex; align-items:center; justify-content:center; font-size:50px; color:var(--text-secondary); overflow:hidden; animation:popIn 0.5s cubic-bezier(0.21,1.02,0.58,1) forwards; }
-        .home-avatar img { width:100%; height:100%; object-fit:cover; }
+        .home-avatar { width:100px; height:100px; border-radius:50%; background:var(--hover-bg); display:flex; align-items:center; justify-content:center; font-size:50px; overflow:hidden; }
         .home-name { font-size:24px; font-weight:500; color:var(--text); }
         .home-days { font-size:14px; color:var(--text-secondary); }
         .home-chat-btn { margin-top:8px; padding:14px 40px; background:var(--btn-primary); color:var(--btn-primary-text); border:none; border-radius:25px; font-size:16px; cursor:pointer; }
@@ -85,6 +82,7 @@
         .typing-bubble span:nth-child(2) { animation-delay:0.2s; }
         .typing-bubble span:nth-child(3) { animation-delay:0.4s; }
         @keyframes dotPulse { 0%,60%,100%{opacity:0.2;transform:translateY(0);} 30%{opacity:1;transform:translateY(-3px);} }
+        .message img { max-width:100%; border-radius:12px; cursor:pointer; }
         .message .timestamp { font-size:10px; color:var(--text-secondary); margin-top:3px; padding:0 6px; display:flex; align-items:center; gap:6px; }
         .message .edited-tag { font-size:9px; color:#B8A88A; font-style:italic; }
         .message .rewind-row { display:none; align-items:center; gap:6px; margin-top:2px; font-size:11px; }
@@ -115,11 +113,7 @@
         .calendar-page .cal-grid .day-cell.has-diary::after { content:''; position:absolute; bottom:3px; width:5px; height:5px; background:#B8A88A; border-radius:50%; }
         .calendar-page .cal-grid .day-cell.mark-anniversary::before { content:'★'; position:absolute; top:1px; right:3px; font-size:10px; color:#D4A853; }
         .calendar-page .cal-grid .day-cell.mark-period { background:rgba(220,160,140,0.15); border-radius:40%; }
-        .calendar-page .cal-tabs { display:flex; padding:8px 12px; border-bottom:1px solid var(--border); }
-        .calendar-page .cal-tabs .tab { flex:1; text-align:center; padding:8px 0; font-size:13px; color:var(--text-secondary); cursor:pointer; border-radius:8px; }
-        .calendar-page .cal-tabs .tab.active { background:var(--hover-bg); color:var(--text); font-weight:500; }
 
-        /* 回忆页 */
         .memory-main { display:flex; flex-direction:column; gap:16px; padding:20px 16px; flex:1; overflow-y:auto; align-items:center; }
         .memory-tag { display:inline-block; background:var(--tag-bg); border:1px solid #F0E8C0; border-radius:12px; padding:5px 10px; font-size:11px; color:#8B7A3A; margin:3px; }
         .dark-mode .memory-tag { background:#3A3A20; border-color:#5A5A30; color:#C8C060; }
@@ -129,7 +123,6 @@
         .memory-card .card-label { font-size:17px; font-weight:500; color:var(--text); }
         .memory-card .card-sub { font-size:12px; color:var(--text-secondary); margin-top:4px; }
 
-        /* 日记本全屏 */
         .diary-fullscreen { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:60; transform:translateX(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; overflow:hidden; }
         .diary-fullscreen.open { transform:translateX(0); }
         .diary-fullscreen .fs-header { padding:14px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); flex-shrink:0; }
@@ -148,7 +141,6 @@
         .note-card .card-tap-hint { font-size:10px; color:var(--text-secondary); text-align:right; margin-top:6px; display:block; }
         .note-card.flipped .card-tap-hint { display:none; }
 
-        /* 信箱全屏 */
         .letter-fullscreen { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:60; transform:translateX(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; overflow:hidden; }
         .letter-fullscreen.open { transform:translateX(0); }
         .letter-fullscreen .fs-header { padding:14px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); flex-shrink:0; }
@@ -168,7 +160,6 @@
         .letter-detail .ld-back { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text); }
         .letter-detail .ld-content { padding:20px; font-size:14px; line-height:1.9; color:var(--text); font-family:'Noto Serif SC',serif; white-space:pre-wrap; }
 
-        /* 设置全屏 */
         .settings-fullscreen { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:50; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; }
         .settings-fullscreen.open { transform:translateY(0); }
         .settings-fullscreen .sf-header { padding:14px 16px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); flex-shrink:0; }
@@ -184,7 +175,7 @@
         .settings-item .settings-value { font-size:14px; color:var(--text-secondary); cursor:pointer; }
         .settings-item select,.settings-item input { padding:8px 10px; border:1px solid var(--border); border-radius:10px; font-size:14px; background:var(--input-bg); color:var(--text); outline:none; font-family:inherit; }
 
-        .bottom-drawer { position:absolute; bottom:0; left:0; width:100%; height:70%; background:var(--bg); z-index:55; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
+        .bottom-drawer { position:absolute; bottom:0; left:0; width:100%; height:85%; background:var(--bg); z-index:55; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.25,0.1,0.25,1); display:flex; flex-direction:column; border-radius:20px 20px 0 0; box-shadow:0 -4px 20px rgba(0,0,0,0.1); }
         .bottom-drawer.open { transform:translateY(0); }
         .bottom-drawer .drawer-handle { width:40px; height:5px; background:var(--toggle-off); border-radius:3px; margin:10px auto 6px; flex-shrink:0; cursor:grab; }
         .bottom-drawer .drawer-header { padding:4px 16px 12px; text-align:center; font-size:16px; font-weight:500; color:var(--text); border-bottom:1px solid var(--border); flex-shrink:0; }
@@ -216,7 +207,7 @@
         .image-overlay img { max-width:95%; max-height:95%; border-radius:8px; }
         .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--toast-bg); color:var(--toast-text); padding:10px 20px; border-radius:20px; font-size:13px; z-index:300; opacity:0; transition:0.3s; pointer-events:none; }
         .toast.show { opacity:1; }
-        .reminder-banner { margin:4px 12px; padding:8px 12px; background:var(--banner-bg); border-radius:12px; border:1px solid #F0E8C0; font-size:12px; color:var(--banner-text); display:flex; align-items:center; gap:6px; flex-shrink:0; }
+        .reminder-banner { margin:4px 12px; padding:8px 12px; background:var(--bg-secondary); border-radius:12px; border:1px solid #F0E8C0; font-size:12px; color:#8B7A3A; display:flex; align-items:center; gap:6px; flex-shrink:0; }
         .reminder-banner.hidden { display:none; }
         .music-bar { margin:4px 12px; padding:8px 12px; background:var(--card-bg); border-radius:12px; border:1px solid var(--border); font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:6px; flex-shrink:0; }
         .music-bar.hidden { display:none; }
@@ -243,7 +234,6 @@
     </div>
 
     <div class="main-content" id="mainContent">
-        <!-- 主页 -->
         <div class="page active" id="pageHome">
             <div class="home-page" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
                 <div class="home-avatar" id="homeAvatar">👤</div>
@@ -253,7 +243,6 @@
             </div>
         </div>
 
-        <!-- 聊天页 -->
         <div class="page" id="pageChat">
             <div class="chat-page" style="flex:1;display:flex;flex-direction:column;">
                 <div class="top-bar">
@@ -274,67 +263,41 @@
             </div>
         </div>
 
-        <!-- 日历页 -->
         <div class="page" id="pageCalendar">
             <div class="calendar-page">
-                <div class="cal-tabs" id="calendarTabs">
-                    <div class="tab active" data-filter="calendar">日历</div>
-                    <div class="tab" data-filter="search">搜索</div>
-                </div>
-                <div style="padding:8px 12px;display:none;" id="searchContainer"><input type="text" id="searchInput" placeholder="🔍 搜索聊天记录..." style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:20px;font-size:14px;background:var(--input-bg);color:var(--text);outline:none;"></div>
-                <div id="calendarContent"></div>
+                <div class="cal-header-row" id="calHeaderRow"></div>
+                <div class="cal-grid" id="calGrid"></div>
             </div>
         </div>
 
-        <!-- 回忆页 -->
         <div class="page" id="pageMemory">
             <div class="memory-main">
                 <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;" id="memoryTagsRow"></div>
                 <div class="memory-card" id="diaryCardBtn" style="background:#FFFDF7;">
-                    <span class="card-emoji">📝</span>
-                    <span class="card-label">日记本</span>
-                    <span class="card-sub" id="diaryCountSub">0 篇</span>
+                    <span class="card-emoji">📝</span><span class="card-label">日记本</span><span class="card-sub" id="diaryCountSub">0 篇</span>
                 </div>
                 <div class="memory-card" id="letterCardBtn" style="background:#F5EDD6;">
-                    <span class="card-emoji">💌</span>
-                    <span class="card-label">信箱</span>
-                    <span class="card-sub" id="letterCountSub">0 封</span>
+                    <span class="card-emoji">💌</span><span class="card-label">信箱</span><span class="card-sub" id="letterCountSub">0 封</span>
                 </div>
             </div>
         </div>
 
-        <!-- 日记本全屏 -->
         <div class="diary-fullscreen" id="diaryFullscreen">
-            <div class="fs-header">
-                <button class="fs-back" id="diaryFsBack">←</button>
-                <span class="fs-title">📝 日记本</span>
-            </div>
+            <div class="fs-header"><button class="fs-back" id="diaryFsBack">←</button><span class="fs-title">📝 日记本</span></div>
             <div class="diary-timeline" id="diaryTimeline"></div>
         </div>
 
-        <!-- 信箱全屏 -->
         <div class="letter-fullscreen" id="letterFullscreen">
-            <div class="fs-header">
-                <button class="fs-back" id="letterFsBack">←</button>
-                <span class="fs-title">💌 信箱</span>
-                <button class="fs-write-btn" id="letterWriteBtn">✏️ 写信</button>
-            </div>
+            <div class="fs-header"><button class="fs-back" id="letterFsBack">←</button><span class="fs-title">💌 信箱</span><button class="fs-write-btn" id="letterWriteBtn">✏️ 写信</button></div>
             <div class="letter-stack-area" id="letterStackArea"></div>
             <div class="letter-detail" id="letterDetail">
-                <div class="ld-header">
-                    <button class="ld-back" id="letterDetailBack">←</button>
-                    <span>信件详情</span>
-                </div>
+                <div class="ld-header"><button class="ld-back" id="letterDetailBack">←</button><span>信件详情</span></div>
                 <div class="ld-content" id="letterDetailContent"></div>
             </div>
         </div>
 
-        <!-- 设置全屏 -->
         <div class="settings-fullscreen" id="settingsFullscreen">
-            <div class="sf-header">
-                <button class="sf-back" id="settingsFsBack">←</button>
-                <span class="sf-title">系统设置</span>
-            </div>
+            <div class="sf-header"><button class="sf-back" id="settingsFsBack">←</button><span class="sf-title">系统设置</span></div>
             <div class="settings-tabs" id="settingsFsTabs">
                 <div class="tab active" data-tab="tab-interface">接口</div>
                 <div class="tab" data-tab="tab-chat">对话</div>
@@ -347,23 +310,26 @@
             <div class="settings-tab-content" id="tab-data"></div>
         </div>
 
-        <!-- 用量抽屉 -->
         <div class="bottom-drawer" id="usageDrawer">
-            <div class="drawer-handle"></div>
-            <div class="drawer-header">用量统计</div>
+            <div class="drawer-handle"></div><div class="drawer-header">用量统计</div>
             <div class="drawer-content" id="usageContent"></div>
         </div>
 
-        <!-- 记忆库抽屉 -->
-        <div class="bottom-drawer" id="memoryDrawer">
-            <div class="drawer-handle"></div>
-            <div class="drawer-header">记忆库</div>
-            <div class="drawer-content" id="memoryDrawerContent"></div>
-            <button class="drawer-bottom-btn" id="memoryDrawerAddBtn">+ 手动添加一条</button>
+        <div class="bottom-drawer" id="dayDetailDrawer">
+            <div style="padding:10px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+                <button class="cancel-btn" id="cancelDayDetailBtn">取消</button>
+                <span style="font-size:16px;font-weight:500;color:var(--text);" id="dayDetailDate"></span>
+                <button class="save-btn" id="saveDayDetailBtn">保存</button>
+            </div>
+            <div class="drawer-content" id="dayDetailContent" style="padding:16px;">
+                <div style="margin-bottom:16px;"><div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">天气</div><div style="display:flex;gap:8px;font-size:28px;" id="weatherPicker"></div></div>
+                <div style="margin-bottom:16px;"><div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">我的心情</div><div style="display:flex;gap:8px;font-size:28px;" id="myMoodPicker"></div></div>
+                <div style="margin-bottom:16px;"><div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">TA的心情</div><div style="display:flex;gap:8px;font-size:28px;" id="taMoodPicker"></div></div>
+                <div><div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">备注</div><textarea id="dayNoteInput" placeholder="记账、随笔、对话标签……写什么都行" style="width:100%;height:100px;padding:10px;border:1px solid var(--border);border-radius:12px;font-size:14px;background:var(--input-bg);color:var(--text);outline:none;resize:vertical;font-family:inherit;"></textarea></div>
+            </div>
         </div>
     </div>
 
-    <!-- 底部导航 -->
     <div class="bottom-nav" id="bottomNav">
         <div class="nav-item active" data-page="pageHome"><span class="nav-icon">🏠</span>主页</div>
         <div class="nav-item" data-page="pageMemory"><span class="nav-icon">📖</span>回忆</div>
@@ -372,7 +338,6 @@
         <div class="nav-item" data-page="pageSettings"><span class="nav-icon">⚙️</span>设置</div>
     </div>
 
-    <!-- 弹窗 -->
     <div class="modal-overlay hidden" id="editNameModal"><div class="modal-card"><h3>编辑名字</h3><input type="text" id="editNameInput" maxlength="20"><div class="btn-row"><button class="cancel-btn" id="cancelNameBtn">取消</button><button class="save-btn" id="saveNameBtn">保存</button></div></div></div>
     <div class="modal-overlay hidden" id="editPromptModal"><div class="modal-card"><h3>互动指令</h3><textarea id="editPromptInput" style="min-height:200px;"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelPromptBtn">取消</button><button class="save-btn" id="savePromptBtn">保存</button></div></div></div>
     <div class="modal-overlay hidden" id="editApiKeyModal"><div class="modal-card"><h3>API Keys</h3><textarea id="editApiKeyInput" placeholder="多个Key用英文逗号分隔"></textarea><div class="btn-row"><button class="cancel-btn" id="cancelApiKeyBtn">取消</button><button class="save-btn" id="saveApiKeyBtn">保存</button></div></div></div>
@@ -383,10 +348,13 @@
     <div class="modal-overlay hidden" id="yearPickerModal"><div class="modal-card"><h3>选择年份</h3><div class="year-list" id="yearList"></div><div class="btn-row"><button class="cancel-btn" id="cancelYearBtn">取消</button></div></div></div>
     <div class="modal-overlay hidden" id="addMarkModal"><div class="modal-card"><h3 id="addMarkTitle">添加日程</h3><input type="text" id="markTitleInput" placeholder="标题"><select id="markTypeSelect"><option value="anniversary">纪念日</option><option value="period-start">经期开始</option><option value="period-end">经期结束</option><option value="custom">自定义日程</option></select><textarea id="markNoteInput" placeholder="备注" style="height:60px;"></textarea><select id="markReminderSelect"><option value="none">不提醒</option><option value="day-before">提前一天</option><option value="same-day">当天早上</option></select><input type="hidden" id="editMarkDate"><div class="btn-row"><button class="cancel-btn" id="cancelMarkBtn">取消</button><button class="save-btn" id="saveMarkBtn">保存</button><button class="cancel-btn" id="deleteMarkBtn" style="display:none;color:#C06050;">删除</button></div></div></div>
     <div class="modal-overlay hidden" id="addMemoryModal"><div class="modal-card"><h3>添加记忆</h3><select id="memCategorySelect"><option value="about_you">关于你</option><option value="about_us">我们之间</option></select><textarea id="memContentInput" placeholder="写一条记忆..."></textarea><div class="btn-row"><button class="cancel-btn" id="cancelMemBtn">取消</button><button class="save-btn" id="saveMemBtn">保存</button></div></div></div>
+    <div class="modal-overlay hidden" id="memoryDrawerModal"><div class="modal-card" style="max-height:80vh;display:flex;flex-direction:column;"><h3>记忆库</h3><div style="flex:1;overflow-y:auto;min-height:200px;" id="memoryDrawerContent"></div><button class="drawer-bottom-btn" id="memoryDrawerAddBtn" style="width:100%;margin-top:8px;">+ 手动添加一条</button><div class="btn-row"><button class="cancel-btn" id="cancelMemoryDrawerBtn">关闭</button></div></div></div>
     <div class="modal-overlay hidden" id="paramSelectModal"><div class="modal-card"><h3 id="paramSelectTitle">选择</h3><div id="paramSelectOptions" style="max-height:50vh;overflow-y:auto;"></div><div class="btn-row"><button class="cancel-btn" id="cancelParamSelectBtn">取消</button></div></div></div>
     <div class="toast" id="toast"></div>
     <div class="context-menu" id="contextMenu"></div>
-</div><script>
+</div>
+
+<script>
 (function() {
     const $ = (id) => document.getElementById(id);
     const passwordScreen = $('passwordScreen'), passwordInput = $('passwordInput'), pwError = $('pwError'), pwSubmitBtn = $('pwSubmitBtn'), pwSub = $('pwSub'), pwSetupHint = $('pwSetupHint');
@@ -397,8 +365,9 @@
     const reminderBanner = $('reminderBanner'), reminderBannerText = $('reminderBannerText'), bannerCloseBtn = $('bannerCloseBtn');
     const contextMenu = $('contextMenu');
     const settingsFullscreen = $('settingsFullscreen'), settingsFsTabs = $('settingsFsTabs');
-    const usageDrawer = $('usageDrawer'), memoryDrawer = $('memoryDrawer');
+    const usageDrawer = $('usageDrawer');
     const diaryFullscreen = $('diaryFullscreen'), letterFullscreen = $('letterFullscreen');
+    const dayDetailDrawer = $('dayDetailDrawer');
     const toast = $('toast');
     const PW_HASH_KEY = 'claude_pw_hash_v2';
 
@@ -415,9 +384,9 @@
     let MAX_SENTENCES = parseInt(localStorage.getItem('claude_max_sentences') || '3');
     let FREQ_PENALTY = parseFloat(localStorage.getItem('claude_freq_penalty') || '0.1'), PRES_PENALTY = parseFloat(localStorage.getItem('claude_pres_penalty') || '0.1');
     let THEME_MODE = localStorage.getItem('claude_theme') || 'auto';
-    let conversationHistory = [], diary = {}, calendarMarks = {}, memoryBank = { about_you: [], about_us: [] }, usageLog = [];
+    let conversationHistory = [], diary = {}, calendarMarks = {}, dailyNotes = {}, memoryBank = { about_you: [], about_us: [] }, usageLog = [];
     let pendingImage = null, selectedMessageId = null, editingMsgTimestamp = null;
-    let calendarFilter = 'calendar', currentMonth = new Date().getMonth(), currentYear = new Date().getFullYear(), selectedDate = null, activeMarkDate = null;
+    let currentMonth = new Date().getMonth(), currentYear = new Date().getFullYear(), selectedDate = null, activeMarkDate = null;
     let currentMusic = null, notificationPermission = false;
     let currentAbortController = null, userInputTimer = null;
     let currentPage = 'pageHome', previousPage = 'pageHome';
@@ -429,8 +398,9 @@
     const SENTENCE_PRESETS = [{label:'1句',value:1},{label:'2句',value:2},{label:'3句',value:3},{label:'4句',value:4},{label:'5句',value:5},{label:'6句',value:6},{label:'7句',value:7},{label:'8句',value:8}];
     const TOKENS_PRESETS = [{label:'短',value:512},{label:'中',value:1024},{label:'长',value:2048},{label:'超长',value:4096}];
     const PENALTY_PRESETS = [{label:'无',value:0},{label:'低',value:0.1},{label:'中',value:0.5},{label:'高',value:1}];
+    const WEATHERS = ['☀️','⛅','🌧️','⛈️','❄️','🌬️'];
+    const MOODS = ['😊','😢','😡','😴','💕','😐'];
 
-    // ========== 页面导航 ==========
     function switchPage(pageId){
         if(currentPage === pageId) return;
         if(currentPage !== 'pageSettings') previousPage = currentPage;
@@ -444,7 +414,7 @@
         if(pageId === 'pageMemory'){ refreshMemoryMain(); }
         settingsFullscreen.classList.remove('open');
         usageDrawer.classList.remove('open');
-        memoryDrawer.classList.remove('open');
+        dayDetailDrawer.classList.remove('open');
         diaryFullscreen.classList.remove('open');
         letterFullscreen.classList.remove('open');
     }
@@ -456,7 +426,6 @@
     });
     $('homeChatBtn').addEventListener('click', ()=> switchPage('pageChat'));
 
-    // ========== 抽屉下拉关闭 ==========
     function makeDrawerClosable(drawerId){
         const drawer = $(drawerId); if(!drawer) return;
         const handle = drawer.querySelector('.drawer-handle'); if(!handle) return;
@@ -477,14 +446,11 @@
         });
     }
     makeDrawerClosable('usageDrawer');
-    makeDrawerClosable('memoryDrawer');
+    makeDrawerClosable('dayDetailDrawer');
 
-    // ========== 设置全屏 ==========
     function openSettings(){ settingsFullscreen.classList.add('open'); refreshSettingsUI(); }
     function closeSettings(){ settingsFullscreen.classList.remove('open'); switchPage(previousPage || 'pageHome'); }
     $('settingsFsBack').addEventListener('click', closeSettings);
-
-    // Tab切换事件——切到数据Tab时强制重新绑定
     settingsFsTabs.addEventListener('click', (e)=>{
         if(!e.target.classList.contains('tab')) return;
         document.querySelectorAll('#settingsFsTabs .tab').forEach(t=>t.classList.remove('active'));
@@ -493,7 +459,6 @@
         document.querySelectorAll('.settings-tab-content').forEach(c=>c.classList.remove('active'));
         const tabContent = $(tabId);
         if(tabContent) tabContent.classList.add('active');
-        // 切到数据Tab时重新绑定事件
         if(tabId === 'tab-data') bindDataTabEvents();
     });
 
@@ -524,7 +489,6 @@
             <div class="settings-item"><span class="settings-label">修改密码</span><span class="settings-value" id="changePwEntry">修改</span></div>
             <div class="settings-item"><span class="settings-label" style="color:#C06050;">清空对话</span><span class="settings-value" id="clearEntry" style="color:#C06050;">⚠️</span></div>`;
 
-        // 绑定接口/对话/界面Tab事件
         $('apiKeyVal').onclick = ()=>{ $('editApiKeyInput').value=API_KEYS.join(','); $('editApiKeyModal').classList.remove('hidden'); };
         $('modelSel').onchange = function(){
             if(this.value==='custom'){ $('customModelItem').style.display='flex'; }
@@ -541,12 +505,9 @@
         $('themeSel').onchange = function(){ THEME_MODE=this.value; saveTheme(); applyTheme(); };
         $('imgToggle').onclick = function(){ IMAGE_ENABLED=!IMAGE_ENABLED; this.classList.toggle('on', IMAGE_ENABLED); localStorage.setItem('claude_image_enabled', IMAGE_ENABLED); };
         $('musicEntrySet').onclick = ()=>{ $('musicModal').classList.remove('hidden'); };
-
-        // 初始绑定数据Tab
         bindDataTabEvents();
     }
 
-    // 数据Tab事件单独绑定（每次切到数据Tab都会调用）
     function bindDataTabEvents(){
         const promptEntry = $('promptEntry');
         const memoryEntry = $('memoryEntry');
@@ -555,11 +516,10 @@
         const usageEntry = $('usageEntry');
         const changePwEntry = $('changePwEntry');
         const clearEntry = $('clearEntry');
-
         if(promptEntry) promptEntry.onclick = ()=>{ $('editPromptInput').value=SYSTEM_PROMPT; $('editPromptModal').classList.remove('hidden'); };
         if(memoryEntry) memoryEntry.onclick = ()=>openMemoryDrawer();
-        if(exportEntry) exportEntry.onclick = ()=>{ const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,memory:memoryBank,usage:usageLog}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='七次元_备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();showToast('导出成功'); };
-        if(importEntry) importEntry.onclick = ()=>{ const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);if(d.name){PARTNER_NAME=d.name;localStorage.setItem('claude_partner_name',d.name);}if(d.avatar!==undefined){PARTNER_AVATAR=d.avatar;localStorage.setItem('claude_partner_avatar',d.avatar);}if(d.chat){conversationHistory=d.chat;saveHistory();rebuildChatFromHistory();}if(d.diary){diary=d.diary;saveDiary();}if(d.marks){calendarMarks=d.marks;saveMarks();}if(d.memory){memoryBank=d.memory;saveMemory();}if(d.usage){usageLog=d.usage;saveUsage();}applyUI();showToast('导入成功');}catch(err){alert('文件格式错误');}};r.readAsText(f);};i.click(); };
+        if(exportEntry) exportEntry.onclick = ()=>{ const d={name:PARTNER_NAME,avatar:PARTNER_AVATAR,chat:conversationHistory,diary,marks:calendarMarks,dailyNotes,memory:memoryBank,usage:usageLog}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='七次元_备份_'+new Date().toISOString().slice(0,10)+'.json';a.click();showToast('导出成功'); };
+        if(importEntry) importEntry.onclick = ()=>{ const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=(e)=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);if(d.name){PARTNER_NAME=d.name;localStorage.setItem('claude_partner_name',d.name);}if(d.avatar!==undefined){PARTNER_AVATAR=d.avatar;localStorage.setItem('claude_partner_avatar',d.avatar);}if(d.chat){conversationHistory=d.chat;saveHistory();rebuildChatFromHistory();}if(d.diary){diary=d.diary;saveDiary();}if(d.marks){calendarMarks=d.marks;saveMarks();}if(d.dailyNotes){dailyNotes=d.dailyNotes;saveDailyNotes();}if(d.memory){memoryBank=d.memory;saveMemory();}if(d.usage){usageLog=d.usage;saveUsage();}applyUI();showToast('导入成功');}catch(err){alert('文件格式错误');}};r.readAsText(f);};i.click(); };
         if(usageEntry) usageEntry.onclick = ()=>{ openUsageDrawer(); };
         if(changePwEntry) changePwEntry.onclick = ()=>{ $('oldPasswordInput').value='';$('newPasswordInput').value='';$('changePasswordModal').classList.remove('hidden'); };
         if(clearEntry) clearEntry.onclick = openClearChatModal;
@@ -579,7 +539,6 @@
     }
     $('cancelParamSelectBtn').addEventListener('click', ()=>$('paramSelectModal').classList.add('hidden'));
 
-    // ========== 密码系统 ==========
     async function sha256(m){ const b = new TextEncoder().encode(m); const h = await crypto.subtle.digest('SHA-256', b); return Array.from(new Uint8Array(h)).map(x => x.toString(16).padStart(2,'0')).join(''); }
     function isPasswordSet(){ return !!localStorage.getItem(PW_HASH_KEY); }
     async function checkPassword(p){ const s = localStorage.getItem(PW_HASH_KEY); return s ? await sha256(p) === s : false; }
@@ -600,17 +559,16 @@
         await setPassword(n); $('changePasswordModal').classList.add('hidden'); showToast('密码已修改');
     });
 
-    // ========== 清空对话 ==========
     function openClearChatModal(){ $('clearChatConfirmInput').value=''; $('confirmClearChatBtn').disabled=true; $('confirmClearChatBtn').style.opacity='0.5'; $('clearChatModal').classList.remove('hidden'); }
     $('cancelClearChatBtn').addEventListener('click', ()=>$('clearChatModal').classList.add('hidden'));
     $('clearChatConfirmInput').addEventListener('input', function(){ const ok=this.value.trim()==='确认删除'; $('confirmClearChatBtn').disabled=!ok; $('confirmClearChatBtn').style.opacity=ok?'1':'0.5'; });
     $('confirmClearChatBtn').addEventListener('click', ()=>{ if($('clearChatConfirmInput').value.trim()!=='确认删除')return; conversationHistory=[{role:'assistant',versions:['记忆被清空了。重新认识一下。'],currentVersion:0,timestamp:Date.now()}]; saveHistory(); rebuildChatFromHistory(); $('clearChatModal').classList.add('hidden'); showToast('已清空'); });
 
-    // ========== 保存函数 ==========
     function saveKeys(){ localStorage.setItem('claude_api_keys',API_KEYS.join(',')); localStorage.setItem('claude_models',API_MODELS.join(',')); localStorage.setItem('claude_key_index',currentKeyIndex); }
     function saveHistory(){ localStorage.setItem('claude_chat_history_v2',JSON.stringify(conversationHistory)); }
     function saveDiary(){ localStorage.setItem('claude_diary',JSON.stringify(diary)); }
     function saveMarks(){ localStorage.setItem('claude_calendar_marks',JSON.stringify(calendarMarks)); }
+    function saveDailyNotes(){ localStorage.setItem('claude_daily_notes',JSON.stringify(dailyNotes)); }
     function saveMemory(){ localStorage.setItem('claude_memory_bank',JSON.stringify(memoryBank)); }
     function saveUsage(){ localStorage.setItem('claude_usage_log',JSON.stringify(usageLog)); }
     function saveParams(){ localStorage.setItem('claude_temperature',TEMPERATURE); localStorage.setItem('claude_top_p',TOP_P); localStorage.setItem('claude_max_tokens',MAX_TOKENS); localStorage.setItem('claude_freq_penalty',FREQ_PENALTY); localStorage.setItem('claude_pres_penalty',PRES_PENALTY); }
@@ -635,6 +593,7 @@
         if(!conversationHistory.length){const n=Date.now();conversationHistory=[{role:'assistant',versions:['嗨，我在。'],currentVersion:0,timestamp:n}];saveHistory();renderMessage('assistant',conversationHistory[0]);}
         const sd=localStorage.getItem('claude_diary'); if(sd){try{diary=JSON.parse(sd);}catch(e){diary={};}}
         const sm=localStorage.getItem('claude_calendar_marks'); if(sm){try{calendarMarks=JSON.parse(sm);}catch(e){calendarMarks={};}}
+        const sdn=localStorage.getItem('claude_daily_notes'); if(sdn){try{dailyNotes=JSON.parse(sdn);}catch(e){dailyNotes={};}}
         const smb=localStorage.getItem('claude_memory_bank'); if(smb){try{memoryBank=JSON.parse(smb);}catch(e){memoryBank={about_you:[],about_us:[]};}}
         const su=localStorage.getItem('claude_usage_log'); if(su){try{usageLog=JSON.parse(su);}catch(e){usageLog=[];}}
     }
@@ -642,28 +601,31 @@
     function rebuildChatFromHistory(){chatLog.innerHTML='';conversationHistory.forEach(m=>renderMessage(m.role,m));scrollToBottom();}
     function getCurrentContent(m){return m.versions?.[m.currentVersion]||'';}
 
-    // ========== 消息操作（完整版——撤回不连坐、版本切换、编辑、删除） ==========
     function selectTextForManualCopy(text){ const old=document.getElementById('__copy_overlay'); if(old) old.remove(); const o=document.createElement('div'); o.id='__copy_overlay'; o.style.cssText='position:fixed;left:0;top:0;width:100%;height:100%;z-index:9999;background:rgba(0,0,0,0.03);display:flex;align-items:center;justify-content:center;'; const c=document.createElement('div'); c.style.cssText='background:var(--card-bg);border-radius:16px;padding:20px;max-width:85vw;max-height:60vh;overflow-y:auto;word-break:break-word;font-size:15px;line-height:1.6;color:var(--text);user-select:text;-webkit-user-select:text;'; c.textContent=text; o.appendChild(c); document.body.appendChild(o); o.addEventListener('click',function(e){if(e.target===o){o.remove();window.getSelection().removeAllRanges();}}); }
     function showMessageContextMenu(msg, event){ hideContextMenu(); const role=msg.role; let html='<div style="padding:8px 16px;font-size:11px;color:var(--text-secondary);">消息操作</div>'; html+='<div class="menu-item" data-action="copy">📋 复制</div>'; if(role==='user') html+='<div class="menu-item" data-action="edit">✏️ 编辑</div>'; html+='<div class="menu-item danger" data-action="delete">🗑 删除</div>'; contextMenu.innerHTML=html; contextMenu.style.left=Math.min((event.touches?.[0]?.clientX||event.clientX),window.innerWidth-180)+'px'; contextMenu.style.top=Math.min((event.touches?.[0]?.clientY||event.clientY),window.innerHeight-160)+'px'; contextMenu.classList.add('show'); contextMenu.style.display='block'; contextMenu.querySelector('[data-action="copy"]').addEventListener('click',()=>{hideContextMenu();selectTextForManualCopy(getCurrentContent(msg));}); contextMenu.querySelector('[data-action="edit"]')?.addEventListener('click',()=>{hideContextMenu();setTimeout(()=>startEditUserMsg(msg.timestamp),100);}); contextMenu.querySelector('[data-action="delete"]').addEventListener('click',()=>{hideContextMenu();deleteSingleMessage(msg.timestamp);}); setTimeout(()=>{ const ch=(e)=>{if(!contextMenu.contains(e.target)){hideContextMenu();document.removeEventListener('click',ch);document.removeEventListener('touchstart',ch);}}; document.addEventListener('click',ch); document.addEventListener('touchstart',ch); },50); }
     function deleteSingleMessage(timestamp){ const idx=conversationHistory.findIndex(m=>m.timestamp===timestamp); if(idx===-1)return; conversationHistory.splice(idx,1); saveHistory(); rebuildChatFromHistory(); showToast('已删除'); }
     function hideContextMenu(){ contextMenu.classList.remove('show'); contextMenu.style.display='none'; }
 
     function renderMessage(role, msg){
-        const content=getCurrentContent(msg); const div=document.createElement('div'); div.className='message '+role; div.dataset.ts=msg.timestamp;
+        const content=getCurrentContent(msg);
+        const div=document.createElement('div'); div.className=`message ${role}`; div.dataset.ts=msg.timestamp; div.dataset.role=role;
         const timeStr=new Date(msg.timestamp).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
         let inner='';
-        if(msg.image) inner+='<img src="'+msg.image+'" onclick="event.stopPropagation();window.showImageOverlay(\''+msg.image+'\')">';
-        if(content) inner+=role==='assistant'?'<div class="bubble">'+parseMarkdown(content)+'</div>':'<div class="bubble">'+escapeHtml(content)+'</div>';
-        inner+='<div class="timestamp"><span>'+timeStr+'</span>';
-        if(msg.edited) inner+='<span class="edited-tag">已编辑</span>';
-        inner+='</div>';
+        if(msg.image) inner+=`<img src="${msg.image}" alt="图片" onclick="event.stopPropagation();window.showImageOverlay('${msg.image}')">`;
+        if(content) inner+=role==='assistant'?`<div class="bubble">${parseMarkdown(content)}</div>`:`<div class="bubble">${escapeHtml(content)}</div>`;
+        inner+=`<div class="timestamp"><span>${timeStr}</span>`;
+        if(msg.edited) inner+=`<span class="edited-tag">已编辑</span>`;
+        inner+=`</div>`;
         if(role==='assistant'){
-            inner+='<div class="rewind-row"><button class="prev-ver-btn"'+(msg.versions.length<=1?' disabled':'')+'>◂</button><span class="ver-indicator">'+(msg.currentVersion+1)+'/'+msg.versions.length+'</span><button class="next-ver-btn"'+(msg.versions.length<=1?' disabled':'')+'>▸</button><button class="regen-btn">↺ 重新生成</button></div>';
+            inner+=`<div class="rewind-row"><button class="prev-ver-btn" ${msg.versions.length<=1?'disabled':''}>◂</button><span class="ver-indicator">${msg.currentVersion+1}/${msg.versions.length}</span><button class="next-ver-btn" ${msg.versions.length<=1?'disabled':''}>▸</button><button class="regen-btn">↺ 重新生成</button></div>`;
         }
         div.innerHTML=inner; chatLog.appendChild(div); scrollToBottom();
         const bubble=div.querySelector('.bubble');
         if(bubble){ bubble.addEventListener('click',(e)=>{e.stopPropagation();handleBubbleClick(role,msg.timestamp,div);}); }
-        let pressTimer; div.addEventListener('touchstart',(e)=>{pressTimer=setTimeout(()=>{showMessageContextMenu(msg,e);},450);}); div.addEventListener('touchend',()=>clearTimeout(pressTimer)); div.addEventListener('touchmove',()=>clearTimeout(pressTimer));
+        let pressTimer; let isLongPress=false;
+        div.addEventListener('touchstart',(e)=>{isLongPress=false;pressTimer=setTimeout(()=>{isLongPress=true;showMessageContextMenu(msg,e);},450);});
+        div.addEventListener('touchend',()=>{clearTimeout(pressTimer);});
+        div.addEventListener('touchmove',()=>{clearTimeout(pressTimer);isLongPress=false;});
         if(role==='assistant'){
             div.querySelector('.prev-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,-1,div);});
             div.querySelector('.next-ver-btn')?.addEventListener('click',(e)=>{e.stopPropagation();changeVersion(msg,1,div);});
@@ -722,7 +684,6 @@
         finally{currentAbortController=null;userInput.focus();}
     }
 
-    // ========== 发送消息 ==========
     sendBtn.addEventListener('click',()=>{
         if(editingMsgTimestamp){ const nc=userInput.value.trim(); if(!nc){showToast('消息不能为空');return;} trimHistoryAfter(editingMsgTimestamp); sendMessageAfterEdit(nc); return; }
         const text=userInput.value.trim(); const hasImage=!!pendingImage; if(!text&&!hasImage)return;
@@ -739,7 +700,6 @@
     function parseMarkdown(t){if(!t)return'';return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');}
     function showToast(t){toast.textContent=t;toast.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(()=>toast.classList.remove('show'),2000);}
 
-    // ========== 用量统计 ==========
     function openUsageDrawer(){
         usageDrawer.classList.add('open');
         const s=(()=>{const n=Date.now(),ds=new Date();ds.setHours(0,0,0,0);const ws=new Date(ds);ws.setDate(ws.getDate()-ws.getDay());const ms=new Date();ms.setDate(1);ms.setHours(0,0,0,0);const sum=a=>a.reduce((x,y)=>x+y,0);const td=usageLog.filter(u=>u.ts>=ds.getTime()),wk=usageLog.filter(u=>u.ts>=ws.getTime()),mo=usageLog.filter(u=>u.ts>=ms.getTime());return{today:sum(td.map(u=>u.input+u.output)),week:sum(wk.map(u=>u.input+u.output)),month:sum(mo.map(u=>u.input+u.output)),total:sum(usageLog.map(u=>u.input+u.output))};})();
@@ -747,32 +707,28 @@
         $('usageContent').innerHTML='<div class="usage-section"><div class="usage-section-title">本月概览</div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:'+pct+'%"></div></div><div style="font-size:11px;color:var(--text-secondary);">本月已用 '+s.month.toLocaleString()+' token · '+pct+'%</div></div><div class="usage-section"><div class="usage-section-title">详细统计</div>'+['今日','本周','本月','总计'].map(t=>'<div class="stat-card"><span>'+t+'</span><span>'+s[t==='今日'?'today':t==='本周'?'week':t==='本月'?'month':'total'].toLocaleString()+' token</span></div>').join('')+'</div>';
     }
 
-    // ========== 日历 ==========
-    $('calendarTabs').addEventListener('click',(e)=>{if(e.target.classList.contains('tab')){document.querySelectorAll('#calendarTabs .tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');calendarFilter=e.target.dataset.filter;if(calendarFilter==='search'){$('searchContainer').style.display='block';$('calendarContent').style.display='none';}else{$('searchContainer').style.display='none';$('calendarContent').style.display='block';renderCalendarPanel();}}});
-    function isPeriodActive(d){const m=Object.entries(calendarMarks);let s=null;for(const[da,ma]of m){if(ma.type==='period-start')s=da;if(ma.type==='period-end'&&s&&da>=s){if(d>=s&&d<=da)return true;s=null;}}if(s&&d>=s){const st=new Date(s),ed=new Date(s);ed.setDate(ed.getDate()+5);if(new Date(d)>=st&&new Date(d)<=ed)return true;}return false;}
-    function getTodayDateStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-
     function renderCalendarPanel(){
-        if(calendarFilter==='search')return;
         const td=new Date(),fd=new Date(currentYear,currentMonth,1).getDay(),dm=new Date(currentYear,currentMonth+1,0).getDate();
         const mn=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-        let h='<div class="cal-header-row"><button id="prevMonthBtn">‹</button><span class="month-label">'+mn[currentMonth]+'</span><span class="year-label" id="yearLabel">'+currentYear+'年</span><button id="nextMonthBtn">›</button></div><div class="cal-grid"><div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>';
+        $('calHeaderRow').innerHTML=`<button id="prevMonthBtn">‹</button><span class="month-label">${mn[currentMonth]}</span><span class="year-label" id="yearLabel">${currentYear}年</span><button id="nextMonthBtn">›</button>`;
+        let h='<div class="day-name">日</div><div class="day-name">一</div><div class="day-name">二</div><div class="day-name">三</div><div class="day-name">四</div><div class="day-name">五</div><div class="day-name">六</div>';
         for(let i=0;i<fd;i++) h+='<div class="day-cell other-month"></div>';
         for(let d=1;d<=dm;d++){
-            const ds=currentYear+'-'+String(currentMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+            const ds=`${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const isToday=d===td.getDate()&&currentMonth===td.getMonth()&&currentYear===td.getFullYear();
-            const hd=!!diary[ds],mk=calendarMarks[ds],pa=isPeriodActive(ds);
-            let cl='day-cell';if(isToday)cl+=' today';if(hd)cl+=' has-diary';if(pa)cl+=' mark-period';
-            if(mk){if(mk.type==='anniversary')cl+=' mark-anniversary';if(mk.type==='custom')cl+=' mark-custom';}
-            h+='<div class="'+cl+'" data-date="'+ds+'">'+d+'</div>';
+            const mk=calendarMarks[ds], dn=dailyNotes[ds]||{};
+            let cl='day-cell'; if(isToday) cl+=' today';
+            if(mk){ if(mk.type==='anniversary') cl+=' mark-anniversary'; if(mk.type==='period-start'||mk.type==='period-end') cl+=' mark-period'; }
+            h+=`<div class="${cl}" data-date="${ds}">${d}<div style="display:flex;gap:1px;font-size:8px;justify-content:center;position:absolute;bottom:1px;left:0;right:0;">${dn.weather||''}${dn.myMood?dn.myMood:''}${dn.taMood?dn.taMood:''}</div></div>`;
         }
-        h+='</div>'; $('calendarContent').innerHTML=h;
+        $('calGrid').innerHTML=h;
         $('prevMonthBtn').addEventListener('click',()=>{if(currentMonth===0){currentMonth=11;currentYear--;}else currentMonth--;renderCalendarPanel();});
         $('nextMonthBtn').addEventListener('click',()=>{if(currentMonth===11){currentMonth=0;currentYear++;}else currentMonth++;renderCalendarPanel();});
-        $('yearLabel').addEventListener('click',()=>{const ty=new Date().getFullYear();$('yearList').innerHTML=Array.from({length:21},(_,i)=>{const y=ty+10-i;return'<div class="year-item'+(y===currentYear?' active':'')+'" data-year="'+y+'">'+y+'年</div>';}).join('');$('yearPickerModal').classList.remove('hidden');document.querySelectorAll('.year-item').forEach(i=>i.addEventListener('click',function(){currentYear=parseInt(this.dataset.year);$('yearPickerModal').classList.add('hidden');renderCalendarPanel();}));});
+        $('yearLabel').addEventListener('click',()=>{const ty=new Date().getFullYear();$('yearList').innerHTML=Array.from({length:21},(_,i)=>{const y=ty+10-i;return`<div class="year-item${y===currentYear?' active':''}" data-year="${y}">${y}年</div>`;}).join('');$('yearPickerModal').classList.remove('hidden');document.querySelectorAll('.year-item').forEach(i=>i.addEventListener('click',function(){currentYear=parseInt(this.dataset.year);$('yearPickerModal').classList.add('hidden');renderCalendarPanel();}));});
         $('cancelYearBtn').addEventListener('click',()=>$('yearPickerModal').classList.add('hidden'));
-        document.querySelectorAll('.day-cell:not(.other-month)').forEach(c=>{c.addEventListener('click',function(){selectedDate=this.dataset.date;renderCalendarPanel();});let pt;c.addEventListener('touchstart',(e)=>{pt=setTimeout(()=>showDateContextMenu(c.dataset.date,e),500);});c.addEventListener('touchend',()=>clearTimeout(pt));c.addEventListener('touchmove',()=>clearTimeout(pt));});
+        document.querySelectorAll('.day-cell:not(.other-month)').forEach(c=>{c.addEventListener('click',function(){openDayDetail(this.dataset.date);});let pt;c.addEventListener('touchstart',(e)=>{pt=setTimeout(()=>showDateContextMenu(c.dataset.date,e),500);});c.addEventListener('touchend',()=>clearTimeout(pt));c.addEventListener('touchmove',()=>clearTimeout(pt));});
     }
+
     function showDateContextMenu(d,e){activeMarkDate=d;const mk=calendarMarks[d];let h='<div style="padding:8px 16px;font-size:11px;color:var(--text-secondary);">'+new Date(d).toLocaleDateString('zh-CN',{month:'long',day:'numeric'})+'</div>';h+='<div class="menu-item" data-action="add-anniversary">+ 添加纪念日</div><div class="menu-item" data-action="add-custom">+ 添加日程</div><div class="menu-item" data-action="add-period-start">+ 经期开始</div><div class="menu-item" data-action="add-period-end">+ 经期结束</div>';if(mk){h+='<div class="menu-item" data-action="edit">✏️ 编辑</div><div class="menu-item danger" data-action="delete">🗑 删除</div>';}contextMenu.innerHTML=h;contextMenu.style.display='block';contextMenu.style.left=Math.min(e.touches?.[0]?.clientX||e.clientX,window.innerWidth-180)+'px';contextMenu.style.top=Math.min(e.touches?.[0]?.clientY||e.clientY,window.innerHeight-260)+'px';contextMenu.classList.add('show');contextMenu.querySelectorAll('.menu-item').forEach(i=>{i.addEventListener('click',function(){const a=this.dataset.action;hideContextMenu();if(a==='add-anniversary')openMarkModal('anniversary');if(a==='add-custom')openMarkModal('custom');if(a==='add-period-start')openMarkModal('period-start');if(a==='add-period-end')openMarkModal('period-end');if(a==='edit')openMarkModal(mk.type,mk);if(a==='delete'){delete calendarMarks[activeMarkDate];saveMarks();renderCalendarPanel();showToast('已删除');}});});}
     document.addEventListener('click',(e)=>{if(!contextMenu.contains(e.target))hideContextMenu();});
     function openMarkModal(t,em=null){$('markTypeSelect').value=t;$('markTitleInput').value=em?.title||'';$('markNoteInput').value=em?.note||'';$('markReminderSelect').value=em?.reminder||'none';$('editMarkDate').value=activeMarkDate;$('addMarkTitle').textContent=em?'编辑日程':'添加日程';$('deleteMarkBtn').style.display=em?'inline-block':'none';$('addMarkModal').classList.remove('hidden');}
@@ -780,30 +736,50 @@
     $('saveMarkBtn').addEventListener('click',()=>{const ds=$('editMarkDate').value||activeMarkDate;if(!ds)return;const t=$('markTitleInput').value.trim(),ty=$('markTypeSelect').value,n=$('markNoteInput').value.trim(),r=$('markReminderSelect').value;if(!t&&ty!=='period-start'&&ty!=='period-end'){showToast('请输入标题');return;}calendarMarks[ds]={type:ty,title:t||(ty==='period-start'?'经期开始':ty==='period-end'?'经期结束':'日程'),note:n,reminder:r};saveMarks();$('addMarkModal').classList.add('hidden');renderCalendarPanel();showToast('已保存');});
     $('deleteMarkBtn').addEventListener('click',()=>{const ds=$('editMarkDate').value||activeMarkDate;if(ds&&calendarMarks[ds]){delete calendarMarks[ds];saveMarks();}$('addMarkModal').classList.add('hidden');renderCalendarPanel();showToast('已删除');});
 
-    // ========== 图片 ==========
-    attachBtn.addEventListener('click',()=>{if(!IMAGE_ENABLED)return;imageInput.click();});
-    imageInput.addEventListener('change',()=>{const f=imageInput.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{pendingImage=e.target.result;imagePreviewThumb.src=pendingImage;imagePreviewRow.classList.remove('hidden');};r.readAsDataURL(f);imageInput.value='';});
-    imagePreviewRemove.addEventListener('click',()=>{pendingImage=null;imagePreviewRow.classList.add('hidden');});
-    async function sendImageMessage(img){if(!getCurrentKey()||!SYSTEM_PROMPT)return;if(currentAbortController){currentAbortController.abort();currentAbortController=null;}const old=document.querySelector('[data-typing="true"]');if(old)old.remove();const td=createTypingBubble();currentAbortController=new AbortController();const sig=currentAbortController.signal;let fr='';try{const ms=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,ms,sig);if(!rp.ok){if(rp.status===429&&switchToNextKey()){sendImageMessage(img);return;}throw new Error('API '+rp.status);}const rd=rp.body.getReader();const dc=new TextDecoder();let bf='',lc='';while(true){const{done,value}=await rd.read();if(done)break;bf+=dc.decode(value,{stream:true});const ls=bf.split('\n');bf=ls.pop()||'';for(const l of ls){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const t=extractStreamText(ep.type,p);if(t)fr+=t;if(p.usage)lc=d;}catch(e){}}}}if(lc){try{const u=JSON.parse(lc).usage;if(u){usageLog.push({ts:Date.now(),input:u.prompt_tokens||0,output:u.completion_tokens||0});saveUsage();}}catch(e){}}const nm={role:'assistant',versions:[fr],currentVersion:0,timestamp:Date.now()};conversationHistory.push(nm);saveHistory();replaceTypingBubble(td,fr,nm);}catch(e){if(e.name!=='AbortError'&&td.parentNode)td.innerHTML='<div class="bubble">（连接断开了……）</div>';}finally{currentAbortController=null;userInput.focus();}}
+    let selectedWeather='',selectedMyMood='',selectedTaMood='';
+    function openDayDetail(ds){
+        $('dayDetailDate').textContent = ds;
+        const dn = dailyNotes[ds] || {};
+        $('dayNoteInput').value = dn.note || '';
+        selectedWeather = dn.weather || ''; selectedMyMood = dn.myMood || ''; selectedTaMood = dn.taMood || '';
+        $('weatherPicker').innerHTML = WEATHERS.map(w=>`<span data-w="${w}" style="cursor:pointer;opacity:${w===selectedWeather?'1':'0.3'};">${w}</span>`).join('');
+        $('myMoodPicker').innerHTML = MOODS.map(m=>`<span data-m="${m}" style="cursor:pointer;opacity:${m===selectedMyMood?'1':'0.3'};">${m}</span>`).join('');
+        $('taMoodPicker').innerHTML = MOODS.map(m=>`<span data-m="${m}" style="cursor:pointer;opacity:${m===selectedTaMood?'1':'0.3'};">${m}</span>`).join('');
+        $('weatherPicker').querySelectorAll('span').forEach(s=>s.onclick=()=>{selectedWeather=s.dataset.w;document.querySelectorAll('#weatherPicker span').forEach(x=>x.style.opacity='0.3');s.style.opacity='1';});
+        $('myMoodPicker').querySelectorAll('span').forEach(s=>s.onclick=()=>{selectedMyMood=s.dataset.m;document.querySelectorAll('#myMoodPicker span').forEach(x=>x.style.opacity='0.3');s.style.opacity='1';});
+        $('taMoodPicker').querySelectorAll('span').forEach(s=>s.onclick=()=>{selectedTaMood=s.dataset.m;document.querySelectorAll('#taMoodPicker span').forEach(x=>x.style.opacity='0.3');s.style.opacity='1';});
+        dayDetailDrawer.classList.add('open');
+        $('saveDayDetailBtn').onclick = ()=>{
+            const note = $('dayNoteInput').value.trim();
+            dailyNotes[ds] = { weather: selectedWeather, myMood: selectedMyMood, taMood: selectedTaMood, note };
+            saveDailyNotes();
+            dayDetailDrawer.classList.remove('open');
+            renderCalendarPanel();
+            showToast('已保存');
+        };
+        $('cancelDayDetailBtn').onclick = ()=>{ dayDetailDrawer.classList.remove('open'); };
+    }
 
-    // ========== 音乐 ==========
-    $('cancelMusicBtn').addEventListener('click',()=>$('musicModal').classList.add('hidden'));
-    $('readClipboardBtn').addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(t){const m=t.match(/(.+?)\s*[-–—]\s*(.+?)(?:\s*[\[\(]|$)/);if(m){$('musicSongInput').value=m[1]?.trim()||t.slice(0,30);$('musicArtistInput').value=m[2]?.trim()||'';}else{$('musicSongInput').value=t.slice(0,50);}showToast('已从剪贴板读取');}else{showToast('剪贴板为空');}}catch(e){showToast('无法读取剪贴板');}});
-    $('saveMusicBtn').addEventListener('click',()=>{const s=$('musicSongInput').value.trim(),a=$('musicArtistInput').value.trim();if(!s){showToast('请输入歌名');return;}const t=a?s+' - '+a:s;currentMusic=t;musicBarText.textContent='正在听：'+t;musicBar.classList.remove('hidden');$('musicModal').classList.add('hidden');addSystemMessage('我开始听《'+t+'》了');const m={role:'user',versions:['[正在听《'+t+'》]'],currentVersion:0,timestamp:Date.now()};conversationHistory.push(m);saveHistory();resetTypingTimer();});
-    musicCloseBtn.addEventListener('click',()=>{currentMusic=null;musicBar.classList.add('hidden');});
-    bannerCloseBtn.addEventListener('click',()=>reminderBanner.classList.add('hidden'));
-    function addSystemMessage(t){const d=document.createElement('div');d.className='message assistant';d.innerHTML='<div class="bubble" style="background:var(--hover-bg);color:var(--text-secondary);">🔔 '+t+'</div>';chatLog.appendChild(d);scrollToBottom();}
+    function openMemoryDrawer(){ $('memoryDrawerModal').classList.remove('hidden'); renderMemoryDrawerContent(); }
+    $('cancelMemoryDrawerBtn').addEventListener('click', ()=>{ $('memoryDrawerModal').classList.add('hidden'); });
+    function renderMemoryDrawerContent(){
+        const cy = memoryBank.about_you, cu = memoryBank.about_us;
+        $('memoryDrawerContent').innerHTML =
+            '<div class="md-section-title">关于你 · '+cy.length+'条</div>' +
+            (cy.length ? cy.map((item,i) => '<div class="mem-item-card">'+escapeHtml(item.text||item)+' <button class="mem-delete-btn" data-cat="about_you" data-idx="'+i+'">✕</button></div>').join('') : '<div style="color:var(--text-secondary);font-size:12px;padding:8px 0;">暂无</div>') +
+            '<div class="md-section-title" style="margin-top:16px;">我们之间 · '+cu.length+'条</div>' +
+            (cu.length ? cu.map((item,i) => '<div class="mem-item-card">'+escapeHtml(item.text||item)+' <button class="mem-delete-btn" data-cat="about_us" data-idx="'+i+'">✕</button></div>').join('') : '<div style="color:var(--text-secondary);font-size:12px;padding:8px 0;">暂无</div>');
+        document.querySelectorAll('.mem-delete-btn').forEach(b=>{b.addEventListener('click',function(e){e.stopPropagation();const c=this.dataset.cat,i=parseInt(this.dataset.idx);memoryBank[c].splice(i,1);saveMemory();renderMemoryDrawerContent();refreshMemoryMain();});});
+    }
+    $('memoryDrawerAddBtn').addEventListener('click', ()=>{ $('addMemoryModal').classList.remove('hidden'); });
 
-    // ========== 回忆页 ==========
     function refreshMemoryMain(){
-        const tags=[...(memoryBank.about_you||[]),...(memoryBank.about_us||[])].filter(m=>m.text).slice(0,8);
-        const tagsRow=$('memoryTagsRow');
-        if(tagsRow) tagsRow.innerHTML=tags.length?tags.map(t=>'<span class="memory-tag">'+escapeHtml(t.text)+'</span>').join(''):'<span style="font-size:11px;color:var(--text-secondary);">还没有记忆碎片 ✨</span>';
+        const tags=[...(memoryBank.about_you||[]),...(memoryBank.about_us||[])].filter(m=>m.text&&!m.manual).slice(0,8);
+        $('memoryTagsRow').innerHTML=tags.length?tags.map(t=>'<span class="memory-tag">'+escapeHtml(t.text)+'</span>').join(''):'<span style="font-size:11px;color:var(--text-secondary);">还没有记忆碎片，多聊聊天吧 ✨</span>';
         $('diaryCountSub').textContent=Object.keys(diary).filter(d=>!diary[d].isLetter).length+' 篇';
         $('letterCountSub').textContent=Object.keys(diary).filter(d=>diary[d].isLetter).length+' 封';
     }
 
-    // 日记本
     $('diaryCardBtn').addEventListener('click',()=>{ diaryFullscreen.classList.add('open'); renderDiaryTimeline(); });
     $('diaryFsBack').addEventListener('click',()=>{ diaryFullscreen.classList.remove('open'); });
     function renderDiaryTimeline(){
@@ -819,7 +795,6 @@
         tl.innerHTML=html;
     }
 
-    // 信箱
     $('letterCardBtn').addEventListener('click',()=>{ letterFullscreen.classList.add('open'); renderLetterStack(); });
     $('letterFsBack').addEventListener('click',()=>{ letterFullscreen.classList.remove('open'); $('letterDetail').classList.remove('open'); });
     function getLetters(){ return Object.keys(diary).filter(d=>diary[d].isLetter).sort().reverse(); }
@@ -838,14 +813,8 @@
         stack.addEventListener('touchend',()=>{if(isSwiping){const topItem=stack.querySelector('.envelope-item:nth-child(1)');if(topItem)openLetterDetail(topItem.dataset.date);}stack.classList.remove('swiping');isSwiping=false;});
         stack.querySelectorAll('.envelope-item').forEach(item=>{item.addEventListener('click',function(e){if(isSwiping)return;openLetterDetail(this.dataset.date);});});
     }
-    function openLetterDetail(dateStr){
-        const entry=diary[dateStr];if(!entry)return;
-        $('letterDetailContent').textContent=entry.content;
-        $('letterDetail').classList.add('open');
-    }
+    function openLetterDetail(dateStr){ const entry=diary[dateStr];if(!entry)return; $('letterDetailContent').textContent=entry.content; $('letterDetail').classList.add('open'); }
     $('letterDetailBack').addEventListener('click',()=>{ $('letterDetail').classList.remove('open'); });
-
-    // 写信
     $('letterWriteBtn').addEventListener('click',async()=>{
         if(!getCurrentKey()||!SYSTEM_PROMPT){showToast('请先设置API Key和互动指令');return;}
         showToast('正在写信...');
@@ -859,16 +828,18 @@
         }catch(e){showToast('写信失败，请重试');}
     });
 
-    // ========== 记忆库抽屉 ==========
-    function openMemoryDrawer(){ memoryDrawer.classList.add('open'); renderMemoryDrawerContent(); }
-    function renderMemoryDrawerContent(){
-        const cy=memoryBank.about_you,cu=memoryBank.about_us;
-        $('memoryDrawerContent').innerHTML='<div class="md-section-title">关于你 · '+cy.length+'条</div>'+(cy.length?cy.map((item,i)=>'<div class="mem-item-card">'+escapeHtml(item.text||item)+' <button class="mem-delete-btn" data-cat="about_you" data-idx="'+i+'">✕</button></div>').join(''):'<div style="color:var(--text-secondary);font-size:12px;padding:8px 0;">暂无</div>')+'<div class="md-section-title" style="margin-top:16px;">我们之间 · '+cu.length+'条</div>'+(cu.length?cu.map((item,i)=>'<div class="mem-item-card">'+escapeHtml(item.text||item)+' <button class="mem-delete-btn" data-cat="about_us" data-idx="'+i+'">✕</button></div>').join(''):'<div style="color:var(--text-secondary);font-size:12px;padding:8px 0;">暂无</div>');
-        document.querySelectorAll('.mem-delete-btn').forEach(b=>{b.addEventListener('click',function(e){e.stopPropagation();const c=this.dataset.cat,i=parseInt(this.dataset.idx);memoryBank[c].splice(i,1);saveMemory();renderMemoryDrawerContent();refreshMemoryMain();});});
-    }
-    $('memoryDrawerAddBtn').addEventListener('click',()=>{$('addMemoryModal').classList.remove('hidden');});
+    attachBtn.addEventListener('click',()=>{if(!IMAGE_ENABLED)return;imageInput.click();});
+    imageInput.addEventListener('change',()=>{const f=imageInput.files[0];if(!f)return;const r=new FileReader();r.onload=(e)=>{pendingImage=e.target.result;imagePreviewThumb.src=pendingImage;imagePreviewRow.classList.remove('hidden');};r.readAsDataURL(f);imageInput.value='';});
+    imagePreviewRemove.addEventListener('click',()=>{pendingImage=null;imagePreviewRow.classList.add('hidden');});
+    async function sendImageMessage(img){if(!getCurrentKey()||!SYSTEM_PROMPT)return;if(currentAbortController){currentAbortController.abort();currentAbortController=null;}const old=document.querySelector('[data-typing="true"]');if(old)old.remove();const td=createTypingBubble();currentAbortController=new AbortController();const sig=currentAbortController.signal;let fr='';try{const ms=[{role:'system',content:buildSystemPrompt()},...conversationHistory.map(m=>{if(m.image&&m.role==='user')return{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:m.image.split(',')[1]}},{type:'text',text:getCurrentContent(m)}]};return{role:m.role,content:getCurrentContent(m)};})];const ep=getAPIEndpoint();const rp=await makeAPIRequest(ep,ms,sig);if(!rp.ok){if(rp.status===429&&switchToNextKey()){sendImageMessage(img);return;}throw new Error('API '+rp.status);}const rd=rp.body.getReader();const dc=new TextDecoder();let bf='',lc='';while(true){const{done,value}=await rd.read();if(done)break;bf+=dc.decode(value,{stream:true});const ls=bf.split('\n');bf=ls.pop()||'';for(const l of ls){if(l.startsWith('data: ')){const d=l.slice(6);if(d==='[DONE]')continue;try{const p=JSON.parse(d);const t=extractStreamText(ep.type,p);if(t)fr+=t;if(p.usage)lc=d;}catch(e){}}}}if(lc){try{const u=JSON.parse(lc).usage;if(u){usageLog.push({ts:Date.now(),input:u.prompt_tokens||0,output:u.completion_tokens||0});saveUsage();}}catch(e){}}const nm={role:'assistant',versions:[fr],currentVersion:0,timestamp:Date.now()};conversationHistory.push(nm);saveHistory();replaceTypingBubble(td,fr,nm);}catch(e){if(e.name!=='AbortError'&&td.parentNode)td.innerHTML='<div class="bubble">（连接断开了……）</div>';}finally{currentAbortController=null;userInput.focus();}}
 
-    // ========== 弹窗事件 ==========
+    $('cancelMusicBtn').addEventListener('click',()=>$('musicModal').classList.add('hidden'));
+    $('readClipboardBtn').addEventListener('click',async()=>{try{const t=await navigator.clipboard.readText();if(t){const m=t.match(/(.+?)\s*[-–—]\s*(.+?)(?:\s*[\[\(]|$)/);if(m){$('musicSongInput').value=m[1]?.trim()||t.slice(0,30);$('musicArtistInput').value=m[2]?.trim()||'';}else{$('musicSongInput').value=t.slice(0,50);}showToast('已从剪贴板读取');}else{showToast('剪贴板为空');}}catch(e){showToast('无法读取剪贴板');}});
+    $('saveMusicBtn').addEventListener('click',()=>{const s=$('musicSongInput').value.trim(),a=$('musicArtistInput').value.trim();if(!s){showToast('请输入歌名');return;}const t=a?s+' - '+a:s;currentMusic=t;musicBarText.textContent='正在听：'+t;musicBar.classList.remove('hidden');$('musicModal').classList.add('hidden');addSystemMessage('我开始听《'+t+'》了');const m={role:'user',versions:['[正在听《'+t+'》]'],currentVersion:0,timestamp:Date.now()};conversationHistory.push(m);saveHistory();resetTypingTimer();});
+    musicCloseBtn.addEventListener('click',()=>{currentMusic=null;musicBar.classList.add('hidden');});
+    bannerCloseBtn.addEventListener('click',()=>reminderBanner.classList.add('hidden'));
+    function addSystemMessage(t){const d=document.createElement('div');d.className='message assistant';d.innerHTML='<div class="bubble" style="background:var(--hover-bg);color:var(--text-secondary);">🔔 '+t+'</div>';chatLog.appendChild(d);scrollToBottom();}
+
     $('cancelMemBtn').addEventListener('click',()=>$('addMemoryModal').classList.add('hidden'));
     $('saveMemBtn').addEventListener('click',()=>{const c=$('memCategorySelect').value,v=$('memContentInput').value.trim();if(!v)return;memoryBank[c].push({text:v,ts:Date.now(),manual:true});saveMemory();renderMemoryDrawerContent();refreshMemoryMain();$('addMemoryModal').classList.add('hidden');$('memContentInput').value='';});
     $('cancelNameBtn').addEventListener('click',()=>$('editNameModal').classList.add('hidden'));
@@ -884,14 +855,12 @@
     topAvatarBtn.addEventListener('click',()=>{$('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden');});
     topBarName.addEventListener('click',()=>{$('editNameInput').value=PARTNER_NAME;$('editNameModal').classList.remove('hidden');});
 
-    // ========== 主页 ==========
     function refreshHomePage(){
         $('homeName').textContent=PARTNER_NAME;
         $('homeDays').textContent='在一起 '+(conversationHistory.length>0?Math.floor((Date.now()-conversationHistory[0].timestamp)/86400000):0)+' 天';
         if(PARTNER_AVATAR)$('homeAvatar').innerHTML='<img src="'+PARTNER_AVATAR+'">';
     }
 
-    // ========== 初始化 ==========
     updatePasswordUI(); if(!isPasswordSet()) passwordInput.focus();
     loadData(); applyTheme(); applyUI(); renderCalendarPanel(); refreshHomePage(); refreshMemoryMain();
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(THEME_MODE==='auto')applyTheme();});
